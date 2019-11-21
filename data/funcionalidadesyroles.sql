@@ -2,9 +2,9 @@
                                                             /*Creacion de datos*/
 
 /*                         	Usuarios
-insert into SQL_INJECTION.Usuario (nombreUsuario,contraseÃ±a,tipoUsuario,estado) values ('admin','E6B87050BFCB8143FCB8DB0170A4DC9ED00D904DDD3E2A4AD1',1,1)
+insert into SQL_INJECTION.Usuario (nombreUsuario,contraseña,tipoUsuario,estado) values ('admin','E6B87050BFCB8143FCB8DB0170A4DC9ED00D904DDD3E2A4AD1',1,1)
 GO
-insert into SQL_INJECTION.Usuario (nombreUsuario,contraseÃ±a,tipoUsuario,estado) values ('admin2','E6B87050BFCB8143FCB8DB0170A4DC9ED00D904DDD3E2A4AD1',1,1)
+insert into SQL_INJECTION.Usuario (nombreUsuario,contraseña,tipoUsuario,estado) values ('admin2','E6B87050BFCB8143FCB8DB0170A4DC9ED00D904DDD3E2A4AD1',1,1)
 GO
 */
 
@@ -25,8 +25,8 @@ GO
 -- 5) Carga de credito
 INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descipcion) VALUES ('Carga de credito')
 GO
--- 6) Cambio de contraseÃ±a
-INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descipcion) VALUES ('Cambio de contraseÃ±a')
+-- 6) Cambio de contraseña
+INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descipcion) VALUES ('Cambio de contraseña')
 GO
 -- 7) Baja de usuario
 INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descipcion) VALUES ('Baja de usuario')
@@ -43,7 +43,7 @@ GO
 -- 11) Facturacion a proveedor
 INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descipcion) VALUES ('Facturacion a proveedor')
 GO
--- 12) Listado EstadÃ­stico
+-- 12) Listado Estadastico
 INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descipcion) VALUES ('Listado Estadistico')
 GO
 
@@ -65,7 +65,7 @@ INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,6)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,7)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,8)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,11)
-INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,12) --No sabemos quien tiene esa funciÃ³n
+INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,12) --No sabemos quien tiene esa función
 -- Funciones Cliente
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,2)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,5)
@@ -88,7 +88,7 @@ GO
 */
 --                       Listado estadistico
 INSERT INTO LIL_MIX.listado (listado_descripcion) VALUES ('Proveedores con mayor porcentaje de descuento ofrecido en sus ofertas')
-INSERT INTO LIL_MIX.listado (listado_descripcion) VALUES ('Proveedores con mayor facturaciï¿½n')
+INSERT INTO LIL_MIX.listado (listado_descripcion) VALUES ('Proveedores con mayor facturación')
 GO
 --                       Listados de semestres
 INSERT INTO LIL_MIX.semestre(semestre_descripcion) VALUES ('1')
@@ -108,3 +108,4 @@ insert into SQL_INJECTION.OperacionCompra(nombreOperacion) values ('Reservar pas
 insert into SQL_INJECTION.OperacionCancelarPasajes(nombreOperacion) values ('Cancelar Pasajes')
 insert into SQL_INJECTION.OperacionCancelarPasajes(nombreOperacion) values ('Reprogramar pasajes')
 */
+
