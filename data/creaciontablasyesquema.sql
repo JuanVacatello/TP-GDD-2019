@@ -1,4 +1,4 @@
-use GD2C2019
+--use GD2C2019
 
 --CREACION DE ESQUEMA
 
@@ -7,8 +7,8 @@ CREATE SCHEMA LIL_MIX AUTHORIZATION  gdCupon2019
 --CREACION DE TABLAS 
 
 CREATE TABLE LIL_MIX.usuario ( usuario_id INT NOT NULL IDENTITY(1000,1) PRIMARY KEY,
-							   usuario_nombre VARCHAR(255),
-							   usuario_password VARCHAR(255),
+							   usuario_nombre VARCHAR(255) NOT NULL UNIQUE,
+							   usuario_password VARCHAR(255) NOT NULL,
 							   usuario_intentos TINYINT,
 							   usuario_habilitado BIT
 							  )
@@ -23,12 +23,12 @@ CREATE TABLE LIL_MIX.direccion ( direccion_id INT NOT NULL IDENTITY(1,1) PRIMARY
 CREATE TABLE LIL_MIX.proveedor ( proveedor_id INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
 								 proveedor_direccion_id INT FOREIGN KEY REFERENCES LIL_MIX.direccion(direccion_id),
 								 proveedor_telefono INT,
-								 proveedor_cuit VARCHAR(13),
+								 proveedor_cuit VARCHAR(13) UNIQUE,
 								 proveedor_rubro VARCHAR(255),
 								 proveedor_mail VARCHAR(255),
 								 proveedor_cp SMALLINT,
 								 proveedor_nombre_contacto VARCHAR(255),
-								 proveedor_rs VARCHAR(255),
+								 proveedor_rs VARCHAR(255) UNIQUE,
 								 proveedor_habilitado BIT,
 								 proveedor_usuario_id INT FOREIGN KEY REFERENCES LIL_MIX.usuario(usuario_id)
 								 )
@@ -83,7 +83,7 @@ CREATE TABLE LIL_MIX.cupon ( cupon_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 							 )
 
 CREATE TABLE LIL_MIX.rol ( rol_id INT NOT NULL PRIMARY KEY,
-						   rol_nombre VARCHAR(30),
+						   rol_nombre VARCHAR(30) NOT NULL,
 						   rol_habilitado BIT
 						   )
 
