@@ -6,7 +6,7 @@
 --1) No puede haber un rol con funcionalidades repetidas
 
 CREATE TRIGGER LIL_MIX.noRepetirFuncionalidadesEnUnRol ON LIL_MIX.funcionalidadxrol
-INSTEAD OF INSERT AS 
+INSTEAD OF INSERT AS
 BEGIN
 	DECLARE @funcionalidad_id varchar(30)
 	DECLARE @rol_id int
@@ -67,7 +67,7 @@ AFTER UPDATE AS
 BEGIN
 
 	--Se le debe quitar el rol inhabilitado a todos aquellos usuarios que lo posean
-	
+
 	DELETE FROM LIL_MIX.rolxusuario
 	WHERE rol_id IN (SELECT rol_id FROM inserted WHERE rol_habilitado = 0)
 
@@ -75,22 +75,22 @@ END
 
 ---------------------------------------  REGISTRO DE USUARIO  ---------------------------------------
 
---3) 
+--3)
 
 CREATE TRIGGER LIL_MIX.usuarioYaExistente ON LIL_MIX.usuario
 INSTEAD OF INSERT AS
 BEGIN
 
-	-- El username debe ser único en un todo el sistema. 
+	-- El username debe ser Ãºnico en un todo el sistema.
 
 	IF EXISTS (SELECT * FROM LIL_MIX.usuario u, inserted i WHERE u.usuario_nombre = i.usuario_nombre)
 
-	--La aplicación deberá controlar esta restricción e informar debidamente al usuario. 
+	--La aplicaciÃ³n deberÃ¡ controlar esta restricciÃ³n e informar debidamente al usuario.
 
 		RAISERROR('Nombre de usuario ya existente, intente nuevamente', 16, 1)
 
 	ELSE
-	
+
 		INSERT INTO LIL_MIX.usuario (usuario_nombre, usuario_password, usuario_intentos, usuario_habilitado)
 		VALUES ((SELECT usuario_nombre FROM inserted),(SELECT usuario_password FROM inserted), 0, 1)
 
@@ -98,11 +98,11 @@ END
 
 ---------------------------------------  AMB DE CLIENTES  ---------------------------------------
 
---4) 
+--4)
 
---El alumno deberá determinar un procedimiento para evitar la generación de clientes 
---“gemelos” (distinto nombre de usuario, pero igual datos identificatorios según se 
---justifique en la estrategia de resolución). 
+--El alumno deberÃ¡ determinar un procedimiento para evitar la generaciÃ³n de clientes
+--"gemelos" (distinto nombre de usuario, pero igual datos identificatorios segÃºn se
+--justifique en la estrategia de resoluciÃ³n).
 
 CREATE TRIGGER LIL_MIX.clientesGemelos ON LIL_MIX.cliente
 INSTEAD OF INSERT AS
@@ -116,8 +116,8 @@ END
 CREATE TRIGGER LIL_MIX.eliminarClientes ON LIL_MIX.cliente
 INSTEAD OF DELETE AS
 BEGIN
- 
- --La eliminación de un cliente implica la baja lógica del mismo. 
+
+ --La eliminaciÃ³n de un cliente implica la baja lï¿½gica del mismo.
 
 	UPDATE LIL_MIX.cliente
 	SET cliente_habilitado = 0
@@ -134,12 +134,12 @@ BEGIN
 
 	BEGIN TRY
 		BEGIN TRAN
-				
-		--La razón social y cuit son datos únicos, por ende no pueden existir 2 proveedores con la misma razón social y cuit
+
+		--La razÃ³n social y cuit son datos Ãºnicos, por ende no pueden existir 2 proveedores con la misma razÃ³n social y cuit
 
 		IF (SELECT proveedor_rs FROM inserted) IN (SELECT proveedor_rs FROM LIL_MIX.proveedor)
 
-		--El sistema deberá controlar esta restricción e informar debidamente al usuario ante alguna anomalía.
+		--El sistema deberÃ¡ controlar esta restricciÃ³n e informar debidamente al usuario ante alguna anomalÃ­a.
 
 			THROW 51000, 'Razon social ya existente', 1
 
@@ -147,11 +147,11 @@ BEGIN
 
 			THROW 51000, 'CUIT ya existente', 1
 
-		INSERT INTO LIL_MIX.proveedor 
+		INSERT INTO LIL_MIX.proveedor
 		SELECT * FROM inserted
 
 		COMMIT
-			
+
 	END TRY
 
 	BEGIN CATCH
@@ -168,8 +168,8 @@ END
 CREATE TRIGGER LIL_MIX.eliminarProveedor ON LIL_MIX.proveedor
 INSTEAD OF DELETE AS
 BEGIN
- 
- --La eliminación de un proveedor implica la baja lógica del mismo. 
+
+ --La eliminaciÃ³n de un proveedor implica la baja lÃ³gica del mismo.
 
 	UPDATE LIL_MIX.proveedor
 	SET proveedor_habilitado = 0

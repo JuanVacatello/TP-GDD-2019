@@ -1,4 +1,4 @@
-use GD2C2019
+--use GD2C2019
 
 --MIGRACION
 
@@ -9,15 +9,15 @@ use GD2C2019
 --								 direccion_ciudad VARCHAR(255),
 --								 )
 
-INSERT INTO LIL_MIX.direccion (direccion_calle, direccion_ciudad) 
-SELECT Cli_Direccion, Cli_Ciudad 
+INSERT INTO LIL_MIX.direccion (direccion_calle, direccion_ciudad)
+SELECT Cli_Direccion, Cli_Ciudad
 FROM gd_esquema.Maestra
-GROUP BY Cli_Direccion, Cli_Ciudad 
+GROUP BY Cli_Direccion, Cli_Ciudad
 
-INSERT INTO LIL_MIX.direccion (direccion_calle, direccion_ciudad) 
-SELECT Provee_Dom, Provee_Ciudad 
+INSERT INTO LIL_MIX.direccion (direccion_calle, direccion_ciudad)
+SELECT Provee_Dom, Provee_Ciudad
 FROM gd_esquema.Maestra
-GROUP BY Provee_Dom, Provee_Ciudad  
+GROUP BY Provee_Dom, Provee_Ciudad
 
 --CREATE TABLE LIL_MIX.proveedor ( proveedor_id INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
 --								 proveedor_direccion_id INT FOREIGN KEY REFERENCES LIL_MIX.direccion(direccion_id),
@@ -33,7 +33,7 @@ GROUP BY Provee_Dom, Provee_Ciudad
 --								 )
 
 
-INSERT INTO LIL_MIX.proveedor ( proveedor_direccion_id, proveedor_telefono, proveedor_cuit, proveedor_rubro , proveedor_rs, proveedor_habilitado) 
+INSERT INTO LIL_MIX.proveedor ( proveedor_direccion_id, proveedor_telefono, proveedor_cuit, proveedor_rubro , proveedor_rs, proveedor_habilitado)
 SELECT (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle LIKE Provee_Dom),
 		Provee_Telefono, Provee_CUIT, Provee_Rubro, Provee_RS, 1
 FROM gd_esquema.Maestra
@@ -52,16 +52,16 @@ group by Provee_CUIT, Provee_Telefono, Provee_Rubro, Provee_RS, Provee_Dom
 --							  oferta_codigo VARCHAR(255)
 --							  )
 
-INSERT INTO LIL_MIX.oferta (oferta_proveedor_id, oferta_precio_oferta , oferta_precio_lista, oferta_fecha_publicacion , 
+INSERT INTO LIL_MIX.oferta (oferta_proveedor_id, oferta_precio_oferta , oferta_precio_lista, oferta_fecha_publicacion ,
 							oferta_fecha_vencimiento , oferta_decripcion , oferta_stock , oferta_codigo)
-SELECT (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit LIKE Provee_CUIT), Oferta_Precio, Oferta_Precio_Ficticio, 
+SELECT (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit LIKE Provee_CUIT), Oferta_Precio, Oferta_Precio_Ficticio,
 		Oferta_Fecha, Oferta_Fecha_Venc , Oferta_Descripcion , Oferta_Cantidad , Oferta_Codigo
 FROM gd_esquema.Maestra
 WHERE Oferta_Fecha IS NOT NULL
 
-/*-CREATE TABLE LIL_MIX.cliente ( cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --el cliente id comenzará en 1 y se incrementará en 1 a medida que se vayan agregando nuevos clientes
+/*-CREATE TABLE LIL_MIX.cliente ( cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --el cliente id comenzarï¿½ en 1 y se incrementarï¿½ en 1 a medida que se vayan agregando nuevos clientes
 						       cliente_nombre VARCHAR(255) ,
-							   cliente_apellido VARCHAR(255) , 
+							   cliente_apellido VARCHAR(255) ,
 							   cliente_direccion_id INT FOREIGN KEY REFERENCES LIL_MIX.direccion(direccion_id),
 							   cliente_mail VARCHAR(255),
 							   cliente_telefono INT,
@@ -71,12 +71,12 @@ WHERE Oferta_Fecha IS NOT NULL
 							   cliente_credito BIGINT,
 							   cliente_habilitado BIT,
 							   cliente_user_id INT FOREIGN KEY REFERENCES LIL_MIX.usuario(usuario_id)
-							   ) 
+							   )
 */
 
 INSERT INTO LIL_MIX.cliente (cliente_nombre , cliente_apellido , cliente_direccion_id, cliente_mail,
-							 cliente_telefono , cliente_fecha_nacimiento , cliente_dni , cliente_credito , cliente_habilitado ) 
-SELECT Cli_Nombre , Cli_Apellido , (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle LIKE Cli_Direccion), 
+							 cliente_telefono , cliente_fecha_nacimiento , cliente_dni , cliente_credito , cliente_habilitado )
+SELECT Cli_Nombre , Cli_Apellido , (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle LIKE Cli_Direccion),
 	   Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , Cli_Dni , SUM(Carga_Credito), 1
 FROM gd_esquema.Maestra
 WHERE Cli_Dni IS NOT NULL
@@ -92,8 +92,8 @@ GROUP BY Cli_Nombre , Cli_Apellido , Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , C
 							   )
 */
 
-INSERT INTO LIL_MIX.factura (factura_numero , factura_proveedor_id, factura_fecha_inicio, factura_fecha_fin, factura_importe) 
+INSERT INTO LIL_MIX.factura (factura_numero , factura_proveedor_id, factura_fecha_inicio, factura_fecha_fin, factura_importe)
 SELECT Factura_Nro , (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit LIKE Provee_CUIT), SUM()
-FROM gd_esquema.Maestra 
+FROM gd_esquema.Maestra
 
 --Fecha inicio? Fecha fin? Datos tabla compra?
