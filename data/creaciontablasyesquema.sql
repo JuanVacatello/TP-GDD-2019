@@ -17,8 +17,8 @@ CREATE TABLE LIL_MIX.direccion ( direccion_id INT NOT NULL IDENTITY(1,1) PRIMARY
 				direccion_calle VARCHAR(255),
 				direccion_piso TINYINT,
 				direccion_dpto CHAR(1),
-				direccion_ciudad VARCHAR(255),
-								 )
+				direccion_ciudad VARCHAR(255)
+				)
 
 CREATE TABLE LIL_MIX.proveedor ( proveedor_id INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
 				proveedor_direccion_id INT FOREIGN KEY REFERENCES LIL_MIX.direccion(direccion_id),
@@ -60,20 +60,20 @@ CREATE TABLE LIL_MIX.cliente ( cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY
 				) 
 
 CREATE TABLE LIL_MIX.compra ( compra_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-							  compra_oferta_id INT FOREIGN KEY REFERENCES LIL_MIX.oferta(oferta_id) ,
-							  compra_cliente_id INT FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id),
-							  compra_cantidad INT,
-							  compra_fecha DATETIME
-							  )
+				compra_oferta_id INT FOREIGN KEY REFERENCES LIL_MIX.oferta(oferta_id) ,
+				compra_cliente_id INT FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id),
+				compra_cantidad INT,
+				compra_fecha DATETIME
+				)
 
 CREATE TABLE LIL_MIX.factura ( factura_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-							   factura_numero INT,
-							   factura_proveedor_id INT FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
-							   factura_fecha_inicio DATETIME,
-							   factura_fecha_fin DATETIME,
-							   factura_compra_id INT FOREIGN KEY REFERENCES LIL_MIX.compra(compra_id),
-							   factura_importe FLOAT
-							   )
+				factura_numero INT,
+				factura_proveedor_id INT FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
+				factura_fecha_inicio DATETIME,
+				factura_fecha_fin DATETIME,
+				factura_compra_id INT FOREIGN KEY REFERENCES LIL_MIX.compra(compra_id),
+				factura_importe FLOAT
+				)
 
 CREATE TABLE LIL_MIX.cupon ( cupon_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 				cupon_fecha_vencimiento DATETIME,
@@ -83,43 +83,43 @@ CREATE TABLE LIL_MIX.cupon ( cupon_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 				)
 
 CREATE TABLE LIL_MIX.rol ( rol_id INT NOT NULL PRIMARY KEY,
-						   rol_nombre VARCHAR(30) NOT NULL,
-						   rol_habilitado BIT
-						   )
+			   rol_nombre VARCHAR(30) NOT NULL,
+			   rol_habilitado BIT
+			   )
 
 CREATE TABLE LIL_MIX.funcionalidad ( funcionalidad_id VARCHAR(30) NOT NULL PRIMARY KEY,
-									 funcionalidad_descipcion VARCHAR(30)
-									 )
+					 funcionalidad_descipcion VARCHAR(30)
+					 )
 
 CREATE TABLE LIL_MIX.rolxusuario ( rol_id INT,
-								   usuario_id INT,
-								   PRIMARY KEY (rol_id, usuario_id),
-								   FOREIGN KEY (rol_id) REFERENCES LIL_MIX.rol(rol_id),
-								   FOREIGN KEY (usuario_id) REFERENCES LIL_MIX.usuario(usuario_id)
-								   )
+				  usuario_id INT,
+				  PRIMARY KEY (rol_id, usuario_id),
+				  FOREIGN KEY (rol_id) REFERENCES LIL_MIX.rol(rol_id),
+				  FOREIGN KEY (usuario_id) REFERENCES LIL_MIX.usuario(usuario_id)
+				  )
 
 CREATE TABLE LIL_MIX.funcionalidadxrol ( rol_id INT,
-										 funcionalidad_id VARCHAR(30),
-										 PRIMARY KEY (rol_id, funcionalidad_id),
-										 FOREIGN KEY (rol_id) REFERENCES LIL_MIX.rol(rol_id),
-										 FOREIGN KEY (funcionalidad_id) REFERENCES LIL_MIX.funcionalidad(funcionalidad_id)
-										 )
+					 funcionalidad_id VARCHAR(30),
+					 PRIMARY KEY (rol_id, funcionalidad_id),
+					 FOREIGN KEY (rol_id) REFERENCES LIL_MIX.rol(rol_id),
+					 FOREIGN KEY (funcionalidad_id) REFERENCES LIL_MIX.funcionalidad(funcionalidad_id)
+					 )
 
 CREATE TABLE LIL_MIX.tarjeta ( tarjeta_numero INT NOT NULL PRIMARY KEY,
-							   tarjeta_tipo VARCHAR(30),
-							   tarjeta_fecha_vencimiento DATETIME,
-							   tarjeta_id_cliente INT
-							   )
+				tarjeta_tipo VARCHAR(30),
+				tarjeta_fecha_vencimiento DATETIME,
+				tarjeta_id_cliente INT
+				)
 
 CREATE TABLE LIL_MIX.tipoDePago ( tipo_de_pago VARCHAR(30) NOT NULL PRIMARY KEY, --CHEQUEAR PK (TODAVIA NO EJECUTAMOS)
-								  tipo_de_pago_descripcion VARCHAR(30),
-								  tipo_de_pago_descuento INT,
-								  tipo_de_pago_tarjeta_numero INT FOREIGN KEY REFERENCES LIL_MIX.tarjeta(tarjeta_numero)
-								  )
+				  tipo_de_pago_descripcion VARCHAR(30),
+				  tipo_de_pago_descuento INT,
+				  tipo_de_pago_tarjeta_numero INT FOREIGN KEY REFERENCES LIL_MIX.tarjeta(tarjeta_numero)
+				  )
 
 CREATE TABLE LIL_MIX.cargaDeCredito ( carga_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-									  carga_fecha DATETIME,
-									  carga_id_cliente INT FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id),
-									  carga_tipo_de_pago VARCHAR(30) FOREIGN KEY REFERENCES LIL_MIX.tipoDePago(tipo_de_pago), --TODAVIA NO EJECUTAMOS
-									  carga_monto BIGINT
-									  )
+					carga_fecha DATETIME,
+					carga_id_cliente INT FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id),
+					carga_tipo_de_pago VARCHAR(30) FOREIGN KEY REFERENCES LIL_MIX.tipoDePago(tipo_de_pago), --TODAVIA NO EJECUTAMOS
+					carga_monto BIGINT
+					)
