@@ -73,3 +73,35 @@ BEGIN
 
 END
 
+----------------------------------------- CARGA DE CRÉDITO ----------------------------------------------
+
+-- 3)
+
+CREATE TRIGGER cargarCreditoAlCliente ON cargaDeCredito
+AFTER INSERT AS
+BEGIN
+	DECLARE @monto_cargado INT,
+		@cliente_id INT
+
+	DECLARE cursorCreditoInsertado CURSOR FOR
+	SELECT carga_monto, carga_id_cliente FROM inserted
+
+	OPEN cursorCreditoInsertado
+
+	FETCH NEXT FROM cursorCreditoInsertado
+	INTO @monto_cargado, @cliente_id
+
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		UPDATE cliente
+		SET cliente_credito = cliente_credito + @monto_cargado
+		WHERE cliente_id = @cliente_id
+
+		FETCH NEXT FROM cursorCreditoInsertado
+		INTO @monto_cargado, @cliente_id
+	END
+
+	CLOSE cursorCreditoInsertado
+	DEALLOCATE cursorCreditoInsertado
+END
+
