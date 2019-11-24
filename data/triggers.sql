@@ -73,60 +73,9 @@ BEGIN
 
 END
 
----------------------------------------  REGISTRO DE USUARIO  ---------------------------------------
-
---3)
-
-CREATE TRIGGER LIL_MIX.usuarioYaExistente ON LIL_MIX.usuario
-INSTEAD OF INSERT AS
-BEGIN
-
-	-- El username debe ser único en un todo el sistema.
-
-	IF EXISTS (SELECT * FROM LIL_MIX.usuario u, inserted i WHERE u.usuario_nombre = i.usuario_nombre)
-
-	--La aplicación deberá controlar esta restricción e informar debidamente al usuario.
-
-		RAISERROR('Nombre de usuario ya existente, intente nuevamente', 16, 1)
-
-	ELSE
-
-		INSERT INTO LIL_MIX.usuario (usuario_nombre, usuario_password, usuario_intentos, usuario_habilitado)
-		VALUES ((SELECT usuario_nombre FROM inserted),(SELECT usuario_password FROM inserted), 0, 1)
-
-END
-
----------------------------------------  AMB DE CLIENTES  ---------------------------------------
-
---4)
-
---El alumno deberá determinar un procedimiento para evitar la generación de clientes
---"gemelos" (distinto nombre de usuario, pero igual datos identificatorios según se
---justifique en la estrategia de resolución).
-
-CREATE TRIGGER LIL_MIX.clientesGemelos ON LIL_MIX.cliente
-INSTEAD OF INSERT AS
-BEGIN
-
-END
-
---5)Eliminar un cliente (Se lo inhabilita)
---		TENEMOS DUDAS SI ESTE ES UN TRIGGER U OTRA COSA
-
-CREATE TRIGGER LIL_MIX.eliminarClientes ON LIL_MIX.cliente
-INSTEAD OF DELETE AS
-BEGIN
-
- --La eliminación de un cliente implica la baja l�gica del mismo.
-
-	UPDATE LIL_MIX.cliente
-	SET cliente_habilitado = 0
-
-END
-
 ---------------------------------------  AMB DE PROVEEDOR  ---------------------------------------
 
---6)No se puede ingresar un proveedor con el mismo CUIT y/o Razon Social
+--3) No se puede ingresar un proveedor con el mismo CUIT y/o Razon Social
 
 CREATE TRIGGER LIL_MIX.proveedorExistente ON LIL_MIX.proveedor
 INSTEAD OF INSERT AS
@@ -159,19 +108,5 @@ BEGIN
 		ROLLBACK
 
 	END CATCH
-
-END
-
---7)Eliminar un proveedor (Se lo inhabilita)
---		TENEMOS DUDAS SI ESTE ES UN TRIGGER U OTRA COSA
-
-CREATE TRIGGER LIL_MIX.eliminarProveedor ON LIL_MIX.proveedor
-INSTEAD OF DELETE AS
-BEGIN
-
- --La eliminación de un proveedor implica la baja lógica del mismo.
-
-	UPDATE LIL_MIX.proveedor
-	SET proveedor_habilitado = 0
 
 END
