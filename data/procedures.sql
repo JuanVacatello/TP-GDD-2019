@@ -74,4 +74,66 @@ BEGIN
 
 END
 
+---------------------------------------  AMB DE CLIENTES  ---------------------------------------
+
+--4)
+
+-- Dar de alta un cliente 
+
+CREATE PROCEDURE LIL_MIX.darDeAltaCliente 
+@nombre_de_usuario VARCHAR(255), @nombre VARCHAR(255), @apellido VARCHAR(255), @dni INT, @mail VARCHAR(255), 
+@telefono INT, @fechanacimiento DATETIME, @codigopostal SMALLINT, @direccion_calle VARCHAR(255), @direccion_piso TINYINT, 
+@direccion_dpto CHAR(1), @ciudad VARCHAR(255)
+AS
+BEGIN
+
+-- El alumno deberá determinar un procedimiento para evitar la generación de clientes “gemelos” 
+-- (distinto nombre de usuario, pero igual datos identificatorios según se justifique en la estrategia de resolución).
+
+BEGIN TRY
+	BEGIN TRAN
+
+	-- Consideramos dato identificatorio al dni 
+
+	IF EXISTS (SELECT * FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (c.cliente_usuario_id = u.usuario_id)
+				 WHERE c.cliente_dni = @dni AND u.usuario_nombre =! @nombre_de_usuario)
+		THROW 51003, 'Cliente gemelo. No puede realizarse la operación', 1
+
+	INSERT INTO dirección (direccion_calle, direccion_piso, direccion_dpto, direccion_ciudad)
+	VALUES (@direccion_calle, @direccion_piso, @direccion_dpto, @ciudad)
+
+	-- Toda creación de cliente nuevo, implica una carga de dinero de bienvenida de $200.
+	
+	INSERT INTO cliente (cliente_nombre, cliente_apellido, cliente_mail, cliente_telefono, cliente_fecha_nacimiento, 
+				cliente_cp, cliente_dni, cliente_credito, cliente_habilitado, cliente_usuario_id, cliente_direccion_id)
+	VALUES (@nombre, @apellido, @mail, @telefono, @fechanacimiento, @codigopostal, @dni, 200, 1, 
+		(SELECT usuario_id FROM usuario WHERE usuario_nombre = @nombre_de_usuario),
+		(SELECT direccion_id FROM dirección WHERE direccion_calle = @direccion_calle AND direccion_piso = @direccion_piso AND
+		direccion_dpto = @direccion_dpto AND direccion_ciudad = @ciudad)) 
+	
+	COMMIT
+
+END TRY
+
+BEGIN CATCH
+
+	ROLLBACK
+
+END CATCH
+
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
