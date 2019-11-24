@@ -45,7 +45,7 @@ CREATE TABLE LIL_MIX.oferta ( oferta_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 							  oferta_codigo VARCHAR(255)
 							  )
 
-CREATE TABLE LIL_MIX.cliente ( cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --el cliente id comenzar· en 1 y se incrementar· en 1 a medida que se vayan agregando nuevos clientes
+CREATE TABLE LIL_MIX.cliente ( cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --el cliente id comenzar√° en 1 y se incrementar√° en 1 a medida que se vayan agregando nuevos clientes
 							   cliente_nombre VARCHAR(255) ,
 							   cliente_apellido VARCHAR(255) , 
 							   cliente_direccion_id INT FOREIGN KEY REFERENCES LIL_MIX.direccion(direccion_id),
@@ -95,7 +95,7 @@ CREATE TABLE LIL_MIX.rolxusuario ( rol_id INT,
 								   usuario_id INT,
 								   PRIMARY KEY (rol_id, usuario_id),
 								   FOREIGN KEY (rol_id) REFERENCES LIL_MIX.rol(rol_id),
-								   FOREIGN KEY (usuario_id) REFERENCES usuario(usuario_id)
+								   FOREIGN KEY (usuario_id) REFERENCES LIL_MIX.usuario(usuario_id)
 								   )
 
 CREATE TABLE LIL_MIX.funcionalidadxrol ( rol_id INT,
