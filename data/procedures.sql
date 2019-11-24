@@ -13,10 +13,10 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRAN
 			IF @rol_nombre IN (SELECT rol_nombre FROM LIL_MIX.rol)
-				THROW 51000, 'Rol existente', 1
+				THROW 50004, 'Rol existente', 1
 
 			IF @funcionalidad_descripcion NOT IN (SELECT funcionalidad_descripcion FROM LIL_MIX.funcionalidad)
-				THROW 51001, 'Funcionalidad inexistente', 1
+				THROW 50005, 'Funcionalidad inexistente', 1
 			
 			INSERT INTO LIL_MIX.rol (rol_nombre, rol_habilitado)
 			VALUES (@rol_nombre, 1)
@@ -194,10 +194,10 @@ BEGIN
 
 			--La aplicación deberá controlar esta restricción e informar debidamente al usuario.
 
-				THROW 50008, 'Nombre de usuario ya existente, intente nuevamente', 1
+				THROW 50006, 'Nombre de usuario ya existente, intente nuevamente', 1
 
 			IF @rol_nombre NOT IN (SELECT rol_nombre FROM LIL_MIX.rol)
-				THROW 50009, 'El rol no existe', 1
+				THROW 50007, 'El rol no existe', 1
 			
 			--El password deberá almacenarse encriptado de forma irreversible bajo el algoritmo de encriptación SHA256.
 
@@ -271,7 +271,7 @@ BEGIN TRY
 
 	IF EXISTS (SELECT * FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (c.cliente_usuario_id = u.usuario_id)
 				 WHERE c.cliente_dni = @dni AND u.usuario_nombre =! @nombre_de_usuario)
-		THROW 51003, 'Cliente gemelo. No puede realizarse la operación', 1
+		THROW 50008, 'Cliente gemelo. No puede realizarse la operación', 1
 
 	INSERT INTO LIL_MIX.dirección (direccion_calle, direccion_piso, direccion_dpto, direccion_ciudad)
 	VALUES (@direccion_calle, @direccion_piso, @direccion_dpto, @ciudad)
@@ -312,7 +312,7 @@ BEGIN
 
 END
 
---11)
+-- 11)
 
 -- Todos los datos mencionados anteriormente son modificables. 
 -- Se debe poder volver a habilitar el cliente deshabilitado desde la sección de modificación. 
@@ -330,18 +330,92 @@ BEGIN
 
 END
 
+---------------------------------------------  AMB DE PROVEEDOR  ---------------------------------------------
 
+-- 12)
 
+-- Dar de alta un proveedor 
 
+CREATE PROCEDURE LIL_MIX.darDeAltaProveedor
+@nombre_de_usuario VARCHAR(255), @razon_social VARCHAR(255), @mail VARCHAR(255), @telefono INT, @cuit VARCHAR(13), @rubro VARCHAR(255), 
+@nombre_contacto VARCHAR(255), @codigo_postal SMALLINT, @calle VARCHAR(255), @piso TINYINT, @dpto CHAR(1), @ciudad VARCHAR(255)
+AS
+BEGIN TRY
+	BEGIN TRAN
+	
+		INSERT INTO LIL_MIX.direccion (direccion_calle, direccion_piso, direccion_dpto, direccion_ciudad)
+		VALUES (@calle, @piso, @dpto, @ciudad)
+		
+	--La razón social y cuit son datos únicos, por ende no pueden existir 2 proveedores con la misma razón social y cuit
+	--El sistema deberá controlar esta restricción e informar debidamente al usuario ante alguna anomalía.
 
+		IF EXISTS (SELECT * FROM LIL_MIX.proveedor WHERE proveedor_rs = @razon_social AND proveedor_cuit = @cuit)
+			THROW 50009, 'Combinacion de razón social y CUIT existentes', 1
+			
+		INSERT INTO LIL_MIX.proveedor (proveedor_telefono, proveedor_cuit, proveedor_rubro, proveedor_mail, proveedor_cp, 
+			proveedor_nombre_contacto, proveedor_rs, proveedor_habilitado, proveedor_usuario_id, proveedor_direccion_id)
+		VALUES (@telefono, @cuit, @rubro, @mail, @codigo_postal, @nombre_contacto, @razon_social, 1,
+			(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_de_usuario),
+			(SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = @calle AND direccion_piso = @piso AND
+				direccion_dpto = @dpto AND direccion_ciudad = @ciudad)
+		
+	COMMIT
+END TRY
 
+BEGIN CATCH
+	
+	ROLLBACK
+	
+END CATCH
 
+END
 
+-- 13)
 
+La eliminación de un proveedor implica la baja lógica del mismo.
 
+CREATE PROCEDURE LIL_MIX.eliminarProveedor
+@razon_social VARCHAR(255), @cuit VARCHAR(13)
+AS
+BEGIN
 
+	UPDATE LIL_MIX.proveedor
+	SET proveedor_habilitado = 0
+	WHERE proveedor_rs = @razon_social AND proveedor_cuit = @cuit
 
+END
 
+-- 14)
 
+-- Todos los datos mencionados anteriormente son modificables. 
+-- Se debe poder volver a habilitar el proveedor deshabilitado desde la sección de modificación. 
 
+NI PUTA IDEA COMO SE HACE IDEM EL 11
+
+---------------------------------------  CARGA DE CRÉDITO  ---------------------------------------
+
+-- 15)
+
+-- Esta funcionalidad permite la carga de crédito a la cuenta de un cliente para poder operar en este nuevo sistema
+
+CREATE PROCEDURE LIL_MIX.cargarCredito
+@usuario_nombre VARCHAR(255), @monto INT, @datos_tarjeta 
+@tipo_de_pago VARCHAR(30) -- > efectivo, credito o debito
+AS
+BEGIN
+
+-- Al momento de efectuarse la carga de dinero, el sistema tomará la fecha de día. 
+-- La misma será tomada del archivo de configuración de la aplicación. 
+
+	INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_monto, carga_tipo_de_pago, carga_id_cliente)
+	VALUES (GETDATE(), monto, (SELECT tipo_de_pago FROM LIL_MIX.tipoDePago WHERE tipo_de_pago_descripcion = @tipo_de_pago),
+		(SELECT cliente_id FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id) 
+			WHERE u.usuario_nombre = @usuario_nombre)) — NI IDEA COMO TIENE QUE SER EL GETDATE
+
+	-- Una vez que se determina el monto a cargar, será necesario que se elija el tipo de pago (tarjeta de crédito o débito), 
+	-- será obligatorio que se registren los datos necesarios para poder identificar la tarjeta utilizada. 
+
+	INSERT INTO tipoDePago ( tipo_de_pago_descripcion, tipo_de_pago_descuento, tipo_de_pago_tarjeta_numero)
+
+	END
 
