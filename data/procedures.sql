@@ -41,7 +41,8 @@ END
 -- En la modificación de un rol solo se pueden alterar ambos campos: el nombre y el listado de funcionalidades. 
 
 CREATE PROCEDURE LIL_MIX.modificarRol
-@rol_nombre VARCHAR(30), @rol_nombre_nuevo VARCHAR(30), @funcionalidad_descripcion VARCHAR(30), @accion VARCHAR(1)
+@rol_nombre VARCHAR(30), @rol_nombre_nuevo VARCHAR(30), @funcionalidad_descripcion VARCHAR(30), 
+@accion VARCHAR(1) -- borrar o agregar funcionalidad
 AS
 BEGIN
 
@@ -302,37 +303,107 @@ END
 -- La eliminación de un cliente implica la baja lógica del mismo. 
 
 CREATE PROCEDURE LIL_MIX.eliminarCliente
-@dni_del_cliente int
+@dni_del_cliente INT
 AS
 BEGIN
-
 	UPDATE LIL_MIX.cliente
 	SET cliente_habilitado = 0
 	WHERE cliente_dni = @dni_del_cliente
-
 END
 
 -- 11)
 
--- Todos los datos mencionados anteriormente son modificables. 
+CREATE PROCEDURE LIL_MIX.habilitarCliente
+@dni_del_cliente INT
+AS
+BEGIN
+	UPDATE LIL_MIX.cliente
+	SET cliente_habilitado = 1
+	WHERE cliente_dni = @dni_del_cliente
+END
+
+-- 12)
+
+-- Todos los datos mencionados anteriormente son modificables: Nombre, Apellido, DNI, Mail, Teléfono,
+-- Dirección calle, nro piso, depto y localidad, Código Postal, Fecha de Nacimiento.
 -- Se debe poder volver a habilitar el cliente deshabilitado desde la sección de modificación. 
 
-CREATE PROCEDURE LIL_MIX.modificarCliente
-@nombre_usuario_nuevo VARCHAR(255), @nombre_nuevo VARCHAR(255), @apellido_nuevo VARCHAR(255), @dni_nuevo INT, @mail_nuevo VARCHAR(255), 
+CREATE PROCEDURE LIL_MIX.modificarCliente 
+@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@nombre_nuevo VARCHAR(255), @apellido_nuevo VARCHAR(255), @dni_nuevo INT, @mail_nuevo VARCHAR(255), 
 @telefono_nuevo INT, @fechanacimiento_nuevo DATETIME, @codigopostal_nuevo SMALLINT, @direccion_calle_nuevo VARCHAR(255), 
 @direccion_piso_nuevo TINYINT, @direccion_dpto_nuevo CHAR(1), @ciudad_nuevo VARCHAR(255)
 AS
 BEGIN
+	BEGIN TRY
+		BEGIN TRAN
+		
+		DECLARE @direccion_id_del_cliente INT,
+			@dni_del_cliente INT,
+			@usuario_id_del_cliente INT
+			
+		DECLARE direccionusuarioydni CURSOR FOR
+		SELECT c.cliente_direccion_id, u.usuario_id, c.cliente_dni 
+		FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (c.cliente_usuario_id = u.usuario_id) 
+		WHERE usuario_nombre = @nombre_usuario) 
+		
+		FETCH NEXT FROM direccionusuarioydni
+		INTO @direccion_id_del_cliente, @dni_del_cliente, @usuario_id_del_cliente 		
 
-	IF @nombre_de_usuario IS NOT NULL
-		UPDATE LIL_MIX.usuario
-		SET n
+		-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
+		
+		IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = @contrasenia)
+			THROW 50010, 'Usuario y/o contraseña incorrecta', 1
+		
+		UPDATE LIL_MIX.cliente
+		BEGIN
+			IF @nombre_nuevo IS NOT NULL
+				SET cliente_nombre = @nombre_nuevo
+			IF @apellido_nuevo IS NOT NULL
+				SET cliente_apellido = @apellido_nuevo
+			IF @dni_nuevo IS NOT NULL
+				SET cliente_dni = @dni_nuevo
+			IF @mail_nuevo IS NOT NULL
+				SET cliente_mail = @mail_nuevo
+			IF @telefono_nuevo IS NOT NULL
+				SET cliente_telefono = @telefono_nuevo
+			IF @fechanacimiento_nuevo IS NOT NULL
+				SET cliente_fecha_nacimiento = @fechanacimiento_nuevo
+			IF @codigopostal_nuevo IS NOT NULL
+				SET cliente_cp = @codigopostal_nuevo
+		END			
+		WHERE cliente_usuario_id = @usuario_id_del_cliente
+		
+		UPDATE LIL_MIX.direccion
+		BEGIN
+			IF @direccion_calle_nuevo IS NOT NULL
+				SET direccion_calle = @direccion_calle_nuevo 
+			IF @direccion_piso_nuevo IS NOT NULL
+				SET direccion_piso = @direccion_piso_nuevo
+			IF @direccion_dpto_nuevo IS NOT NULL
+				SET direccion_dpto = @direccion_dpto_nuevo
+			IF @ciudad_nuevo IS NOT NULL
+				SET direccion_ciudad = @ciudad_nuevo
+		END
+		WHERE direccion_id = @direccion_id_del_cliente 
+					
+		EXECUTE LIL_MIX.habilitarCliente @dni_del_cliente
+		
+		COMMIT
+		
+	END TRY
+	
+	BEGIN CATCH
+		
+		ROLLBACK
+	
+	END CATCH
 
 END
 
 ---------------------------------------------  AMB DE PROVEEDOR  ---------------------------------------------
 
--- 12)
+-- 13)
 
 -- Dar de alta un proveedor 
 
@@ -370,7 +441,7 @@ END CATCH
 
 END
 
--- 13)
+-- 14)
 
 La eliminación de un proveedor implica la baja lógica del mismo.
 
@@ -385,7 +456,7 @@ BEGIN
 
 END
 
--- 14)
+-- 15)
 
 -- Todos los datos mencionados anteriormente son modificables. 
 -- Se debe poder volver a habilitar el proveedor deshabilitado desde la sección de modificación. 
@@ -394,7 +465,7 @@ NI PUTA IDEA COMO SE HACE IDEM EL 11
 
 ---------------------------------------  CARGA DE CRÉDITO  ---------------------------------------
 
--- 15)
+-- 16)
 
 -- Esta funcionalidad permite la carga de crédito a la cuenta de un cliente para poder operar en este nuevo sistema
 
