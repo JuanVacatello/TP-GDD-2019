@@ -368,18 +368,15 @@ BEGIN
 			@usuario_id_del_cliente INT
 			
 		DECLARE direccionusuarioydni CURSOR FOR
-		SELECT c.cliente_direccion_id, u.usuario_id, c.cliente_dni 
+		SELECT @direccion_id_del_cliente = c.cliente_direccion_id, 
+		@usuario_id_del_cliente = u.usuario_id, @dni_del_cliente = c.cliente_dni 
 		FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (c.cliente_user_id = u.usuario_id) 
 		WHERE usuario_nombre = @nombre_usuario 
-		
-		FETCH NEXT FROM direccionusuarioydni
-		INTO @direccion_id_del_cliente, @dni_del_cliente, @usuario_id_del_cliente 		
-
+	
 		-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
 		
 		IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = @contrasenia)
 			THROW 50010, 'Usuario y/o contraseña incorrecta', 1
-		
 		
 		BEGIN
 			IF @nombre_nuevo IS NOT NULL
@@ -491,14 +488,96 @@ END
 
 -- 15)
 
--- Todos los datos mencionados anteriormente son modificables. 
--- Se debe poder volver a habilitar el proveedor deshabilitado desde la sección de modificación. 
+CREATE PROCEDURE LIL_MIX.habilitarProveedor
+@cuit VARCHAR(13), @razon_social VARCHAR(255)
+AS
+BEGIN
 
-NI PUTA IDEA COMO SE HACE IDEM EL 11
+	UPDATE LIL_MIX.proveedor
+	SET proveedor_habilitado = 1
+	WHERE proveedor_cuir = @cuit AND proveedor_rs = @razon_social
 
----------------------------------------  CARGA DE CRÉDITO  ---------------------------------------
+END
 
 -- 16)
+
+-- Todos los datos mencionados anteriormente son modificables: Razón Social, Mail, Teléfono, Dirección calle, nro piso, depto 
+-- y localidad, Código Postal, Ciudad, CIUT, Rubro en el cual se desempeña, Nombre de Contacto  
+-- Se debe poder volver a habilitar el proveedor deshabilitado desde la sección de modificación. 
+
+CREATE PROCEDURE LIL_MIX.modificarProveedor
+@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@razon_social_nuevo VARCHAR(255), @mail_nuevo VARCHAR(255), @telefono_nuevo INT, @codigopostal_nuevo SMALLINT, 
+@direccion_calle_nuevo VARCHAR(255), @direccion_piso_nuevo TINYINT, @direccion_dpto_nuevo CHAR(1), @ciudad_nuevo VARCHAR(255)
+@cuit_nuevo VARCHAR(13), @rubro_nuevo VARCHAR(255), @nombre_de_contacto_nuevo VARCHAR(255)
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRAN
+		
+		-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
+		
+		IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = @contrasenia)
+			THROW 50010, 'Usuario y/o contraseña incorrecta', 1
+		
+		DECLARE @cuit_proveedor VARCHAR(13),
+			@razon_social_proveedor VARCHAR(255),
+			@usuario_id_del_proveedor INT,
+			@direccion_id_del_proveedor INT
+			
+		DECLARE cuitrazonsocialdireccionyusuario CURSOR FOR
+		SELECT @direccion_id_del_proveedor = p.proveedor_direccion_id, @usuario_id_del_proveedor = u.usuario_id,  
+		@cuit_proveedor = p.proveedor_cuit, @razon_social_proveedor = p.proveedor_rs
+		FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (p.proveedor_usuario_id = u.usuario_id) 
+		WHERE usuario_nombre = @nombre_usuario 
+		
+		BEGIN
+			IF @razon_social_nuevo IS NOT NULL
+				UPDATE LIL_MIX.proveedor SET proveedor_rs = @razon_social_nuevo WHERE proveedor_usuario_id = @usuario_id_del_proveedor
+			IF @mail_nuevo IS NOT NULL
+				UPDATE LIL_MIX.proveedor SET proveedor_mail = @mail_nuevo WHERE proveedor_usuario_id = @usuario_id_del_proveedor
+			IF @telefono_nuevo IS NOT NULL
+				UPDATE LIL_MIX.proveedor SET proveedor_telefono = @telefono_nuevo WHERE proveedor_usuario_id = @usuario_id_del_proveedor
+			IF @codigopostal_nuevo IS NOT NULL
+				UPDATE LIL_MIX.proveedor SET proveedor_cp = @codigopostal_nuevo WHERE proveedor_usuario_id = @usuario_id_del_proveedor
+			IF @cuit_nuevo IS NOT NULL
+				UPDATE LIL_MIX.proveedor SET proveedor_cuit = @cuit_nuevo_nuevo WHERE proveedor_usuario_id = @usuario_id_del_proveedor
+			IF @rubro_nuevo IS NOT NULL
+				UPDATE LIL_MIX.proveedor SET proveedor_rubro = @rubro_nuevo WHERE proveedor_usuario_id = @usuario_id_del_proveedor
+			IF @nombre_de_contacto_nuevo IS NOT NULL
+				UPDATE LIL_MIX.proveedor SET proveedor_nombre_contacto = @nombre_de_contacto_nuevo WHERE proveedor_usuario_id = @usuario_id_del_proveedor
+			
+		END			
+		
+		BEGIN
+			IF @direccion_calle_nuevo IS NOT NULL
+				UPDATE LIL_MIX.direccion SET direccion_calle = @direccion_calle_nuevo WHERE direccion_id = @direccion_id_del_proveedor
+			IF @direccion_piso_nuevo IS NOT NULL
+				UPDATE LIL_MIX.direccion SET direccion_piso = @direccion_piso_nuevo WHERE direccion_id = @direccion_id_del_proveedor
+			IF @direccion_dpto_nuevo IS NOT NULL
+				UPDATE LIL_MIX.direccion SET direccion_dpto = @direccion_dpto_nuevo WHERE direccion_id = @direccion_id_del_proveedor
+			IF @ciudad_nuevo IS NOT NULL
+				UPDATE LIL_MIX.direccion SET direccion_ciudad = @ciudad_nuevo WHERE direccion_id = @direccion_id_del_proveedor
+		END
+		 
+					
+		EXECUTE LIL_MIX.habilitarProveedor @cuit_proveedor, @razon_social_proveedor
+		
+		COMMIT
+		
+	END TRY
+	
+	BEGIN CATCH
+		
+		ROLLBACK
+	
+	END CATCH
+
+END
+
+--------------------------------------------  CARGA DE CRÉDITO  -----------------------------------------------
+
+-- 17)
 
 IF OBJECT_ID('LIL_MIX.cargarCredito') IS NOT NULL
   DROP PROCEDURE LIL_MIX.cargarCredito
