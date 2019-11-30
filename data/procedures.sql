@@ -4,6 +4,9 @@
 
 --1) 
 
+IF OBJECT_ID('LIL_MIX.crearRol') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.crearRol
+
 --Crear un rol implica cargar los siguientes datos: Nombre y Listado de Funcionalidades (selección acotada) 
  
 CREATE PROCEDURE LIL_MIX.crearRol 
@@ -37,6 +40,9 @@ BEGIN
 END 
 
 --2)
+
+IF OBJECT_ID('LIL_MIX.modificarRol') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarRol
 
 -- En la modificación de un rol solo se pueden alterar ambos campos: el nombre y el listado de funcionalidades. 
 
@@ -84,6 +90,9 @@ END
 
 --3) 
 
+IF OBJECT_ID('LIL_MIX.eliminarRol') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.eliminarRol
+
 -- La eliminación del rol implica una baja lógica del mismo. El rol debe poder inhabilitarse.
 
 CREATE PROCEDURE LIL_MIX.eliminarRol
@@ -98,6 +107,9 @@ BEGIN
 END
 
 --4) 
+
+IF OBJECT_ID('LIL_MIX.habilitarRol') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.habilitarRol
 
 --Se debe poder volver a habilitar un rol inhabilitado desde la sección de modificación. 
 
@@ -181,8 +193,8 @@ END
 
 --6)
 
-IF OBJECT_ID('LIL_MIX.habilitarCliente') IS NOT NULL
-  DROP PROCEDURE LIL_MIX.habilitarCliente
+IF OBJECT_ID('LIL_MIX.crearUsuario') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.crearUsuario
 
 --Crear un Usuario
 
