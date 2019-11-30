@@ -5,6 +5,9 @@
 
 --1) No puede haber un rol con funcionalidades repetidas
 
+IF OBJECT_ID('LIL_MIX.noRepetirFuncionalidadesEnUnRol') IS NOT NULL
+  DROP TRIGGER LIL_MIX.noRepetirFuncionalidadesEnUnRol
+
 CREATE TRIGGER LIL_MIX.noRepetirFuncionalidadesEnUnRol ON LIL_MIX.funcionalidadxrol
 INSTEAD OF INSERT AS
 BEGIN
@@ -62,6 +65,9 @@ END
 
 --2)
 
+IF OBJECT_ID('LIL_MIX.eliminarRolesInhabilitados') IS NOT NULL
+  DROP TRIGGER LIL_MIX.eliminarRolesInhabilitados
+
 CREATE TRIGGER LIL_MIX.eliminarRolesInhabilitados ON LIL_MIX.rol
 AFTER UPDATE AS
 BEGIN
@@ -76,6 +82,9 @@ END
 ----------------------------------------- CARGA DE CRÉDITO ----------------------------------------------
 
 -- 3)
+
+IF OBJECT_ID('LIL_MIX.cargarCreditoAlCliente') IS NOT NULL
+  DROP TRIGGER LIL_MIX.cargarCreditoAlCliente
 
 CREATE TRIGGER cargarCreditoAlCliente ON cargaDeCredito
 AFTER INSERT AS
