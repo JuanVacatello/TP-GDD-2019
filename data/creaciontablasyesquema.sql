@@ -110,7 +110,8 @@ CREATE TABLE LIL_MIX.cliente ( 	cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KE
 				) 
 
 CREATE TABLE LIL_MIX.compra ( 	compra_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-				compra_oferta_id INT FOREIGN KEY REFERENCES LIL_MIX.oferta(oferta_id) ,
+				compra_oferta_numero INT FOREIGN KEY REFERENCES LIL_MIX.oferta(oferta_id),
+				compra_oferta_descr VARCHAR(255),
 				compra_cliente_id INT FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id),
 				compra_cantidad INT,
 				compra_fecha DATETIME
