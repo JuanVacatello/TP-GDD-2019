@@ -161,15 +161,15 @@ CREATE TABLE LIL_MIX.tarjeta ( tarjeta_numero INT NOT NULL PRIMARY KEY,
 				tarjeta_id_cliente INT
 				)
 
-CREATE TABLE LIL_MIX.tipoDePago ( tipo_de_pago INT NOT NULL PRIMARY KEY, --ANTES ERA VARCHAR(30)
-				  tipo_de_pago_descripcion VARCHAR(30), --CREDITO, DEBITO O EFECTIVO
-				  tipo_de_pago_descuento INT,
-				  tipo_de_pago_tarjeta_numero INT FOREIGN KEY REFERENCES LIL_MIX.tarjeta(tarjeta_numero)
-				  )
+CREATE TABLE LIL_MIX.tipoDePago ( tipo_de_pago_id INT NOT NULL PRIMARY KEY, --1, 2, 3
+				  tipo_de_pago_descripcion VARCHAR(30), --EFECTIVO, CREDITO, DEBITO
+				  tipo_de_pago_descuento INT -- ???
+				 )
 
 CREATE TABLE LIL_MIX.cargaDeCredito ( carga_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 					carga_fecha DATETIME,
 					carga_id_cliente INT FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id),
-					carga_tipo_de_pago INT FOREIGN KEY REFERENCES LIL_MIX.tipoDePago(tipo_de_pago), --TODAVIA NO EJECUTAMOS
-					carga_monto BIGINT
+					carga_tipo_de_pago INT FOREIGN KEY REFERENCES LIL_MIX.tipoDePago(tipo_de_pago_id), --TODAVIA NO EJECUTAMOS
+					carga_monto BIGINT,
+					carga_tarjeta_numero INT FOREIGN KEY REFERENCES LIL_MIX.tarjeta(tarjeta_numero)
 					)
