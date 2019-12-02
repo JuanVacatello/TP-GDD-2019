@@ -170,5 +170,5 @@ CREATE TABLE LIL_MIX.cargaDeCredito ( carga_id INT NOT NULL IDENTITY(1,1) PRIMAR
 				      carga_id_cliente INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id),
 				      carga_tipo_de_pago INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.tipoDePago(tipo_de_pago_id), --TODAVIA NO EJECUTAMOS
 				      carga_monto BIGINT NOT NULL,
-				      carga_tarjeta_numero INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.tarjeta(tarjeta_numero)
+				      carga_tarjeta_numero INT FOREIGN KEY REFERENCES LIL_MIX.tarjeta(tarjeta_numero) --puede ser null por si carga con efectivo
 				     )
