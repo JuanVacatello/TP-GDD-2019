@@ -132,12 +132,12 @@ CREATE TABLE LIL_MIX.cupon ( cupon_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 				cupon_cliente_id INT FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id)
 				)
 
-CREATE TABLE LIL_MIX.rol ( rol_id INT NOT NULL PRIMARY KEY,
+CREATE TABLE LIL_MIX.rol ( rol_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 			   rol_nombre VARCHAR(30) NOT NULL,
 			   rol_habilitado BIT
 			   )
 
-CREATE TABLE LIL_MIX.funcionalidad ( funcionalidad_id VARCHAR(30) NOT NULL PRIMARY KEY,
+CREATE TABLE LIL_MIX.funcionalidad ( funcionalidad_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 					 funcionalidad_descipcion VARCHAR(30)
 					 )
 
@@ -149,7 +149,7 @@ CREATE TABLE LIL_MIX.rolxusuario ( rol_id INT,
 				  )
 
 CREATE TABLE LIL_MIX.funcionalidadxrol ( rol_id INT,
-					 funcionalidad_id VARCHAR(30),
+					 funcionalidad_id INT,
 					 PRIMARY KEY (rol_id, funcionalidad_id),
 					 FOREIGN KEY (rol_id) REFERENCES LIL_MIX.rol(rol_id),
 					 FOREIGN KEY (funcionalidad_id) REFERENCES LIL_MIX.funcionalidad(funcionalidad_id)
@@ -161,7 +161,7 @@ CREATE TABLE LIL_MIX.tarjeta ( tarjeta_numero INT NOT NULL PRIMARY KEY,
 				tarjeta_id_cliente INT
 				)
 
-CREATE TABLE LIL_MIX.tipoDePago ( tipo_de_pago_id INT NOT NULL PRIMARY KEY, --1, 2, 3
+CREATE TABLE LIL_MIX.tipoDePago ( tipo_de_pago_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --1, 2, 3
 				  tipo_de_pago_descripcion VARCHAR(30), --EFECTIVO, CREDITO, DEBITO
 				  tipo_de_pago_descuento INT -- ???
 				 )
