@@ -155,14 +155,14 @@ CREATE TABLE LIL_MIX.funcionalidadxrol ( rol_id INT,
 					 FOREIGN KEY (funcionalidad_id) REFERENCES LIL_MIX.funcionalidad(funcionalidad_id)
 					 )
 
-CREATE TABLE LIL_MIX.tarjeta ( tarjeta_numero INT NOT NULL PRIMARY KEY,
+CREATE TABLE LIL_MIX.tarjeta ( 	tarjeta_numero INT NOT NULL PRIMARY KEY,
 				tarjeta_tipo VARCHAR(30),
 				tarjeta_fecha_vencimiento DATETIME,
 				tarjeta_id_cliente INT
 				)
 
-CREATE TABLE LIL_MIX.tipoDePago ( tipo_de_pago_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --1, 2, 3
-				  tipo_de_pago_descripcion VARCHAR(30) --EFECTIVO, CREDITO, DEBITO
+CREATE TABLE LIL_MIX.tipoDePago ( tipo_de_pago_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --1 Y 2
+				  tipo_de_pago_descripcion VARCHAR(30) --CREDITO O DEBITO
 				 )
 
 CREATE TABLE LIL_MIX.cargaDeCredito ( carga_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
@@ -170,5 +170,5 @@ CREATE TABLE LIL_MIX.cargaDeCredito ( carga_id INT NOT NULL IDENTITY(1,1) PRIMAR
 				      carga_id_cliente INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id),
 				      carga_tipo_de_pago INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.tipoDePago(tipo_de_pago_id), --TODAVIA NO EJECUTAMOS
 				      carga_monto BIGINT NOT NULL,
-				      carga_tarjeta_numero INT FOREIGN KEY REFERENCES LIL_MIX.tarjeta(tarjeta_numero) --puede ser null por si carga con efectivo
+				      carga_tarjeta_numero INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.tarjeta(tarjeta_numero) 
 				     )
