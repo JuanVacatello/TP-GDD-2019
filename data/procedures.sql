@@ -640,12 +640,12 @@ BEGIN
 			INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_monto, carga_id_cliente, carga_tipo_de_pago, carga_tarjeta_numero)
 			VALUES (GETDATE(), @monto , @cliente, @tipodepago, @tarjeta_numero) -- NI IDEA COMO TIENE QUE SER EL GETDATE
 
-		COMMIT
+		COMMIT TRANSACTION
 	END TRY
 	
 	BEGIN CATCH
 		
-		ROLLBACK
+		ROLLBACK TRANSACTION
 		
 	END CATCH
 END
@@ -663,7 +663,7 @@ CREATE PROCEDURE LIL_MIX.crearOferta
 AS
 BEGIN
 	BEGIN TRY
-		BEGIN TRAN
+		BEGIN TRANSACTION
 		
 		-- Chequeo de existencia del proveedor
 		
@@ -691,16 +691,101 @@ BEGIN
 			oferta_fecha_vencimiento, oferta_decripcion, oferta_stock, oferta_proveedor_id, oferta_restriccion_compra)
 		VALUES (@oferta_codigo, @oferta_precio_oferta, @oferta_precio_lista, GETDATE(), @oferta_fecha_vencimiento,
 			@oferta_decripcion, @oferta_stock, @oferta_restriccion_compra) --cambiar a la funcion q encontro juan
+			
+	-- ULTIMO PARRAFO: Y SI UN ADMINISTRATIVO HACE UNA OFERTA=?=?=?=?=?
 		
-		COMMIT
+		COMMIT TRANSACTION
 	END TRY
 	
 	BEGIN CATCH
 	
-		ROLLBACK
+		ROLLBACK TRANSACTION
 		
 	END TRY
 END
+
+---------------------------------------  CONFECCIÓN Y PUBLICACIÓN DE OFERTAS ------------------------------------------
+
+-- 19)
+
+-- Esta funcionalidad permite a un cliente comprar una oferta publicada por los diferentes proveedores. 
+
+CREATE PROCEDURE LIL_MIX.comprarOferta
+@oferta_codigo VARCHAR(255), @cliente_dni INT, @cantidad TINYINT			
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+		
+		-- Al momento de realizar la compra el sistema deberá validar que el crédito que posee el usuario sea suficiente
+
+		DECLARE @creditocliente BIGINT,
+			@preciooferta INT,
+			@cantmaximadeofertas TINYINT,
+			@ofertaid INT,
+			@clienteid INT,
+			@compraid INT,
+			@ofertadesc VARCHAR(255)
+		
+		SELECT @creditocliente = cliente_credito, @clienteid = cliente_id
+		FROM LIL_MIX.cliente WHERE cliente_dni = @cliente_dni
+		
+		SELECT @preciooferta = oferta_precio_oferta, @cantmaximadeofertas = oferta_restriccion_compra, 
+		@ofertaid = oferta_id, @ofertadesc = oferta_decripcion
+		FROM LIL_MIX.proveedor WHERE oferta_codigo = @oferta_codigo
+		
+		IF @creditocliente < @preciooferta
+			THROW 50017, 'No tiene crédito suficiente para realizar la compra', 1
+		
+		-- Se deberá validar que la adquisición no supere la cantidad máxima de ofertas permitida por usuario. 
+		
+		IF @cantidad > @cantmaximadeofertas
+			THROW 50018, 'Superó el máximo de unidades para comprar por cliente', 1
+		
+		-- Los datos mínimos a registrar son los siguientes: Fecha de compra, Oferta, Nro de Oferta, Cliente que realizó la compra 
+
+		INSERT INTO (compra_oferta_numero, compra_oferta_descr, compra_cliente_id, compra_cantidad, compra_fecha)
+		VALUES (@ofertaid, @ofertadesc, @clienteid, @cantidad, GETDATE()) --cambiar a la funcion q encontro juan
+		
+		-- Cuando un cliente adquiere una oferta, se le deberá informar el código de compra 
+		-- ((((((((((((no se si esto es asi))))))))))))))
+		
+		SELECT @compraid = compra_id FROM LIL_MIX.compra
+		WHERE compra_oferta_id = @ofertaid AND compra_oferta_descr = @ofertadesc AND compra_cliente_id = @clienteid AND compra_cantidad = @cantidad AND compra_fecha = GETDATE() --cambiar a la funcion q encontro juan
+		
+		PRINT @compraid 
+
+		COMMIT TRANSACTION
+		
+	END TRY
+	
+	BEGIN CATCH
+	
+		ROLLBACK TRANSACTION
+		
+	END CATCH
+
+END
+
+---------------------------------------  ENTREGA/CONSUMO DE OFERTA ------------------------------------------
+
+-- 20)
+
+-- Funcionalidad que permite a un proveedor dar de baja una oferta entregada por un cliente al momento de realizarse el canje.  
+
+-- Este proceso tiene como restricciones que un cupón no puede ser canjeado más de una vez, 
+-- si el cupón se venció tampoco podrá ser canjeado y validarse que dicho cupón entrega corresponda al proveedor. 
+
+-- Para dar de baja un cupón disponible para consumir es necesario que se registre: 
+ 
+ Fecha de consumo  Código de cupón  Cliente 
+
+
+
+
+
+
+
 
 
 
