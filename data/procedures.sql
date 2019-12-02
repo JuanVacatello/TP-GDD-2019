@@ -597,8 +597,8 @@ IF OBJECT_ID('LIL_MIX.cargarCredito') IS NOT NULL
 -- Esta funcionalidad permite la carga de crédito a la cuenta de un cliente para poder operar en este nuevo sistema
 
 CREATE PROCEDURE LIL_MIX.cargarCredito
-@usuario_nombre VARCHAR(255), @monto INT, 
-@tipo_de_pago VARCHAR(30) --efectivo, credito o debito
+@usuario_nombre VARCHAR(255), @monto BIGINT, 
+@tipo_de_pago VARCHAR(30) --credito o debito
 @tarjeta_numero INT, @tarjeta_tipo VARCHAR(30), @tarjeta_fecha_vencimiento DATETIME
 AS
 BEGIN
@@ -650,9 +650,57 @@ BEGIN
 	END CATCH
 END
 		
+---------------------------------------  CONFECCIÓN Y PUBLICACIÓN DE OFERTAS ------------------------------------------
+
+-- 18)
+
+--Este caso de uso es utilizado por los proveedores para armar y publicar las ofertas que formarán parte de la plataforma.
+
+CREATE PROCEDURE LIL_MIX.crearOferta
+@proveedor_cuit VARCHAR(13),
+@oferta_decripcion VARCHAR(255), @oferta_fecha_vencimiento DATETIME, @oferta_precio_oferta INT, @oferta_precio_lista INT,
+@oferta_stock INT, @oferta_restriccion_compra TINYINT, @oferta_codigo VARCHAR(255)
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRAN
+		
+		-- Chequeo de existencia del proveedor
+		
+		IF NOT EXISTS (SELECT * FROM LIL_MIX.proveedor WHERE proveedor_cuit = @proveedor_cuit)
+			THROW 50017, 'Proveedor inexistente', 1
+
+		DECLARE @proveedorid INT
+		
+		SELECT @proveedorid = @proveedor_id FROM LIL_MIX.proveedor
+		WHERE proveedor_cuit = @proveedor_cuit
+		
+		-- El proveedor podrá ir cargando ofertas con diferentes fechas, 
+		-- esta fecha debe ser mayor o igual a la fecha actual del sistema
+		
+		IF @oferta_fecha_vencimiento < GETDATE() --cambiar a la funcion q encontro juan
+			THROW 50015, 'Fecha de vencimiento debe ser mayor o igual a la fecha actual', 1
+		
+		-- Un cupón consta de 2 precios, que son determinados por el proveedor: 
+		-- El precio de oferta. (rebajado) y El precio de lista u original del producto o servicio que se publica 
+		
+		IF @oferta_precio_oferta >= @oferta_precio_lista
+			THROW 50016, 'El precio de oferta debe ser menor que el precio de lista', 1
+			
+		INSERT INTO LIL_MIX.oferta (oferta_codigo, oferta_precio_oferta, oferta_precio_lista, oferta_fecha_publicacion,
+			oferta_fecha_vencimiento, oferta_decripcion, oferta_stock, oferta_proveedor_id, oferta_restriccion_compra)
+		VALUES (@oferta_codigo, @oferta_precio_oferta, @oferta_precio_lista, GETDATE(), @oferta_fecha_vencimiento,
+			@oferta_decripcion, @oferta_stock, @oferta_restriccion_compra) --cambiar a la funcion q encontro juan
+		
+		COMMIT
+	END TRY
 	
-
-
+	BEGIN CATCH
+	
+		ROLLBACK
+		
+	END TRY
+END
 
 
 
