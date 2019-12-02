@@ -597,22 +597,57 @@ IF OBJECT_ID('LIL_MIX.cargarCredito') IS NOT NULL
 -- Esta funcionalidad permite la carga de crédito a la cuenta de un cliente para poder operar en este nuevo sistema
 
 CREATE PROCEDURE LIL_MIX.cargarCredito
-@usuario_nombre VARCHAR(255), @monto INT, @tipo_de_pago VARCHAR(30) --efectivo, credito o debito
--- Lo saque por que no se usa y no tenia tipo de dato @datos_tarjeta 
+@usuario_nombre VARCHAR(255), @monto INT, 
+@tipo_de_pago VARCHAR(30) --efectivo, credito o debito
+@tarjeta_numero INT, @tarjeta_tipo VARCHAR(30), @tarjeta_fecha_vencimiento DATETIME
 AS
 BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+		
+			DECLARE @cliente INT,
+				@tipodepago VARCHAR(30)
 
--- Al momento de efectuarse la carga de dinero, el sistema tomará la fecha de día. 
--- La misma será tomada del archivo de configuración de la aplicación. 
+			SELECT @cliente = cliente_id 
+			FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_user_id) 
+			WHERE u.usuario_nombre = @usuario_nombre
 
-	INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_monto, carga_tipo_de_pago, carga_id_cliente)
-	VALUES (GETDATE(), @monto , (SELECT tipo_de_pago FROM LIL_MIX.tipoDePago WHERE tipo_de_pago_descripcion = @tipo_de_pago),
-		(SELECT cliente_id FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_user_id) 
-			WHERE u.usuario_nombre = @usuario_nombre)) -- NI IDEA COMO TIENE QUE SER EL GETDATE
+			SELECT @tipodepago = tipo_de_pago FROM LIL_MIX.tipoDePago 
+			WHERE tipo_de_pago_descripcion = @tipo_de_pago
 
-	-- Una vez que se determina el monto a cargar, será necesario que se elija el tipo de pago (tarjeta de crédito o débito), 
-	-- será obligatorio que se registren los datos necesarios para poder identificar la tarjeta utilizada. 
+			-- Una vez que se determina el monto a cargar, será necesario que se elija el tipo de pago (tarjeta de crédito o débito), 
+			-- será obligatorio que se registren los datos necesarios para poder identificar la tarjeta utilizada. 
 
-	INSERT INTO LIL_MIX.tipoDePago (tipo_de_pago_descripcion, tipo_de_pago_descuento, tipo_de_pago_tarjeta_numero)
+			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_id_cliente != @cliente)
+				THROW 50011, 'Error al ingresar tarjeta', 1
+				
+			IF NOT EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_id_cliente = @cliente)
+				INSERT INTO LIL_MIX.tarjeta (tarjeta_numero, tarjeta_tipo, tarjeta_fecha_vencimiento, tarjeta_id_cliente)
+				VALUES (@tarjeta_numero, @tarjeta_tipo, @tarjeta_fecha_vencimiento, @cliente)
 
-	-- END  Falta terminar
+			-- Al momento de efectuarse la carga de dinero, el sistema tomará la fecha de día. 
+			-- La misma será tomada del archivo de configuración de la aplicación. 
+
+			INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_monto, carga_id_cliente, carga_tipo_de_pago, carga_tarjeta_numero)
+			VALUES (GETDATE(), @monto , @cliente, @tipodepago, @tarjeta_numero) -- NI IDEA COMO TIENE QUE SER EL GETDATE
+
+		COMMIT
+	END TRY
+	
+	BEGIN CATCH
+		
+		ROLLBACK
+		
+	END CATCH
+END
+		
+	
+
+
+
+
+
+
+
+
+
