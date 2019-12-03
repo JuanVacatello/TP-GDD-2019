@@ -716,8 +716,6 @@ AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
-		
-		-- Al momento de realizar la compra el sistema deberá validar que el crédito que posee el usuario sea suficiente
 
 		DECLARE @creditocliente BIGINT,
 			@preciooferta INT,
@@ -726,14 +724,22 @@ BEGIN
 			@clienteid INT,
 			@compraid INT,
 			@ofertadesc VARCHAR(255),
-			@fechavenc DATETIME
+			@fechavenc DATETIME,
+			@stockdisponible INT
 		
 		SELECT @creditocliente = cliente_credito, @clienteid = cliente_id
 		FROM LIL_MIX.cliente WHERE cliente_dni = @cliente_dni
 		
-		SELECT @preciooferta = oferta_precio_oferta, @cantmaximadeofertas = oferta_restriccion_compra, 
-		@ofertaid = oferta_id, @ofertadesc = oferta_decripcion, @fechavenc = oferta_fecha_vencimiento
-		FROM LIL_MIX.proveedor WHERE oferta_codigo = @oferta_codigo
+		SELECT @ofertaid = oferta_id, @preciooferta = oferta_precio_oferta, @fechavenc = oferta_fecha_vencimiento,
+		@ofertadesc = oferta_decripcion, @cantmaximadeofertas = oferta_restriccion_compra, @stockdisponible = oferta_stock
+		FROM LIL_MIX.oferta WHERE oferta_codigo = @oferta_codigo
+		
+		-- Chequear si hay stock disponible
+		
+		IF @stockdisponible < @cantidad
+			THROW 50030, 'No hay suficiente stock de dicha oferta', 1
+	
+		-- Al momento de realizar la compra el sistema deberá validar que el crédito que posee el usuario sea suficiente
 		
 		IF @creditocliente < (@preciooferta * @cantidad)
 			THROW 50017, 'No tiene crédito suficiente para realizar la compra', 1
@@ -753,7 +759,11 @@ BEGIN
 		SELECT @compraid = compra_id FROM LIL_MIX.compra
 		WHERE compra_oferta_id = @ofertaid AND compra_oferta_descr = @ofertadesc AND compra_cliente_id = @clienteid AND compra_cantidad = @cantidad AND compra_fecha = GETDATE() --cambiar a la funcion q encontro juan
 		
-		PRINT @compraid 
+		UPDATE LIL_MIX.oferta
+		SET oferta_stock = oferta_stock - @cantidad
+		WHERE oferta_codigo = @oferta_codigo
+		
+		RETURN @compraid 
 		
 		-- Generación automática del cupón
 		
