@@ -711,7 +711,7 @@ END
 -- Esta funcionalidad permite a un cliente comprar una oferta publicada por los diferentes proveedores. 
 
 CREATE PROCEDURE LIL_MIX.comprarOferta
-@oferta_codigo VARCHAR(255), @cliente_dni INT, @cantidad TINYINT			
+@oferta_codigo VARCHAR(255), @cliente_dni INT, @cantidad TINYINT, @diadecompra DATETIME			
 AS
 BEGIN
 	BEGIN TRY
@@ -746,10 +746,9 @@ BEGIN
 		-- Los datos mínimos a registrar son los siguientes: Fecha de compra, Oferta, Nro de Oferta, Cliente que realizó la compra 
 
 		INSERT INTO LIL_MIX.compra (compra_oferta_numero, compra_oferta_descr, compra_cliente_id, compra_cantidad, compra_fecha)
-		VALUES (@ofertaid, @ofertadesc, @clienteid, @cantidad, GETDATE()) --cambiar a la funcion q encontro juan
+		VALUES (@ofertaid, @ofertadesc, @clienteid, @cantidad, @diadecompra) 
 		
 		-- Cuando un cliente adquiere una oferta, se le deberá informar el código de compra 
-		-- ((((((((((((no se si esto es asi))))))))))))))
 		
 		SELECT @compraid = compra_id FROM LIL_MIX.compra
 		WHERE compra_oferta_id = @ofertaid AND compra_oferta_descr = @ofertadesc AND compra_cliente_id = @clienteid AND compra_cantidad = @cantidad AND compra_fecha = GETDATE() --cambiar a la funcion q encontro juan
@@ -759,7 +758,7 @@ BEGIN
 		-- Generación automática del cupón
 		
 		INSERT INTO LIL_MIX.cupon (cupon_fecha_vencimiento, cupon_compra_id, cupon_cliente_id)
-		VALUES (@fechavenc, @compraid, @clienteid)
+		VALUES (DATEADD(day, 30, @diadecompra), @compraid, @clienteid)
 
 		COMMIT TRANSACTION
 		
@@ -780,18 +779,18 @@ END
 -- Funcionalidad que permite a un proveedor dar de baja una oferta entregada por un cliente al momento de realizarse el canje.  
 
 CREATE PROCEDURE LIL_MIX.consumoDeOferta
-@cuponid INT, @proveedorcuit VARCHAR(13)
+@cuponid INT, @proveedorcuit VARCHAR(13), @fechaconsumo DATETIME
 AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
 		
 		DECLARE @fechaconsumo DATETIME,
-			@fechavenc DATETIME,
+			@fechacomp DATETIME,
 			@proveedorid INT,
 			@proveedoridchequear INT
 		
-		SELECT @fechaconsumo = cu.cupon_fecha_consumo, @fechavenc = cu.cupon_fecha_vencimiento,
+		SELECT @fechaconsumo = cu.cupon_fecha_consumo, @fechacomp = co.compra_fecha,
 		@proveedoridchequear = of.oferta_proveedor_id
 		FROM LIL_MIX.compra co JOIN LIL_MIX.cupon cu ON (cu.cupon_compra_id = co.compra_id)
 				       JOIN LIL_MIX.oferta of ON (of.oferta_id = co.compra_oferta_numero)
@@ -817,7 +816,7 @@ BEGIN
 	-- Para dar de baja un cupón disponible para consumir es necesario que se registre: Fecha de consumo, Código de cupón, Cliente 
 		
 		UPDATE LIL_MIX.cupon
-		SET cupon_fecha_consumo = GETDATE()
+		SET cupon_fecha_consumo = @fechaconsumo
 		WHERE cupon_id = @cuponid
 			
 		COMMIT TRANSACTION
@@ -833,7 +832,7 @@ END
 
 ------------------------------------- FACTURACION PROVEEDOR -------------------------------------------------
 
---21)
+-- 21)
 
 -- Esta funcionalidad permite a un administrativo facturar a un proveedor todas las ofertas compradas por los clientes. 
 -- Para ello ingresará el período de facturación por intervalos de fecha, se deberá seleccionar el proveedor 
@@ -875,11 +874,39 @@ BEGIN
 
 END
 
+----------------------------------------- LISTADO ESTADÍSTICO -------------------------------------------------
+
+-- 22)
+
+-- Esta funcionalidad nos debe permitir consultar el TOP 5 de: 
+--	o Proveedores con mayor porcentaje de descuento ofrecido en sus ofertas 
+--	o Proveedores con mayor facturación 
+
+-- Dichas consultas son a nivel semestral, para lo cual la pantalla debe permitirnos selección el semestral a consultar.  
+-- Además de ingresar el año a consultar, el sistema nos debe permitir seleccionar que tipo de listado se quiere visualizar. 
+
+CREATE PROCEDURE LIL_MIX.listadoEstadistico
+@anio INT,
+@semestre INT, -- 1 o 2
+@listadoavisualizar INT -- Prov mayor porcentaje descuento o Prov mayor facturacion
+AS
+BEGIN
+	
+	SELECT TOP 5 p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs,
+	SUM(f.factura_importe) as 'Total Facturado'
+	FROM LIL_MIX.proveedor p JOIN LIL_MIX.factura f ON (f.factura_proveedor_id = p.proveedor_id), LIL_MIX.semestre s
+	WHERE s.semestre_id = @semestre
+	GROUP BY p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs
+	HAVING YEAR(f.factura_fecha_inicio) = @anio AND YEAR(f.factura_fecha_fin) = @anio 
+	ORDER BY [Total Facturado]
 
 
+END
 
 
-
+El listado se debe ordenar en forma descendente por monto. 
+Cabe aclarar que los campos a visualizar en la tabla del listado para las 2 consultas no son los mismos, 
+y al momento de seleccionar un tipo solo deben visualizarse las columnas pertinentes al tipo de listado elegido. 
 
 
 
