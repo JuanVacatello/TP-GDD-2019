@@ -874,7 +874,7 @@ BEGIN
 
 END
 
------------------------------------------ LISTADO ESTADÍSTICO -------------------------------------------------
+--------------------------------------------- LISTADO ESTADÍSTICO -----------------------------------------------------
 
 -- 22)
 
@@ -891,30 +891,31 @@ CREATE PROCEDURE LIL_MIX.listadoEstadistico
 AS
 BEGIN
 
-	IF @listadoavisualizar = 1
+	IF @listadoavisualizar = 1 -- Proveedores con mayor porcentaje de descuento ofrecido en sus ofertas 
 	
-	IF @listadoavisualizar = 2
+		SELECT TOP 5 o.proveedor_id as 'ID', p.proveedor_nombre_contacto as 'Nombre de contacto', p.proveedor_mail as 'Mail', 
+			p.proveedor_cuit as 'CUIT', p.proveedor_rubro as 'Rubro', p.proveedor_rs as 'Razon social', 
+			(o.oferta_precio_oferta * 100 / o.oferta_precio_lista) as 'Porcentaje de Descuento'				
+		FROM LIL_MIX.proveedor p JOIN LIL_MIX.oferta o ON (o.oferta_proveedor_id = p.proveedor_id), LIL_MIX.semestre s
+		WHERE s.semestre_id = @semestre
+		GROUP BY p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs
+		HAVING o.oferta_fecha_publicacion BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103)
+		ORDER BY [Porcentaje de Descuento] DESC	
+
+	IF @listadoavisualizar = 2 -- Proveedores con mayor facturación 
 	
-	SELECT TOP 5 s.semestre_fecha_inicio+'-'+@anio as 'Desde', s.semestre_fecha_fin+'-'+@anio as 'Hasta', 
-		p.proveedor_nombre_contacto as 'Nombre de contacto', p.proveedor_mail as 'Mail', p.proveedor_cuit as 'CUIT', 
-		p.proveedor_rubro as 'Rubro', p.proveedor_rs as 'Razon social', SUM(f.factura_importe) as 'Total Facturado'
-	FROM LIL_MIX.proveedor p JOIN LIL_MIX.factura f ON (f.factura_proveedor_id = p.proveedor_id), LIL_MIX.semestre s
-	WHERE s.semestre_id = @semestre
-	GROUP BY s.semestre_fecha_inicio+'-'+@anio, s.semestre_fecha_fin+'-'+@anio, p.proveedor_nombre_contacto, 
-		p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs
-	HAVING (f.factura_fecha_inicio BETWEEN CONVERT(DATIME, s.semestre_fecha_inicio+'-'+@anio) AND CONVERT(DATIME, s.semestre_fecha_fin+'-'+@anio))
-		AND (f.factura_fecha_fin BETWEEN CONVERT(DATIME, s.semestre_fecha_inicio+'-'+@anio) AND CONVERT(DATIME, s.semestre_fecha_fin+'-'+@anio))
-	ORDER BY [Total Facturado] DESC	
+		SELECT TOP 5 o.proveedor_id as 'ID', p.proveedor_nombre_contacto as 'Nombre de contacto', p.proveedor_mail as 'Mail', 
+			p.proveedor_cuit as 'CUIT', p.proveedor_rubro as 'Rubro', p.proveedor_rs as 'Razon social', SUM(f.factura_importe) as 'Total Facturado'
+		FROM LIL_MIX.proveedor p JOIN LIL_MIX.factura f ON (f.factura_proveedor_id = p.proveedor_id), LIL_MIX.semestre s
+		WHERE s.semestre_id = @semestre
+		GROUP BY p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs
+		HAVING (f.factura_fecha_inicio BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103))
+			AND (f.factura_fecha_fin BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103))
+		ORDER BY [Total Facturado] DESC	
 	
 END
-
 
 -- El listado se debe ordenar en forma descendente por monto. 
 -- Cabe aclarar que los campos a visualizar en la tabla del listado para las 2 consultas no son los mismos, 
 -- y al momento de seleccionar un tipo solo deben visualizarse las columnas pertinentes al tipo de listado elegido. 
-
-
-
-
-
 
