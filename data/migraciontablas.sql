@@ -93,7 +93,8 @@ GROUP BY Cli_Nombre , Cli_Apellido , Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , C
 */
 
 INSERT INTO LIL_MIX.factura (factura_numero , factura_proveedor_id, factura_fecha_inicio, factura_fecha_fin, factura_importe)
-SELECT Factura_Nro , (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit LIKE Provee_CUIT), SUM()
+SELECT Factura_Nro , (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE Provee_CUIT = proveedor_cuit) , MIN(Oferta_Fecha_Compra) , Factura_Fecha , SUM(Oferta_Precio) 
 FROM gd_esquema.Maestra
-
---Fecha inicio? Fecha fin? Datos tabla compra?
+WHERE Factura_Nro IS NOT NULL
+GROUP BY Factura_Nro , Factura_Fecha , Provee_CUIT
+ORDER BY Factura_Nro , Factura_Fecha
