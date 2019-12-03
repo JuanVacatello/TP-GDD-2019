@@ -75,10 +75,10 @@ IF OBJECT_ID('LIL_MIX.cargaDeCredito') IS NOT NULL
 
 CREATE TABLE LIL_MIX.usuario ( usuario_id INT NOT NULL IDENTITY(1000,1) PRIMARY KEY,
 			       usuario_nombre VARCHAR(255) NOT NULL UNIQUE,
-			       usuario_password VARCHAR(255) NOT NULL,
-			       usuario_intentos TINYINT,
-			       usuario_habilitado BIT
-				)
+	                       usuario_password VARCHAR(255) NOT NULL,
+			       usuario_intentos TINYINT DEFAULT 0,
+			       usuario_habilitado BIT DEFAULT 1
+			      )
 									   					 
 CREATE TABLE LIL_MIX.direccion ( direccion_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 				 direccion_calle VARCHAR(255),
