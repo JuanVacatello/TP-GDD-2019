@@ -427,6 +427,8 @@ END
 
 -- 12)
 
+-- Se debe poder volver a habilitar el cliente deshabilitado desde la sección de modificación. 
+
 IF OBJECT_ID('LIL_MIX.habilitarCliente') IS NOT NULL
   DROP PROCEDURE LIL_MIX.habilitarCliente
 
@@ -449,7 +451,6 @@ IF OBJECT_ID('LIL_MIX.modificarCliente') IS NOT NULL
 
 -- Todos los datos mencionados anteriormente son modificables: Nombre, Apellido, DNI, Mail, Teléfono,
 -- Dirección calle, nro piso, depto y localidad, Código Postal, Fecha de Nacimiento.
--- Se debe poder volver a habilitar el cliente deshabilitado desde la sección de modificación. 
 
 CREATE PROCEDURE LIL_MIX.modificarCliente 
 @contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -466,14 +467,13 @@ BEGIN
 			@usuario_id_del_cliente INT
 			
 		DECLARE direccionusuarioydni CURSOR FOR
-		SELECT @direccion_id_del_cliente = c.cliente_direccion_id, 
-		@usuario_id_del_cliente = u.usuario_id, @dni_del_cliente = c.cliente_dni 
+		SELECT @direccion_id_del_cliente = c.cliente_direccion_id, @usuario_id_del_cliente = u.usuario_id, @dni_del_cliente = c.cliente_dni 
 		FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (c.cliente_user_id = u.usuario_id) 
 		WHERE usuario_nombre = @nombre_usuario 
 	
 		-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
 		
-		IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = @contrasenia)
+		IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
 			THROW 50010, 'Usuario y/o contraseña incorrecta', 1
 		
 		BEGIN
@@ -503,9 +503,6 @@ BEGIN
 			IF @ciudad_nuevo IS NOT NULL
 				UPDATE LIL_MIX.direccion SET direccion_ciudad = @ciudad_nuevo WHERE direccion_id = @direccion_id_del_cliente
 		END
-		 
-					
-		EXECUTE LIL_MIX.habilitarCliente @dni_del_cliente
 		
 		COMMIT
 		
@@ -719,10 +716,17 @@ BEGIN
 		IF NOT EXISTS (SELECT * FROM LIL_MIX.proveedor WHERE proveedor_cuit = @proveedor_cuit)
 			THROW 50017, 'Proveedor inexistente', 1
 
-		DECLARE @proveedorid INT
+		DECLARE @proveedorid INT,
+			@proveedorhabilitado BIT
 		
-		SELECT @proveedorid = @proveedor_id FROM LIL_MIX.proveedor
+		SELECT @proveedorid = @proveedor_id, @proveedorhabilitado = proveedor_habilitado
+		FROM LIL_MIX.proveedor
 		WHERE proveedor_cuit = @proveedor_cuit
+		
+		-- Un proveedor inhabilitado no podrá armar ofertas. 
+		
+		IF @proveedorhabilitado = 0
+			THROW 50070, 'Proveedor inhabilitado. No puede armar ofertas', 1
 		
 		-- El proveedor podrá ir cargando ofertas con diferentes fechas, 
 		-- esta fecha debe ser mayor o igual a la fecha actual del sistema
