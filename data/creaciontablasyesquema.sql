@@ -171,3 +171,8 @@ CREATE TABLE LIL_MIX.cargaDeCredito ( carga_id INT NOT NULL IDENTITY(1,1) PRIMAR
 				      carga_monto BIGINT NOT NULL,
 				      carga_tarjeta_numero INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.tarjeta(tarjeta_numero) 
 				     )
+
+CREATE TABLE LIL_MIX.semestre ( semestre_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+				semestre_fecha_inicio DATETIME,
+				semestre_fecha_fin DATETIME
+				)
