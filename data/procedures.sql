@@ -540,6 +540,8 @@ END
 
 -- 15)
 
+-- Se debe poder volver a habilitar el proveedor deshabilitado desde la sección de modificación. 
+
 CREATE PROCEDURE LIL_MIX.habilitarProveedor
 @cuit VARCHAR(13), @razon_social VARCHAR(255)
 AS
@@ -555,7 +557,6 @@ END
 
 -- Todos los datos mencionados anteriormente son modificables: Razón Social, Mail, Teléfono, Dirección calle, nro piso, depto 
 -- y localidad, Código Postal, Ciudad, CIUT, Rubro en el cual se desempeña, Nombre de Contacto  
--- Se debe poder volver a habilitar el proveedor deshabilitado desde la sección de modificación. 
 
 CREATE PROCEDURE LIL_MIX.modificarProveedor
 @contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -569,7 +570,7 @@ BEGIN
 		
 		-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
 		
-		IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = @contrasenia)
+		IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
 			THROW 50010, 'Usuario y/o contraseña incorrecta', 1
 		
 		DECLARE @cuit_proveedor VARCHAR(13),
@@ -611,9 +612,6 @@ BEGIN
 			IF @ciudad_nuevo IS NOT NULL
 				UPDATE LIL_MIX.direccion SET direccion_ciudad = @ciudad_nuevo WHERE direccion_id = @direccion_id_del_proveedor
 		END
-		 
-					
-		EXECUTE LIL_MIX.habilitarProveedor @cuit_proveedor, @razon_social_proveedor
 		
 		COMMIT
 		
