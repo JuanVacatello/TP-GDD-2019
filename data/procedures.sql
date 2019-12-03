@@ -2,12 +2,14 @@
 
 ----------------------------------------  AMB DE ROL  ----------------------------------------
 
---1) 
+-- 1) 
+
+-- Funcionalidad para poder crear, modificar y eliminar el acceso de un usuario a una opción del sistema. 
 
 IF OBJECT_ID('LIL_MIX.crearRol') IS NOT NULL
   DROP PROCEDURE LIL_MIX.crearRol
 
---Crear un rol implica cargar los siguientes datos: Nombre y Listado de Funcionalidades (selección acotada) 
+-- Crear un rol implica cargar los siguientes datos: Nombre y Listado de Funcionalidades (selección acotada) 
  
 CREATE PROCEDURE LIL_MIX.crearRol 
 @rol_nombre VARCHAR(30), @funcionalidad_descripcion VARCHAR(30)
