@@ -91,20 +91,11 @@ INSERT INTO LIL_MIX.listado (listado_descripcion) VALUES ('Proveedores con mayor
 INSERT INTO LIL_MIX.listado (listado_descripcion) VALUES ('Proveedores con mayor facturaci�n')
 GO
 --                       Listados de semestres
-INSERT INTO LIL_MIX.semestre(semestre_descripcion) VALUES ('1')
-INSERT INTO LIL_MIX.semestre(semestre_descripcion) VALUES ('2')
+INSERT INTO LIL_MIX.semestre(semestre_fecha_inicio, semestre_fecha_fin) VALUES ('01-01', '30-06')
+INSERT INTO LIL_MIX.semestre(semestre_fecha_inicio, semestre_fecha_fin) VALUES ('01-07', '31-12')
 GO
 
 --                        Forma de pago
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Efectivo')
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Credito')
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Debito')
-
-/*--                         Operacion de compra
-insert into SQL_INJECTION.OperacionCompra(nombreOperacion) values ('Comprar pasaje')
-insert into SQL_INJECTION.OperacionCompra(nombreOperacion) values ('Reservar pasaje')
-
---                         Operacion de cancelar pasajes por reparacion del crucero
-insert into SQL_INJECTION.OperacionCancelarPasajes(nombreOperacion) values ('Cancelar Pasajes')
-insert into SQL_INJECTION.OperacionCancelarPasajes(nombreOperacion) values ('Reprogramar pasajes')
-*/
