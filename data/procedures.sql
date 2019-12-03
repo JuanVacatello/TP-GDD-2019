@@ -129,40 +129,75 @@ END
 
 ----------------------------------------  LOGIN Y SEGURIDAD  ----------------------------------------
 
---5)
+-- 5)
 
-CREATE PROCEDURE LIL_MIX.Login_procedure @username VARCHAR(20) , @password VARCHAR(10)
+-- Al ejecutar la aplicación el usuario no podrá acceder a ninguna funcionalidad del sistema hasta 
+-- completar el proceso de Login. 
+
+CREATE PROCEDURE LIL_MIX.login
+@usuario VARCHAR(255), @password_ingresada VARCHAR(255) 
 AS
- BEGIN
-	DECLARE @intentos TINYINT 
-	DECLARE @hash VARBINARY(225) 
-	DECLARE @pass VARBINARY(225)
-	DECLARE @cantidad INT 
+BEGIN
+	DECLARE @password_del_usuario varchar(255),
+		@password_hasheada nvarchar(255),
+		@intentos tinyint,
+		@usuario_habilitado bit
+
+	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario)
+	BEGIN
+		RAISERROR('El usuario ingresado no existe.', 16, 1)
+		RETURN
+	END
+
+	SELECT @password_del_usuario = usuario_password, @usuario_habilitado = usuario_habilitado
+	FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario
+
+	IF @usuario_habilitado = 0 
+	BEGIN
+		RAISERROR('El usuario ha sido inhabilitado. Por favor, contáctese con un administrador.', 16, 1)
+		RETURN
+	END
+
+	SELECT @password_hasheada = HASHBYTES('SHA2_256', @password_ingresada)
+
+	IF @password_del_usuario != @password_hasheada
+	BEGIN
+		RAISERROR('Contraseña incorrecta.', 16, 1)
+		
+		-- El sistema debe llevar un registro de cantidad intentos fallidos de login. 
+
+		UPDATE LIL_MIX.usuario
+		SET usuario_intentos = usuario_intentos + 1
+		WHERE usuario_nombre = @usuario
+		
+		SELECT @intentos = usuario_intentos
+		FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario
+
+		IF @intentos >= 3
+		BEGIN
+			RAISERROR('Ha ingresado la contraseña 3 veces de forma incorrecta. El usuario ha sido inhabilitado', 16, 1)
+
+			-- Luego de 3 intentos fallidos en cualquier momento, el usuario debe ser inhabilitado.
+			
+			UPDATE LIL_MIX.usuario
+			SET usuario_habilitado = 0
+			WHERE usuario_nombre = @usuario
+
+			RETURN
+		END
+	END
+	ELSE
+	BEGIN
 	
-	SET @intentos = (SELECT usuario_intentos FROM LIL_MIX.usuario WHERE usuario_nombre = @username) --INTENTOS FALLIDOS
-    SET @hash = HASHBYTES('SHA2_256',  @password) -- Me encripta el password
-	SET @pass = (SELECT usuario_password FROM LIL_MIX.usuario WHERE usuario_nombre = @username) -- El password real
-
-	IF(@intentos IS NULL) 	--me fijo si esta el usuario
-		SET @cantidad = -1
-
-		ELSE IF(@hash != @pass)  --comparo las contrasenias , la que me pasan y se encripta con la real (se equivoca)
-			BEGIN
-				SET @cantidad = @intentos
-				IF(@intentos != 3)  --verifico la cantidad de ceros. si aun le quedan, hago el update
-					UPDATE LIL_MIX.usuario 
-					SET usuario_intentos = @intentos + 1 
-					WHERE usuario_nombre = @username
-			END				
-		ELSE 
-			IF (@intentos != 3) 
-				BEGIN
-				SET @cantidad = 4   --Todo bien! Contrasenia correcta!
-				UPDATE LIL_MIX.Usuario SET usuario_intentos = 0 
-				WHERE usuario_nombre = @username
-				END
-		RETURN @cantidad
- END
+		-- Al realizar un Login satisfactorio, el sistema deberá limpiar la cantidad de intentos fallidos.
+		
+		UPDATE LIL_MIX.usuario
+		SET usuario_intentos = 0
+		WHERE usuario_nombre = @usuario
+		
+		RETURN
+	END
+END
 
 ------------------------------------  REGISTRO DE USUARIO  -----------------------------------
 
