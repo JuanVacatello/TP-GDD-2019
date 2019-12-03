@@ -9,6 +9,23 @@ CREATE SCHEMA LIL_MIX AUTHORIZATION  gdCupon2019
 
 --CREACION DE TABLAS 
 
+DECLARE cursor_tablas CURSOR FOR
+SELECT 'ALTER TABLE [' +  OBJECT_SCHEMA_NAME(parent_object_id) +'].[' + OBJECT_NAME(parent_object_id) + '] DROP CONSTRAINT [' + name + ']'
+FROM sys.foreign_keys
+
+DECLARE @sql nvarchar(255)
+OPEN cursor_tablas
+FETCH NEXT FROM cursor_tablas INTO @sql
+
+WHILE @@FETCH_STATUS = 0
+    BEGIN
+    execute sp_executesql @sql
+    FETCH NEXT FROM cursor_tablas INTO @sql
+    END
+CLOSE cursor_tablas
+DEALLOCATE cursor_tablas
+GO
+
 IF OBJECT_ID('LIL_MIX.usuario') IS NOT NULL
   DROP TABLE LIL_MIX.usuario
 
