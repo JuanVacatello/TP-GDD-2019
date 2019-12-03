@@ -225,10 +225,10 @@ BEGIN
 
 		--La aplicación deberá controlar esta restricción e informar debidamente al usuario.
 
-			THROW 50006, 'Nombre de usuario ya existe, intente con uno distinto.', 1
+			THROW 50064, 'Nombre de usuario ya existe, intente con uno distinto.', 1
 
 		IF @rol_nombre NOT IN (SELECT rol_nombre FROM LIL_MIX.rol)
-			THROW 50007, 'El rol no existe, intente nuevamente.', 1
+			THROW 500065, 'El rol no existe, intente nuevamente.', 1
 			
 		-- El password deberá almacenarse encriptado de forma irreversible bajo el algoritmo de encriptación SHA256.
 	
@@ -649,14 +649,20 @@ BEGIN
 		BEGIN TRANSACTION
 		
 			DECLARE @cliente INT,
-				@tipodepago VARCHAR(30)
+				@tipodepago VARCHAR(30),
+				@clientehabilitado BIT
 
-			SELECT @cliente = cliente_id 
+			SELECT @cliente = cliente_id, @clientehabilitado = cliente_habilitado
 			FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_user_id) 
 			WHERE u.usuario_nombre = @usuario_nombre
 
 			SELECT @tipodepago = tipo_de_pago FROM LIL_MIX.tipoDePago 
 			WHERE tipo_de_pago_descripcion = @tipo_de_pago
+			
+			-- Un cliente inhabilitado no podrá comprar ofertas ni cargarse crédito bajo ninguna forma
+			
+			IF @clientehabiliado = 0
+				THROW 50063, 'Cliente inhabilitado. No puede cargarse de crédito.', 1
 
 			-- Una vez que se determina el monto a cargar, será necesario que se elija el tipo de pago (tarjeta de crédito o débito), 
 			-- será obligatorio que se registren los datos necesarios para poder identificar la tarjeta utilizada. 
@@ -768,14 +774,20 @@ BEGIN
 			@compraid INT,
 			@ofertadesc VARCHAR(255),
 			@fechavenc DATETIME,
-			@stockdisponible INT
+			@stockdisponible INT,
+			@clientehabilitado BIT
 		
-		SELECT @creditocliente = cliente_credito, @clienteid = cliente_id
+		SELECT @creditocliente = cliente_credito, @clienteid = cliente_id, @clientehabilitado = cliente_habilitado
 		FROM LIL_MIX.cliente WHERE cliente_dni = @cliente_dni
 		
 		SELECT @ofertaid = oferta_id, @preciooferta = oferta_precio_oferta, @fechavenc = oferta_fecha_vencimiento,
 		@ofertadesc = oferta_decripcion, @cantmaximadeofertas = oferta_restriccion_compra, @stockdisponible = oferta_stock
 		FROM LIL_MIX.oferta WHERE oferta_codigo = @oferta_codigo
+		
+		-- Un cliente inhabilitado no podrá comprar ofertas ni cargarse crédito bajo ninguna forma
+		
+		IF @clientehabiliado = 0
+			THROW 50064, 'Cliente inhabilitado. No puede comprar ofertas.', 1
 		
 		-- Chequear si hay stock disponible
 		
