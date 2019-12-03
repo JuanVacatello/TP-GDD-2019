@@ -162,8 +162,8 @@ CREATE TABLE LIL_MIX.tarjeta ( 	tarjeta_numero INT NOT NULL PRIMARY KEY,
 				tarjeta_id_cliente INT
 				)
 
-CREATE TABLE LIL_MIX.tipoDePago ( tipo_de_pago_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --1 Y 2
-				  tipo_de_pago_descripcion VARCHAR(30) --CREDITO O DEBITO
+CREATE TABLE LIL_MIX.tipoDePago ( tipo_de_pago_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --1, 2, 3
+				  tipo_de_pago_descripcion VARCHAR(30) --EFECTIVO, CREDITO O DEBITO
 				 )
 
 CREATE TABLE LIL_MIX.cargaDeCredito ( carga_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
