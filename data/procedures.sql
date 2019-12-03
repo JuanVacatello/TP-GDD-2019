@@ -807,7 +807,7 @@ BEGIN
 		-- Si el cupón se venció tampoco podrá ser canjeado 
 		
 		IF @fechavenc < GETDATE() --cambiar a la funcion q encontro juan
-			THROW 50020, 'El cupón ya fue canjeado', 1
+			THROW 50020, 'El cupón está vencido', 1
 			
 		-- Validarse que dicho cupón entrega corresponda al proveedor
 		
