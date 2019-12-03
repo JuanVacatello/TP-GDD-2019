@@ -201,41 +201,14 @@ END
 
 ------------------------------------  REGISTRO DE USUARIO  -----------------------------------
 
--------------------- procedure copiado hay que reveer --> tema encriptacion
+-- CREACIÓN DE AMBOS USUARIOS
 
-CREATE PROCEDURE GEDDES.ingresarUsuario(
-    @username VARCHAR(20),
-  	@password VARCHAR(10),
-    @nombre VARCHAR(255),
-    @apellido VARCHAR(255),
-  	@tipoDoc VARCHAR(20),
-    @nroDoc DECIMAL(8,0),
-  	@direccion VARCHAR(255),
-  	@telefono DECIMAL(18,0),
-  	@fechaNacimiento DATETIME,
-  	@sexo VARCHAR(15),
-	@mail VARCHAR(255))
-AS
-BEGIN
-    DECLARE @pass VARBINARY(225)
-	SET @pass = HASHBYTES('SHA2_256',@password) 
-	INSERT INTO GEDDES.Usuarios(usua_id, usua_username,usua_password, usua_nombre, usua_apellido, usua_tipoDoc, usua_nroDoc, usua_direccion,
-					usua_telefono,usua_fechaNacimiento, usua_sexo, usua_mail)
-
-	VALUES(@nroDoc*100+1,@username,@pass,@nombre,@apellido,@tipoDoc,@nroDoc,@direccion, @telefono,@fechaNacimiento, @sexo, @mail)
-
-	INSERT INTO GEDDES.RolXusuario (usua_id,role_id)
-		VALUES (@nroDoc*100+1, 1)
-
-END
------------
-
---6)
+-- 6) 
 
 IF OBJECT_ID('LIL_MIX.crearUsuario') IS NOT NULL
   DROP PROCEDURE LIL_MIX.crearUsuario
 
---Crear un Usuario
+-- Funcionalidad que se encuentra disponible al momento de loguearse el usuario al sistema. 
 
 CREATE PROCEDURE LIL_MIX.crearUsuario
 @usuario_nombre VARCHAR(255), @usuario_password VARCHAR(255), @rol_nombre VARCHAR(30)
@@ -243,27 +216,28 @@ AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRAN
-			-- El username debe ser único en un todo el sistema.
-
-			IF EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre)
-
-			--La aplicación deberá controlar esta restricción e informar debidamente al usuario.
-
-				THROW 50006, 'Nombre de usuario ya existente, intente nuevamente', 1
-
-			IF @rol_nombre NOT IN (SELECT rol_nombre FROM LIL_MIX.rol)
-				THROW 50007, 'El rol no existe', 1
 			
-			--El password deberá almacenarse encriptado de forma irreversible bajo el algoritmo de encriptación SHA256.
+		-- El username debe ser único en un todo el sistema.
 
-			INSERT INTO LIL_MIX.usuario (usuario_nombre, usuario_password, usuario_intentos, usuario_habilitado)
-			VALUES (@usuario_nombre, @usuario_password, 0, 1)
+		IF EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre)
 
-			INSERT INTO LIL_MIX.rolxusuario(rol_id, usuario_id)
-			VALUES ((SELECT rol_id FROM LIL_MIX.rol WHERE rol_nombre = @rol_nombre), 
-					(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre))
+		--La aplicación deberá controlar esta restricción e informar debidamente al usuario.
 
-			COMMIT
+			THROW 50006, 'Nombre de usuario ya existe, intente con uno distinto.', 1
+
+		IF @rol_nombre NOT IN (SELECT rol_nombre FROM LIL_MIX.rol)
+			THROW 50007, 'El rol no existe, intente nuevamente.', 1
+			
+		-- El password deberá almacenarse encriptado de forma irreversible bajo el algoritmo de encriptación SHA256.
+	
+		INSERT INTO LIL_MIX.usuario (usuario_nombre, usuario_password, usuario_intentos, usuario_habilitado)
+		VALUES (@usuario_nombre, HASHBYTES('SHA2_256', @usuario_password), 0, 1)
+
+		INSERT INTO LIL_MIX.rolxusuario(rol_id, usuario_id)
+		VALUES ((SELECT rol_id FROM LIL_MIX.rol WHERE rol_nombre = @rol_nombre), 
+			(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre))
+
+		COMMIT
 	END TRY
 
 	BEGIN CATCH
@@ -275,23 +249,62 @@ END
 
 --7)
 
+-- 8) 
+
+-- A un usuario se le asigna un solo rol, 
+-- pero no se descarta que pueda tener más de un rol al mismo tiempo en un futuro no muy lejano. 
+
+CREATE PROCEDURE LIL_MIX.agregarRolAUsuario
+@rol_nombre VARCHAR(30), @usuario_nombre VARCHAR(255)
+AS
+BEGIN
+BEGIN TRY
+	BEGIN TRANSACTION
+	
+	-- Chequeo existencia del rol
+	
+	IF @rol_nombre NOT IN (SELECT rol_nombre FROM LIL_MIX.rol)
+		THROW 50059, 'Rol inexistente.', 1
+		
+	-- Chequeo existencia del usuario
+	
+	IF @rol_nombre NOT IN (SELECT rol_nombre FROM LIL_MIX.rol)
+		THROW 50060, 'Usuario inexistente.', 1
+		
+	INSERT INTO LIL_MIX.rolxusuario (rol_id, usuario_id)
+	VALUES ((SELECT rol_id FROM LIL_MIX.rol WHERE rol_nombre = @rol_nombre), 
+		(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre))
+		
+	COMMIT
+END TRY
+
+BEGIN CATCH
+
+	ROLLBACK
+	
+END CATCH
+
+END
+
+-- 9)
+
 IF OBJECT_ID('LIL_MIX.modificarContrasenia') IS NOT NULL
   DROP PROCEDURE LIL_MIX.modificarContrasenia
 
---Debe tenerse en cuenta que se pueda modificar el password. 
+-- Debe tenerse en cuenta que se pueda modificar el password. 
 
 CREATE PROCEDURE LIL_MIX.modificarContrasenia
-@anterior VARCHAR(255), @nueva VARCHAR(255)
+@usuario_nombre VARCHAR(255), @anterior VARCHAR(255), @nueva VARCHAR(255)
 AS
 BEGIN
 
 	UPDATE LIL_MIX.usuario
-	SET usuario_password = @nueva
-	WHERE usuario_password = @anterior
+	SET usuario_password = HASHBYTES('SHA2_256', @nueva)
+	WHERE usuario_password = HASHBYTES('SHA2_256', @anterior) AND usuario_nombre = @usuario_nombre
 
 END
 
---8)
+-- 10)
 
 IF OBJECT_ID('LIL_MIX.darDeBajaUsuario') IS NOT NULL
   DROP PROCEDURE LIL_MIX.darDeBajaUsuario
@@ -305,12 +318,13 @@ BEGIN
 
   UPDATE LIL_MIX.usuario
   SET usuario_habilitado = 0
-  WHERE usuario_nombre = usuario_nombre
+  WHERE usuario_nombre = @usuario_nombre
 
 END
+
 ---------------------------------------  AMB DE CLIENTES  ---------------------------------------
 
---9)
+-- 11)
 
 IF OBJECT_ID('LIL_MIX.darDeAltaCliente') IS NOT NULL
   DROP PROCEDURE LIL_MIX.darDeAltaCliente
@@ -360,7 +374,7 @@ END CATCH
 
 END
 
---10)
+-- 12)
 
 IF OBJECT_ID('LIL_MIX.eliminarCliente') IS NOT NULL
   DROP PROCEDURE LIL_MIX.eliminarCliente
@@ -378,7 +392,7 @@ BEGIN
 
 END
 
--- 11)
+-- 13)
 
 IF OBJECT_ID('LIL_MIX.habilitarCliente') IS NOT NULL
   DROP PROCEDURE LIL_MIX.habilitarCliente
@@ -395,7 +409,7 @@ BEGIN
 END
 
 
--- 12)
+-- 14)
 
 IF OBJECT_ID('LIL_MIX.modificarCliente') IS NOT NULL
   DROP PROCEDURE LIL_MIX.modificarCliente
@@ -475,7 +489,7 @@ END
 
 ---------------------------------------------  AMB DE PROVEEDOR  ---------------------------------------------
 
---13)
+-- 15)
 
 IF OBJECT_ID('LIL_MIX.darDeAltaProveedor') IS NOT NULL
   DROP PROCEDURE LIL_MIX.darDeAltaProveedor
@@ -518,12 +532,12 @@ END CATCH
 END
 
 
--- 14)
+-- 16)
 
 IF OBJECT_ID('LIL_MIX.eliminarProveedor') IS NOT NULL
   DROP PROCEDURE LIL_MIX.eliminarProveedor
 
---La eliminación de un proveedor implica la baja lógica del mismo.
+-- La eliminación de un proveedor implica la baja lógica del mismo.
 
 CREATE PROCEDURE LIL_MIX.eliminarProveedor
 @razon_social VARCHAR(255), @cuit VARCHAR(13)
@@ -537,7 +551,7 @@ BEGIN
 END
 
 
--- 15)
+-- 17)
 
 CREATE PROCEDURE LIL_MIX.habilitarProveedor
 @cuit VARCHAR(13), @razon_social VARCHAR(255)
@@ -550,7 +564,7 @@ BEGIN
 
 END
 
--- 16)
+-- 18)
 
 -- Todos los datos mencionados anteriormente son modificables: Razón Social, Mail, Teléfono, Dirección calle, nro piso, depto 
 -- y localidad, Código Postal, Ciudad, CIUT, Rubro en el cual se desempeña, Nombre de Contacto  
@@ -628,7 +642,7 @@ END
 
 --------------------------------------------  CARGA DE CRÉDITO  -----------------------------------------------
 
--- 17)
+-- 19)
 
 IF OBJECT_ID('LIL_MIX.cargarCredito') IS NOT NULL
   DROP PROCEDURE LIL_MIX.cargarCredito
@@ -691,7 +705,7 @@ END
 		
 ---------------------------------------  CONFECCIÓN Y PUBLICACIÓN DE OFERTAS ------------------------------------------
 
--- 18)
+-- 20)
 
 --Este caso de uso es utilizado por los proveedores para armar y publicar las ofertas que formarán parte de la plataforma.
 
@@ -745,7 +759,7 @@ END
 
 ----------------------------------------------  COMPRAR OFERTA ----------------------------------------------------
 
--- 19)
+-- 21)
 
 -- Esta funcionalidad permite a un cliente comprar una oferta publicada por los diferentes proveedores. 
 
@@ -823,7 +837,7 @@ END
 
 ---------------------------------------  ENTREGA/CONSUMO DE OFERTA ------------------------------------------
 
--- 20)
+-- 22)
 
 -- Funcionalidad que permite a un proveedor dar de baja una oferta entregada por un cliente al momento de realizarse el canje.  
 
@@ -881,7 +895,7 @@ END
 
 ------------------------------------- FACTURACION PROVEEDOR -------------------------------------------------
 
--- 21)
+-- 23)
 
 -- Esta funcionalidad permite a un administrativo facturar a un proveedor todas las ofertas compradas por los clientes. 
 -- Para ello ingresará el período de facturación por intervalos de fecha, se deberá seleccionar el proveedor 
@@ -925,7 +939,7 @@ END
 
 --------------------------------------------- LISTADO ESTADÍSTICO -----------------------------------------------------
 
--- 22)
+-- 24)
 
 -- Esta funcionalidad nos debe permitir consultar el TOP 5 de: 
 --	o Proveedores con mayor porcentaje de descuento ofrecido en sus ofertas 
