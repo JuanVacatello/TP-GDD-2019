@@ -98,3 +98,21 @@ FROM gd_esquema.Maestra
 WHERE Factura_Nro IS NOT NULL
 GROUP BY Factura_Nro , Factura_Fecha , Provee_CUIT
 ORDER BY Factura_Nro , Factura_Fecha
+
+
+/*CREATE TABLE LIL_MIX.usuario ( usuario_id INT NOT NULL IDENTITY(1000,1) PRIMARY KEY,
+				 usuario_nombre VARCHAR(255) NOT NULL UNIQUE,
+				 usuario_password VARCHAR(255) NOT NULL,
+				 usuario_intentos TINYINT DEFAULT 0,
+				 usuario_habilitado BIT DEFAULT 1
+				)
+*/
+
+INSERT INTO LIL_MIX.usuario(usuario_nombre, usuario_password)
+SELECT DISTINCT Cli_Nombre+''+Cli_Apellido , Cli_Dni
+FROM gd_esquema.Maestra
+
+
+INSERT INTO LIL_MIX.usuario(usuario_nombre, usuario_password)
+SELECT DISTINCT Provee_Telefono , Provee_CUIT
+FROM gd_esquema.Maestra
