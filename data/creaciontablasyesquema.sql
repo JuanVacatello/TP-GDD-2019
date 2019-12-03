@@ -117,8 +117,7 @@ CREATE TABLE LIL_MIX.compra ( 	compra_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 				compra_fecha DATETIME
 				)
 
-CREATE TABLE LIL_MIX.factura ( 	factura_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-				factura_numero INT,
+CREATE TABLE LIL_MIX.factura ( 	factura_id INT NOT NULL IDENTITY(1000,1) PRIMARY KEY,
 				factura_proveedor_id INT FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
 				factura_fecha_inicio DATETIME,
 				factura_fecha_fin DATETIME,
