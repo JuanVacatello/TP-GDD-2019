@@ -704,7 +704,7 @@ BEGIN
 	END TRY
 END
 
----------------------------------------  CONFECCIÓN Y PUBLICACIÓN DE OFERTAS ------------------------------------------
+----------------------------------------------  COMPRAR OFERTA ----------------------------------------------------
 
 -- 19)
 
@@ -725,16 +725,17 @@ BEGIN
 			@ofertaid INT,
 			@clienteid INT,
 			@compraid INT,
-			@ofertadesc VARCHAR(255)
+			@ofertadesc VARCHAR(255),
+			@fechavenc DATETIME
 		
 		SELECT @creditocliente = cliente_credito, @clienteid = cliente_id
 		FROM LIL_MIX.cliente WHERE cliente_dni = @cliente_dni
 		
 		SELECT @preciooferta = oferta_precio_oferta, @cantmaximadeofertas = oferta_restriccion_compra, 
-		@ofertaid = oferta_id, @ofertadesc = oferta_decripcion
+		@ofertaid = oferta_id, @ofertadesc = oferta_decripcion, @fechavenc = oferta_fecha_vencimiento
 		FROM LIL_MIX.proveedor WHERE oferta_codigo = @oferta_codigo
 		
-		IF @creditocliente < @preciooferta
+		IF @creditocliente < (@preciooferta * @cantidad)
 			THROW 50017, 'No tiene crédito suficiente para realizar la compra', 1
 		
 		-- Se deberá validar que la adquisición no supere la cantidad máxima de ofertas permitida por usuario. 
@@ -744,7 +745,7 @@ BEGIN
 		
 		-- Los datos mínimos a registrar son los siguientes: Fecha de compra, Oferta, Nro de Oferta, Cliente que realizó la compra 
 
-		INSERT INTO (compra_oferta_numero, compra_oferta_descr, compra_cliente_id, compra_cantidad, compra_fecha)
+		INSERT INTO LIL_MIX.compra (compra_oferta_numero, compra_oferta_descr, compra_cliente_id, compra_cantidad, compra_fecha)
 		VALUES (@ofertaid, @ofertadesc, @clienteid, @cantidad, GETDATE()) --cambiar a la funcion q encontro juan
 		
 		-- Cuando un cliente adquiere una oferta, se le deberá informar el código de compra 
@@ -754,6 +755,11 @@ BEGIN
 		WHERE compra_oferta_id = @ofertaid AND compra_oferta_descr = @ofertadesc AND compra_cliente_id = @clienteid AND compra_cantidad = @cantidad AND compra_fecha = GETDATE() --cambiar a la funcion q encontro juan
 		
 		PRINT @compraid 
+		
+		-- Generación automática del cupón
+		
+		INSERT INTO LIL_MIX.cupon (cupon_fecha_vencimiento, cupon_compra_id, cupon_cliente_id)
+		VALUES (@fechavenc, @compraid, @clienteid)
 
 		COMMIT TRANSACTION
 		
@@ -773,15 +779,17 @@ END
 
 -- Funcionalidad que permite a un proveedor dar de baja una oferta entregada por un cliente al momento de realizarse el canje.  
 
+
+
 -- Este proceso tiene como restricciones que un cupón no puede ser canjeado más de una vez, 
 -- si el cupón se venció tampoco podrá ser canjeado y validarse que dicho cupón entrega corresponda al proveedor. 
 
--- Para dar de baja un cupón disponible para consumir es necesario que se registre: 
- 
- Fecha de consumo  Código de cupón  Cliente 
+-- Para dar de baja un cupón disponible para consumir es necesario que se registre: Fecha de consumo, Código de cupón, Cliente 
 
 
 ------------------------------------- FACTURACION PROVEEDOR -------------------------------------------------
+
+--21)
 
 CREATE PROCEDURE facturacionProveedor
 @fecha_inicio DATETIME , @fecha_fin DATETIME , @proveedor_cuit VARCHAR(13)
