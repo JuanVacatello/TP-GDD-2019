@@ -50,7 +50,7 @@ IF OBJECT_ID('LIL_MIX.modificarRol') IS NOT NULL
 
 CREATE PROCEDURE LIL_MIX.modificarRol
 @rol_nombre VARCHAR(30), @rol_nombre_nuevo VARCHAR(30), @funcionalidad_descripcion VARCHAR(30), 
-@accion VARCHAR(1) -- borrar o agregar funcionalidad
+@accion SMALLINT -- 1) Agregar funcionalidad y 2) Eliminar funcionalidad
 AS
 BEGIN
 
@@ -62,6 +62,8 @@ BEGIN
 
 	--Se deben poder quitar de a una las funcionalidades como así  también agregar nuevas funcionalidades a rol que 
 	--se está modificando
+	
+	IF @funcionalidad_descripcion IS NOT NULL
 
 	BEGIN TRY
 		BEGIN TRAN
