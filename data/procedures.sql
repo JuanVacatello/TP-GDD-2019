@@ -779,13 +779,57 @@ END
 
 -- Funcionalidad que permite a un proveedor dar de baja una oferta entregada por un cliente al momento de realizarse el canje.  
 
+CREATE PROCEDURE LIL_MIX.consumoDeOferta
+@cuponid INT, @proveedorcuit VARCHAR(13)
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+		
+		DECLARE @fechaconsumo DATETIME,
+			@fechavenc DATETIME,
+			@proveedorid INT,
+			@proveedoridchequear INT
+		
+		SELECT @fechaconsumo = cu.cupon_fecha_consumo, @fechavenc = cu.cupon_fecha_vencimiento,
+		@proveedoridchequear = of.oferta_proveedor_id
+		FROM LIL_MIX.compra co JOIN LIL_MIX.cupon cu ON (cu.cupon_compra_id = co.compra_id)
+				       JOIN LIL_MIX.oferta of ON (of.oferta_id = co.compra_oferta_numero)
+		WHERE cupon_id = @cuponid
+		
+		SELECT @proveedorid = proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = @proveedorcuit
+		
+		-- Este proceso tiene como restricciones que un cupón no puede ser canjeado más de una vez
+	
+		IF @fechaconsumo IS NOT NULL
+			THROW 50019, 'El cupón ya fue canjeado', 1
 
+		-- Si el cupón se venció tampoco podrá ser canjeado 
+		
+		IF @fechavenc < GETDATE() --cambiar a la funcion q encontro juan
+			THROW 50020, 'El cupón ya fue canjeado', 1
+			
+		-- Validarse que dicho cupón entrega corresponda al proveedor
+		
+		IF @proveedorid != @proveedoridchequear
+			THROW 50021, 'El cupón no corresponde a dicho proveedor', 1
+		
+	-- Para dar de baja un cupón disponible para consumir es necesario que se registre: Fecha de consumo, Código de cupón, Cliente 
+		
+		UPDATE LIL_MIX.cupon
+		SET cupon_fecha_consumo = GETDATE()
+		WHERE cupon_id = @cuponid
+			
+		COMMIT TRANSACTION
+	END TRY
+	
+	BEGIN CATCH
+	
+		ROLLBACK TRANSACTION
+		
+	END CATCH
 
--- Este proceso tiene como restricciones que un cupón no puede ser canjeado más de una vez, 
--- si el cupón se venció tampoco podrá ser canjeado y validarse que dicho cupón entrega corresponda al proveedor. 
-
--- Para dar de baja un cupón disponible para consumir es necesario que se registre: Fecha de consumo, Código de cupón, Cliente 
-
+END
 
 ------------------------------------- FACTURACION PROVEEDOR -------------------------------------------------
 
@@ -824,7 +868,9 @@ VALUES (@proveedor_id, @fecha_inicio , @fecha_fin , @factura_importe)
 END TRY
 
 BEGIN CATCH 
+
 	ROLLBACK
+	
 END CATCH
 
 END
