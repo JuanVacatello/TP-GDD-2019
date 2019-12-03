@@ -201,21 +201,88 @@ END
 
 ------------------------------------  REGISTRO DE USUARIO  -----------------------------------
 
--- CREACIÓN DE AMBOS USUARIOS
-
--- 6) 
-
-IF OBJECT_ID('LIL_MIX.crearUsuario') IS NOT NULL
-  DROP PROCEDURE LIL_MIX.crearUsuario
-
 -- Funcionalidad que se encuentra disponible al momento de loguearse el usuario al sistema. 
 
-CREATE PROCEDURE LIL_MIX.crearUsuario
-@usuario_nombre VARCHAR(255), @usuario_password VARCHAR(255), @rol_nombre VARCHAR(30)
+-- 6) CREAR USUARIO TIPO CLIENTE
+
+IF OBJECT_ID('LIL_MIX.crearUsuario') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.crearUsuarioCliente
+
+CREATE PROCEDURE LIL_MIX.crearUsuarioCliente
+@usuario_nombre VARCHAR(255), @usuario_password VARCHAR(255), @rol_nombre VARCHAR(30), -- Datos de usuario
+@nombre VARCHAR(255), @apellido VARCHAR(255), @dni INT, @mail VARCHAR(255), @telefono INT, @fechanacimiento DATETIME, 
+@codigopostal SMALLINT, @direccion_calle VARCHAR(255), @direccion_piso TINYINT, @direccion_dpto CHAR(1), @ciudad VARCHAR(255) -- Datos de cliente
 AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRAN
+		
+		-- DATOS DE USUARIO:
+		
+		-- El username debe ser único en un todo el sistema.
+
+		IF EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre)
+
+		--La aplicación deberá controlar esta restricción e informar debidamente al usuario.
+
+			THROW 50006, 'Nombre de usuario ya existe, intente con uno distinto.', 1
+
+		IF @rol_nombre NOT IN (SELECT rol_nombre FROM LIL_MIX.rol)
+			THROW 50007, 'El rol no existe, intente nuevamente.', 1
+			
+		-- El password deberá almacenarse encriptado de forma irreversible bajo el algoritmo de encriptación SHA256.
+	
+		INSERT INTO LIL_MIX.usuario (usuario_nombre, usuario_password, usuario_intentos, usuario_habilitado)
+		VALUES (@usuario_nombre, HASHBYTES('SHA2_256', @usuario_password), 0, 1)
+
+		INSERT INTO LIL_MIX.rolxusuario(rol_id, usuario_id)
+		VALUES ((SELECT rol_id FROM LIL_MIX.rol WHERE rol_nombre = @rol_nombre), 
+			(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre))
+		
+		-- DATOS DE CLIENTE:
+			
+		-- El alumno deberá determinar un procedimiento para evitar la generación de clientes “gemelos” 
+		-- (distinto nombre de usuario, pero igual datos identificatorios según se justifique en la estrategia de resolución).
+
+
+		IF EXISTS (SELECT * FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (c.cliente_user_id = u.usuario_id)
+				 WHERE c.cliente_dni = @dni AND u.usuario_nombre != @usuario_nombre) -- Consideramos dato identificatorio al dni 
+			THROW 50008, 'Cliente gemelo. No puede realizarse la operación.', 1
+
+		INSERT INTO LIL_MIX.direccion (direccion_calle, direccion_piso, direccion_dpto, direccion_ciudad)
+		VALUES (@direccion_calle, @direccion_piso, @direccion_dpto, @ciudad)
+
+		-- Toda creación de cliente nuevo, implica una carga de dinero de bienvenida de $200.
+
+		INSERT INTO LIL_MIX.cliente (cliente_nombre, cliente_apellido, cliente_mail, cliente_telefono, cliente_fecha_nacimiento, 
+					cliente_cp, cliente_dni, cliente_credito, cliente_habilitado, cliente_user_id, cliente_direccion_id)
+		VALUES (@nombre, @apellido, @mail, @telefono, @fechanacimiento, @codigopostal, @dni, 200, 1, 
+			(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre),
+			(SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = @direccion_calle AND 
+			direccion_piso = @direccion_piso AND direccion_dpto = @direccion_dpto AND direccion_ciudad = @ciudad)) 
+
+		COMMIT
+	END TRY
+
+	BEGIN CATCH
+
+		ROLLBACK
+
+	END CATCH
+END
+
+--7) CREAR USUARIO TIPO PROVEEDOR
+
+CREATE PROCEDURE LIL_MIX.crearUsuarioProveedor
+@usuario_nombre VARCHAR(255), @usuario_password VARCHAR(255), @rol_nombre VARCHAR(30), -- Datos de usuario
+@nombre_de_usuario VARCHAR(255), @razon_social VARCHAR(255), @mail VARCHAR(255), @telefono INT, @cuit VARCHAR(13), @rubro VARCHAR(255), 
+@nombre_contacto VARCHAR(255), @codigo_postal SMALLINT, @calle VARCHAR(255), @piso TINYINT, @dpto CHAR(1), @ciudad VARCHAR(255) -- Datos de proveedor
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRAN
+		
+		-- DATOS DE USUARIO:
 			
 		-- El username debe ser único en un todo el sistema.
 
@@ -237,6 +304,24 @@ BEGIN
 		VALUES ((SELECT rol_id FROM LIL_MIX.rol WHERE rol_nombre = @rol_nombre), 
 			(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre))
 
+		-- DATOS DE PROVEEDOR:
+		
+		INSERT INTO LIL_MIX.direccion (direccion_calle, direccion_piso, direccion_dpto, direccion_ciudad)
+		VALUES (@calle, @piso, @dpto, @ciudad)
+		
+		--La razón social y cuit son datos únicos, por ende no pueden existir 2 proveedores con la misma razón social y cuit
+		--El sistema deberá controlar esta restricción e informar debidamente al usuario ante alguna anomalía.
+
+		IF EXISTS (SELECT * FROM LIL_MIX.proveedor WHERE proveedor_rs = @razon_social AND proveedor_cuit = @cuit)
+			THROW 50009, 'Combinacion de razón social y CUIT existentes', 1
+			
+		INSERT INTO LIL_MIX.proveedor (proveedor_telefono, proveedor_cuit, proveedor_rubro, proveedor_mail, proveedor_cp, 
+			proveedor_nombre_contacto, proveedor_rs, proveedor_habilitado, proveedor_usuario_id, proveedor_direccion_id)
+		VALUES (@telefono, @cuit, @rubro, @mail, @codigo_postal, @nombre_contacto, @razon_social, 1,
+			(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre),
+			(SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = @calle AND direccion_piso = @piso AND
+				direccion_dpto = @dpto AND direccion_ciudad = @ciudad)
+		
 		COMMIT
 	END TRY
 
@@ -246,8 +331,6 @@ BEGIN
 
 	END CATCH
 END
-
---7)
 
 -- 8) 
 
@@ -326,56 +409,6 @@ END
 
 -- 11)
 
-IF OBJECT_ID('LIL_MIX.darDeAltaCliente') IS NOT NULL
-  DROP PROCEDURE LIL_MIX.darDeAltaCliente
-
--- Dar de alta un cliente 
-
-CREATE PROCEDURE LIL_MIX.darDeAltaCliente 
-@nombre_de_usuario VARCHAR(255), @nombre VARCHAR(255), @apellido VARCHAR(255), @dni INT, @mail VARCHAR(255), 
-@telefono INT, @fechanacimiento DATETIME, @codigopostal SMALLINT, @direccion_calle VARCHAR(255), @direccion_piso TINYINT, 
-@direccion_dpto CHAR(1), @ciudad VARCHAR(255)
-AS
-BEGIN
-
--- El alumno deberá determinar un procedimiento para evitar la generación de clientes “gemelos” 
--- (distinto nombre de usuario, pero igual datos identificatorios según se justifique en la estrategia de resolución).
-
-BEGIN TRY
-	BEGIN TRAN
-
-	-- Consideramos dato identificatorio al dni 
-
-	IF EXISTS (SELECT * FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (c.cliente_user_id = u.usuario_id)
-				 WHERE c.cliente_dni = @dni AND u.usuario_nombre != @nombre_de_usuario)
-		THROW 50008, 'Cliente gemelo. No puede realizarse la operación', 1
-
-	INSERT INTO LIL_MIX.direccion (direccion_calle, direccion_piso, direccion_dpto, direccion_ciudad)
-	VALUES (@direccion_calle, @direccion_piso, @direccion_dpto, @ciudad)
-
-	-- Toda creación de cliente nuevo, implica una carga de dinero de bienvenida de $200.
-	
-	INSERT INTO LIL_MIX.cliente (cliente_nombre, cliente_apellido, cliente_mail, cliente_telefono, cliente_fecha_nacimiento, 
-				cliente_cp, cliente_dni, cliente_credito, cliente_habilitado, cliente_user_id, cliente_direccion_id)
-	VALUES (@nombre, @apellido, @mail, @telefono, @fechanacimiento, @codigopostal, @dni, 200, 1, 
-		(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_de_usuario),
-		(SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = @direccion_calle AND 
-		direccion_piso = @direccion_piso AND direccion_dpto = @direccion_dpto AND direccion_ciudad = @ciudad)) 
-	
-	COMMIT
-
-END TRY
-
-BEGIN CATCH
-
-	ROLLBACK
-
-END CATCH
-
-END
-
--- 12)
-
 IF OBJECT_ID('LIL_MIX.eliminarCliente') IS NOT NULL
   DROP PROCEDURE LIL_MIX.eliminarCliente
 
@@ -392,7 +425,7 @@ BEGIN
 
 END
 
--- 13)
+-- 12)
 
 IF OBJECT_ID('LIL_MIX.habilitarCliente') IS NOT NULL
   DROP PROCEDURE LIL_MIX.habilitarCliente
@@ -409,7 +442,7 @@ BEGIN
 END
 
 
--- 14)
+-- 13)
 
 IF OBJECT_ID('LIL_MIX.modificarCliente') IS NOT NULL
   DROP PROCEDURE LIL_MIX.modificarCliente
@@ -489,50 +522,7 @@ END
 
 ---------------------------------------------  AMB DE PROVEEDOR  ---------------------------------------------
 
--- 15)
-
-IF OBJECT_ID('LIL_MIX.darDeAltaProveedor') IS NOT NULL
-  DROP PROCEDURE LIL_MIX.darDeAltaProveedor
-
--- Dar de alta un proveedor 
-
-CREATE PROCEDURE LIL_MIX.darDeAltaProveedor
-@nombre_de_usuario VARCHAR(255), @razon_social VARCHAR(255), @mail VARCHAR(255), @telefono INT, @cuit VARCHAR(13), @rubro VARCHAR(255), 
-@nombre_contacto VARCHAR(255), @codigo_postal SMALLINT, @calle VARCHAR(255), @piso TINYINT, @dpto CHAR(1), @ciudad VARCHAR(255)
-AS
---BEGIN
-	BEGIN TRY
-		BEGIN TRAN
-	
-		INSERT INTO LIL_MIX.direccion (direccion_calle, direccion_piso, direccion_dpto, direccion_ciudad)
-		VALUES (@calle, @piso, @dpto, @ciudad)
-		
-	--La razón social y cuit son datos únicos, por ende no pueden existir 2 proveedores con la misma razón social y cuit
-	--El sistema deberá controlar esta restricción e informar debidamente al usuario ante alguna anomalía.
-
-		IF EXISTS (SELECT * FROM LIL_MIX.proveedor WHERE proveedor_rs = @razon_social AND proveedor_cuit = @cuit)
-			THROW 50009, 'Combinacion de razón social y CUIT existentes', 1
-			
-		INSERT INTO LIL_MIX.proveedor (proveedor_telefono, proveedor_cuit, proveedor_rubro, proveedor_mail, proveedor_cp, 
-			proveedor_nombre_contacto, proveedor_rs, proveedor_habilitado, proveedor_usuario_id, proveedor_direccion_id)
-		VALUES (@telefono, @cuit, @rubro, @mail, @codigo_postal, @nombre_contacto, @razon_social, 1,
-			(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_de_usuario),
-			(SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = @calle AND direccion_piso = @piso AND
-				direccion_dpto = @dpto AND direccion_ciudad = @ciudad)
-		
-	COMMIT
-END TRY
-
-BEGIN CATCH
-	
-	ROLLBACK
-	
-END CATCH
-
-END
-
-
--- 16)
+-- 14)
 
 IF OBJECT_ID('LIL_MIX.eliminarProveedor') IS NOT NULL
   DROP PROCEDURE LIL_MIX.eliminarProveedor
@@ -551,7 +541,7 @@ BEGIN
 END
 
 
--- 17)
+-- 15)
 
 CREATE PROCEDURE LIL_MIX.habilitarProveedor
 @cuit VARCHAR(13), @razon_social VARCHAR(255)
@@ -564,7 +554,7 @@ BEGIN
 
 END
 
--- 18)
+-- 16)
 
 -- Todos los datos mencionados anteriormente son modificables: Razón Social, Mail, Teléfono, Dirección calle, nro piso, depto 
 -- y localidad, Código Postal, Ciudad, CIUT, Rubro en el cual se desempeña, Nombre de Contacto  
@@ -642,7 +632,7 @@ END
 
 --------------------------------------------  CARGA DE CRÉDITO  -----------------------------------------------
 
--- 19)
+-- 17)
 
 IF OBJECT_ID('LIL_MIX.cargarCredito') IS NOT NULL
   DROP PROCEDURE LIL_MIX.cargarCredito
@@ -705,7 +695,7 @@ END
 		
 ---------------------------------------  CONFECCIÓN Y PUBLICACIÓN DE OFERTAS ------------------------------------------
 
--- 20)
+-- 18)
 
 --Este caso de uso es utilizado por los proveedores para armar y publicar las ofertas que formarán parte de la plataforma.
 
@@ -759,7 +749,7 @@ END
 
 ----------------------------------------------  COMPRAR OFERTA ----------------------------------------------------
 
--- 21)
+-- 19)
 
 -- Esta funcionalidad permite a un cliente comprar una oferta publicada por los diferentes proveedores. 
 
@@ -837,7 +827,7 @@ END
 
 ---------------------------------------  ENTREGA/CONSUMO DE OFERTA ------------------------------------------
 
--- 22)
+-- 20)
 
 -- Funcionalidad que permite a un proveedor dar de baja una oferta entregada por un cliente al momento de realizarse el canje.  
 
@@ -895,7 +885,7 @@ END
 
 ------------------------------------- FACTURACION PROVEEDOR -------------------------------------------------
 
--- 23)
+-- 21)
 
 -- Esta funcionalidad permite a un administrativo facturar a un proveedor todas las ofertas compradas por los clientes. 
 -- Para ello ingresará el período de facturación por intervalos de fecha, se deberá seleccionar el proveedor 
