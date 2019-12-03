@@ -11,8 +11,8 @@ IF OBJECT_ID('LIL_MIX.noRepetirFuncionalidadesEnUnRol') IS NOT NULL
 CREATE TRIGGER LIL_MIX.noRepetirFuncionalidadesEnUnRol ON LIL_MIX.funcionalidadxrol
 INSTEAD OF INSERT AS
 BEGIN
-	DECLARE @funcionalidad_id varchar(30)
-	DECLARE @rol_id int
+	DECLARE @funcionalidad_id INT,
+		@rol_id INT
 
 	DECLARE cursorInsertados CURSOR FOR
 	SELECT funcionalidad_id, rol_id FROM inserted
