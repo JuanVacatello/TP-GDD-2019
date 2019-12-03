@@ -886,28 +886,32 @@ END
 -- Además de ingresar el año a consultar, el sistema nos debe permitir seleccionar que tipo de listado se quiere visualizar. 
 
 CREATE PROCEDURE LIL_MIX.listadoEstadistico
-@anio INT,
-@semestre INT, -- 1 o 2
-@listadoavisualizar INT -- Prov mayor porcentaje descuento o Prov mayor facturacion
+@anio INT, @semestre INT,    -- 1 o 2
+@listadoavisualizar INT      -- 1. Prov mayor porcentaje descuento o 2. Prov mayor facturacion
 AS
 BEGIN
+
+	IF @listadoavisualizar = 1
 	
-	SELECT TOP 5 p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs,
-		SUM(f.factura_importe) as 'Total Facturado'
+	IF @listadoavisualizar = 2
+	
+	SELECT TOP 5 s.semestre_fecha_inicio+'-'+@anio as 'Desde', s.semestre_fecha_fin+'-'+@anio as 'Hasta', 
+		p.proveedor_nombre_contacto as 'Nombre de contacto', p.proveedor_mail as 'Mail', p.proveedor_cuit as 'CUIT', 
+		p.proveedor_rubro as 'Rubro', p.proveedor_rs as 'Razon social', SUM(f.factura_importe) as 'Total Facturado'
 	FROM LIL_MIX.proveedor p JOIN LIL_MIX.factura f ON (f.factura_proveedor_id = p.proveedor_id), LIL_MIX.semestre s
 	WHERE s.semestre_id = @semestre
-	GROUP BY p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs
-	HAVING YEAR(f.factura_fecha_inicio) = @anio AND YEAR(f.factura_fecha_fin) = @anio AND
-	CONVERT(VARCHAR, 
-	ORDER BY [Total Facturado]
-
-
+	GROUP BY s.semestre_fecha_inicio+'-'+@anio, s.semestre_fecha_fin+'-'+@anio, p.proveedor_nombre_contacto, 
+		p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs
+	HAVING (f.factura_fecha_inicio BETWEEN CONVERT(DATIME, s.semestre_fecha_inicio+'-'+@anio) AND CONVERT(DATIME, s.semestre_fecha_fin+'-'+@anio))
+		AND (f.factura_fecha_fin BETWEEN CONVERT(DATIME, s.semestre_fecha_inicio+'-'+@anio) AND CONVERT(DATIME, s.semestre_fecha_fin+'-'+@anio))
+	ORDER BY [Total Facturado] DESC	
+	
 END
 
 
-El listado se debe ordenar en forma descendente por monto. 
-Cabe aclarar que los campos a visualizar en la tabla del listado para las 2 consultas no son los mismos, 
-y al momento de seleccionar un tipo solo deben visualizarse las columnas pertinentes al tipo de listado elegido. 
+-- El listado se debe ordenar en forma descendente por monto. 
+-- Cabe aclarar que los campos a visualizar en la tabla del listado para las 2 consultas no son los mismos, 
+-- y al momento de seleccionar un tipo solo deben visualizarse las columnas pertinentes al tipo de listado elegido. 
 
 
 
