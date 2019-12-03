@@ -1,7 +1,7 @@
 --use GD2C2019
                                                             /*Creacion de datos*/
 
---Funcionalidades
+--                                  Funcionalidades
 
 -- 1) ABM ROL
 INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descipcion) VALUES ('ABM de ROL')
@@ -41,6 +41,9 @@ INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descipcion) VALUES ('Listado Es
 GO
 
 --                             Roles
+
+-- Debe tenerse en cuenta, que actualmente existen 3 roles, Proveedor, Administrativo, Cliente. 
+
 INSERT INTO LIL_MIX.rol (rol_nombre) VALUES ('ADMINISTRATIVO')
 GO
 INSERT INTO LIL_MIX.rol (rol_nombre) VALUES ('CLIENTE')
@@ -49,6 +52,8 @@ INSERT INTO LIL_MIX.rol (rol_nombre) VALUES ('PROVEEDOR')
 GO
 
 --                          funcionalidadxrol
+
+-- Un rol posee un conjunto de funcionalidades y las mismas no pueden estar repetidas dentro de un rol en particular. 
 
 -- Funciones Administrador
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,1)
