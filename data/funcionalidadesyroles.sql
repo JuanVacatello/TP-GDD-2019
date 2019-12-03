@@ -96,6 +96,7 @@ INSERT INTO LIL_MIX.semestre(semestre_descripcion) VALUES ('2')
 GO
 
 --                        Forma de pago
+INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Efectivo')
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Credito')
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Debito')
 
