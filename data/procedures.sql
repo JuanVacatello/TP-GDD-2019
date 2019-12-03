@@ -173,7 +173,7 @@ BEGIN
 		SELECT @intentos = usuario_intentos
 		FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario
 
-		IF @intentos >= 3
+		IF @intentos = 3
 		BEGIN
 			RAISERROR('Ha ingresado la contraseña 3 veces de forma incorrecta. El usuario ha sido inhabilitado', 16, 1)
 
