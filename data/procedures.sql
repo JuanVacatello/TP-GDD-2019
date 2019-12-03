@@ -835,43 +835,43 @@ END
 
 --21)
 
+-- Esta funcionalidad permite a un administrativo facturar a un proveedor todas las ofertas compradas por los clientes. 
+-- Para ello ingresará el período de facturación por intervalos de fecha, se deberá seleccionar el proveedor 
+-- y a continuación se listaran todos las ofertas que fueron adquiridas por los clientes.  
+
 CREATE PROCEDURE facturacionProveedor
 @fecha_inicio DATETIME , @fecha_fin DATETIME , @proveedor_cuit VARCHAR(13)
 AS
 BEGIN 
 
-DECLARE @proveedor_id INT
-DECLARE @factura_importe INT
+	DECLARE @proveedor_id INT,
+		@factura_importe INT
 
 	BEGIN TRY
 		BEGIN TRAN
-		--No se si va, el proveedor se elige desde una lista o se escribe??? si se escribe si es necesario porque el usuario lo puede escribir mal
-		-- o meter un proveedor que no existe
+	
 		IF NOT EXISTS (SELECT * FROM LIL_MIX.proveedor WHERE proveedor_cuit = @proveedor_cuit)
 			THROW 50125 , 'El proveedor al que se quiere facturar no existe' , 1
 
--- no se si tengo que multiplicar la cantidad por el precio de lista o el precio de oferta
-			SELECT @proveedor_id = p.proveedor_id , @factura_importe = SUM(c.compra_cantidad * o.oferta_precio_lista) FROM 
-			LIL_MIX.oferta o JOIN LIL_MIX.compra c ON (o.oferta_id = c.compra_oferta_id)
-			                 JOIN LIL_MIX.proveedor p ON (o.oferta_proveedor_id = p.proveedor_id)
-			WHERE p.proveedor_cuit = @proveedor_cuit
-			GROUP BY p.proveedor_id
+		-- Se informará el importe de la factura y el número correspondiente de la misma. 
+		
+		SELECT @proveedor_id = p.proveedor_id , @factura_importe = SUM(c.compra_cantidad * o.oferta_precio_oferta) 
+		FROM LIL_MIX.oferta o JOIN LIL_MIX.compra c ON (o.oferta_id = c.compra_oferta_id)
+				      JOIN LIL_MIX.proveedor p ON (o.oferta_proveedor_id = p.proveedor_id)
+		WHERE p.proveedor_cuit = @proveedor_cuit AND (c.compra_fecha BETWEEN @fecha_inicio AND @fecha_fin)
+		GROUP BY p.proveedor_id
 
--- hay que sacar factura numero de la tabla provvedor porque es lo mismo que factura_id
+		INSERT INTO LIL_MIX.factura (factura_proveedor_id , factura_fecha_inicio , factura_fecha_fin , factura_importe)
+		VALUES (@proveedor_id, @fecha_inicio , @fecha_fin , @factura_importe)
 
--- no entiendo si tengo que hacer una unica factura para todas las compras o por cada compra una factura
--- porque en la parte de factura hay un atributo compra_id , pero la facturacion me pide que sea de todas las oferta compradas
-INSERT INTO LIL_MIX.factura (factura_proveedor_id , factura_fecha_inicio , factura_fecha_fin , factura_compra_id , factura_importe)
-VALUES (@proveedor_id, @fecha_inicio , @fecha_fin , @factura_importe)
+		COMMIT 
+	END TRY
 
-	COMMIT 
-END TRY
+	BEGIN CATCH 
 
-BEGIN CATCH 
+		ROLLBACK
 
-	ROLLBACK
-	
-END CATCH
+	END CATCH
 
 END
 
