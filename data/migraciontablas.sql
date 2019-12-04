@@ -109,7 +109,7 @@ ORDER BY Factura_Nro , Factura_Fecha
 */
 
 INSERT INTO LIL_MIX.usuario(usuario_nombre, usuario_password)
-SELECT DISTINCT Cli_Nombre+''+Cli_Apellido , Cli_Dni
+SELECT DISTINCT Cli_Nombre+'_'+Cli_Apellido , Cli_Dni
 FROM gd_esquema.Maestra
 
 
