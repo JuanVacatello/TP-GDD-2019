@@ -1498,11 +1498,10 @@ END
 -- Para ello ingresará el período de facturación por intervalos de fecha, se deberá seleccionar el proveedor 
 -- y a continuación se listaran todos las ofertas que fueron adquiridas por los clientes.  
 
-CREATE PROCEDURE facturacionProveedor
+CREATE PROCEDURE LIL_MIX.facturacionProveedor
 @fecha_inicio DATETIME , @fecha_fin DATETIME , @proveedor_cuit VARCHAR(13)
 AS
 BEGIN 
-
 	DECLARE @proveedor_id INT,
 		@factura_importe INT
 
@@ -1536,8 +1535,6 @@ END
 
 --------------------------------------------- LISTADO ESTADÍSTICO -----------------------------------------------------
 
--- 24)
-
 -- Esta funcionalidad nos debe permitir consultar el TOP 5 de: 
 --	o Proveedores con mayor porcentaje de descuento ofrecido en sus ofertas 
 --	o Proveedores con mayor facturación 
@@ -1545,12 +1542,12 @@ END
 -- Dichas consultas son a nivel semestral, para lo cual la pantalla debe permitirnos selección el semestral a consultar.  
 -- Además de ingresar el año a consultar, el sistema nos debe permitir seleccionar que tipo de listado se quiere visualizar. 
 
-CREATE PROCEDURE LIL_MIX.listadoEstadistico
-@anio INT, @semestre INT,    -- 1 o 2
-@listadoavisualizar INT      -- 1. Prov mayor porcentaje descuento o 2. Prov mayor facturacion
+-- 22) 1. Prov mayor porcentaje descuento
+
+CREATE PROCEDURE LIL_MIX.listadoEstadistico1   
+@anio INT, @semestre INT   -- 1 o 2
 AS
 BEGIN
-
 	IF @listadoavisualizar = 1 -- Proveedores con mayor porcentaje de descuento ofrecido en sus ofertas 
 	
 		SELECT TOP 5 o.proveedor_id as 'ID', p.proveedor_nombre_contacto as 'Nombre de contacto', p.proveedor_mail as 'Mail', 
@@ -1560,8 +1557,19 @@ BEGIN
 		WHERE s.semestre_id = @semestre
 		GROUP BY p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs
 		HAVING o.oferta_fecha_publicacion BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103)
-		ORDER BY [Porcentaje de Descuento] DESC	
+		ORDER BY [Porcentaje de Descuento] DESC	-- El listado se debe ordenar en forma descendente por monto. 
+END
 
+-- Cabe aclarar que los campos a visualizar en la tabla del listado para las 2 consultas no son los mismos, 
+-- y al momento de seleccionar un tipo solo deben visualizarse las columnas pertinentes al tipo de listado elegido. 		
+		
+-- 23) 2. Prov mayor facturacion
+
+CREATE PROCEDURE LIL_MIX.listadoEstadistico1  
+@anio INT, @semestre INT   -- 1 o 2
+     o 2. Prov mayor facturacion
+AS
+BEGIN
 	IF @listadoavisualizar = 2 -- Proveedores con mayor facturación 
 	
 		SELECT TOP 5 o.proveedor_id as 'ID', p.proveedor_nombre_contacto as 'Nombre de contacto', p.proveedor_mail as 'Mail', 
@@ -1571,11 +1579,10 @@ BEGIN
 		GROUP BY p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs
 		HAVING (f.factura_fecha_inicio BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103))
 			AND (f.factura_fecha_fin BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103))
-		ORDER BY [Total Facturado] DESC	
+		ORDER BY [Total Facturado] DESC	-- El listado se debe ordenar en forma descendente por monto. 
 	
 END
 
--- El listado se debe ordenar en forma descendente por monto. 
--- Cabe aclarar que los campos a visualizar en la tabla del listado para las 2 consultas no son los mismos, 
--- y al momento de seleccionar un tipo solo deben visualizarse las columnas pertinentes al tipo de listado elegido. 
+
+
 
