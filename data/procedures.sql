@@ -1214,65 +1214,68 @@ END CATCH
 				
 END
 
-
 --------------------------------------------  CARGA DE CRÉDITO  -----------------------------------------------
 
 -- 17)
 
+-- Esta funcionalidad permite la carga de crédito a la cuenta de un cliente para poder operar en este nuevo sistema
+
 IF OBJECT_ID('LIL_MIX.cargarCredito') IS NOT NULL
   DROP PROCEDURE LIL_MIX.cargarCredito
 
--- Esta funcionalidad permite la carga de crédito a la cuenta de un cliente para poder operar en este nuevo sistema
-
 CREATE PROCEDURE LIL_MIX.cargarCredito
 @usuario_nombre VARCHAR(255), @monto BIGINT, 
-@tipo_de_pago VARCHAR(30) --credito o debito
+@tipo_de_pago VARCHAR(30), --efectivo, credito o debito
+@fechadecarga DATETIME, --supongo que se ve en c# este tema
 @tarjeta_numero INT, @tarjeta_tipo VARCHAR(30), @tarjeta_fecha_vencimiento DATETIME
 AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
 		
-			DECLARE @cliente INT,
-				@tipodepago VARCHAR(30),
-				@clientehabilitado BIT
+		DECLARE @cliente INT,
+			@tipodepago VARCHAR(30),
+			@clientehabilitado BIT
 
-			SELECT @cliente = cliente_id, @clientehabilitado = cliente_habilitado
-			FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_user_id) 
-			WHERE u.usuario_nombre = @usuario_nombre
+		SELECT @cliente = cliente_id, @clientehabilitado = cliente_habilitado
+		FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id) 
+		WHERE u.usuario_nombre = @usuario_nombre
 
-			SELECT @tipodepago = tipo_de_pago FROM LIL_MIX.tipoDePago 
-			WHERE tipo_de_pago_descripcion = @tipo_de_pago
+		SELECT @tipodepago = tipo_de_pago FROM LIL_MIX.tipoDePago 
+		WHERE tipo_de_pago_descripcion = @tipo_de_pago
 			
-			-- Un cliente inhabilitado no podrá comprar ofertas ni cargarse crédito bajo ninguna forma
+		-- Un cliente inhabilitado no podrá comprar ofertas ni cargarse crédito bajo ninguna forma
 			
-			IF @clientehabiliado = 0
-				THROW 50063, 'Cliente inhabilitado. No puede cargarse de crédito.', 1
+		IF @clientehabiliado = 0
+			THROW 50063, 'Cliente inhabilitado. No puede cargarse de crédito.', 1
 
-			-- Una vez que se determina el monto a cargar, será necesario que se elija el tipo de pago (tarjeta de crédito o débito), 
-			-- será obligatorio que se registren los datos necesarios para poder identificar la tarjeta utilizada. 
+		-- Una vez que se determina el monto a cargar, será necesario que se elija el tipo de pago (tarjeta de crédito o débito), 
+		-- será obligatorio que se registren los datos necesarios para poder identificar la tarjeta utilizada. 
 
-			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento AND tarjeta_id_cliente != @cliente)
-				THROW 50011, 'Error al ingresar tarjeta', 1
-				
-			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento != @tarjeta_fecha_vencimiento AND tarjeta_id_cliente = @cliente)
+		IF @tipodepago != 1 -- No es 'Efectivo'
+		
+			-- Chequeo si los datos de la tarjeta ingresada están en la tabla TARJETA pero algún dato no concuerda
+		
+			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente = @cliente AND tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento != @tarjeta_fecha_vencimiento)
 				THROW 50012, 'Error al ingresar tarjeta', 1
-				
-			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_numero = @tarjeta_numero AND tarjeta_tipo != @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento AND tarjeta_id_cliente = @cliente)
+
+			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente = @cliente AND tarjeta_numero = @tarjeta_numero AND tarjeta_tipo != @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento AND tarjeta_id_cliente = @cliente)
 				THROW 50013, 'Error al ingresar tarjeta', 1
-				
-			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_numero != @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento AND tarjeta_id_cliente != @cliente)
+
+			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente = @cliente AND tarjeta_numero != @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento AND tarjeta_id_cliente != @cliente)
 				THROW 50014, 'Error al ingresar tarjeta', 1
 				
+			-- Si en la tabla TARJETAS no está registrada dicha tarjeta para dicho cliente, la registro
+
 			IF NOT EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento AND tarjeta_id_cliente = @cliente)
 				INSERT INTO LIL_MIX.tarjeta (tarjeta_numero, tarjeta_tipo, tarjeta_fecha_vencimiento, tarjeta_id_cliente)
 				VALUES (@tarjeta_numero, @tarjeta_tipo, @tarjeta_fecha_vencimiento, @cliente)
 
-			-- Al momento de efectuarse la carga de dinero, el sistema tomará la fecha de día. 
-			-- La misma será tomada del archivo de configuración de la aplicación. 
+		-- Al momento de efectuarse la carga de dinero, el sistema tomará la fecha de día. 
+		-- La misma será tomada del archivo de configuración de la aplicación. 
 
-			INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_monto, carga_id_cliente, carga_tipo_de_pago, carga_tarjeta_numero)
-			VALUES (GETDATE(), @monto , @cliente, @tipodepago, @tarjeta_numero) -- NI IDEA COMO TIENE QUE SER EL GETDATE
+		INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_monto, carga_id_cliente, carga_tipo_de_pago, carga_tarjeta_numero)
+		VALUES (@fechadecarga, @monto , @cliente, @tipodepago, @tarjeta_numero) 
 
 		COMMIT TRANSACTION
 	END TRY
@@ -1291,7 +1294,8 @@ END
 --Este caso de uso es utilizado por los proveedores para armar y publicar las ofertas que formarán parte de la plataforma.
 
 CREATE PROCEDURE LIL_MIX.crearOferta
-@proveedor_cuit VARCHAR(13),
+@usuario_nombre VARCHAR(255),
+@fechaactualdelsistema DATETIME,
 @oferta_decripcion VARCHAR(255), @oferta_fecha_vencimiento DATETIME, @oferta_precio_oferta INT, @oferta_precio_lista INT,
 @oferta_stock INT, @oferta_restriccion_compra TINYINT, @oferta_codigo VARCHAR(255)
 AS
@@ -1299,17 +1303,12 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
 		
-		-- Chequeo de existencia del proveedor
-		
-		IF NOT EXISTS (SELECT * FROM LIL_MIX.proveedor WHERE proveedor_cuit = @proveedor_cuit)
-			THROW 50017, 'Proveedor inexistente', 1
-
 		DECLARE @proveedorid INT,
 			@proveedorhabilitado BIT
 		
-		SELECT @proveedorid = proveedor_id, @proveedorhabilitado = proveedor_habilitado
-		FROM LIL_MIX.proveedor
-		WHERE proveedor_cuit = @proveedor_cuit
+		SELECT @proveedorid = p.proveedor_id, @proveedorhabilitado = p.proveedor_habilitado
+		FROM LIL_MIX.proveedor p JOIN LIL_MIX.usuario u ON (u.usuario_id = p.proveedor_id)
+		WHERE u.usuario_nombre = @usuario_nombre
 		
 		-- Un proveedor inhabilitado no podrá armar ofertas. 
 		
@@ -1319,19 +1318,19 @@ BEGIN
 		-- El proveedor podrá ir cargando ofertas con diferentes fechas, 
 		-- esta fecha debe ser mayor o igual a la fecha actual del sistema
 		
-		IF @oferta_fecha_vencimiento < GETDATE() --cambiar a la funcion q encontro juan
-			THROW 50015, 'Fecha de vencimiento debe ser mayor o igual a la fecha actual', 1
+		IF @oferta_fecha_vencimiento < @fechaactualdelsistema
+			THROW 50015, 'Fecha de vencimiento debe ser mayor o igual a la fecha actual.', 1
 		
 		-- Un cupón consta de 2 precios, que son determinados por el proveedor: 
 		-- El precio de oferta. (rebajado) y El precio de lista u original del producto o servicio que se publica 
 		
 		IF @oferta_precio_oferta >= @oferta_precio_lista
-			THROW 50016, 'El precio de oferta debe ser menor que el precio de lista', 1
+			THROW 50016, 'El precio de oferta debe ser menor que el precio de lista.', 1
 			
 		INSERT INTO LIL_MIX.oferta (oferta_codigo, oferta_precio_oferta, oferta_precio_lista, oferta_fecha_publicacion,
 			oferta_fecha_vencimiento, oferta_decripcion, oferta_stock, oferta_proveedor_id, oferta_restriccion_compra)
-		VALUES (@oferta_codigo, @oferta_precio_oferta, @oferta_precio_lista, GETDATE(), @oferta_fecha_vencimiento,
-			@oferta_decripcion, @oferta_stock, @oferta_restriccion_compra) --cambiar a la funcion q encontro juan
+		VALUES (@oferta_codigo, @oferta_precio_oferta, @oferta_precio_lista, @fechaactualdelsistema, @oferta_fecha_vencimiento,
+			@oferta_decripcion, @oferta_stock, @oferta_restriccion_compra) 
 			
 	-- ULTIMO PARRAFO: Y SI UN ADMINISTRATIVO HACE UNA OFERTA=?=?=?=?=?
 		
@@ -1352,7 +1351,7 @@ END
 -- Esta funcionalidad permite a un cliente comprar una oferta publicada por los diferentes proveedores. 
 
 CREATE PROCEDURE LIL_MIX.comprarOferta
-@oferta_codigo VARCHAR(255), @cliente_dni INT, @cantidad TINYINT, @diadecompra DATETIME			
+@nombre_usuario INT, @oferta_codigo VARCHAR(255), @cantidad TINYINT, @diadecompra DATETIME			
 AS
 BEGIN
 	BEGIN TRY
@@ -1369,8 +1368,9 @@ BEGIN
 			@stockdisponible INT,
 			@clientehabilitado BIT
 		
-		SELECT @creditocliente = cliente_credito, @clienteid = cliente_id, @clientehabilitado = cliente_habilitado
-		FROM LIL_MIX.cliente WHERE cliente_dni = @cliente_dni
+		SELECT @creditocliente = c.cliente_credito, @clienteid = c.cliente_id, @clientehabilitado = c.cliente_habilitado
+		FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id)
+		WHERE u.usuario_nombre = @nombre_usuario
 		
 		SELECT @ofertaid = oferta_id, @preciooferta = oferta_precio_oferta, @fechavenc = oferta_fecha_vencimiento,
 		@ofertadesc = oferta_decripcion, @cantmaximadeofertas = oferta_restriccion_compra, @stockdisponible = oferta_stock
@@ -1384,17 +1384,17 @@ BEGIN
 		-- Chequear si hay stock disponible
 		
 		IF @stockdisponible < @cantidad
-			THROW 50030, 'No hay suficiente stock de dicha oferta', 1
+			THROW 50030, 'No hay suficiente stock de dicha oferta.', 1
 	
 		-- Al momento de realizar la compra el sistema deberá validar que el crédito que posee el usuario sea suficiente
 		
 		IF @creditocliente < (@preciooferta * @cantidad)
-			THROW 50017, 'No tiene crédito suficiente para realizar la compra', 1
+			THROW 50017, 'No tiene crédito suficiente para realizar la compra.', 1
 		
 		-- Se deberá validar que la adquisición no supere la cantidad máxima de ofertas permitida por usuario. 
 		
 		IF @cantidad > @cantmaximadeofertas
-			THROW 50018, 'Superó el máximo de unidades para comprar por cliente', 1
+			THROW 50018, 'Superó el máximo de unidades permitida para comprar por cliente.', 1
 		
 		-- Los datos mínimos a registrar son los siguientes: Fecha de compra, Oferta, Nro de Oferta, Cliente que realizó la compra 
 
@@ -1406,11 +1406,11 @@ BEGIN
 		SELECT @compraid = compra_id FROM LIL_MIX.compra
 		WHERE compra_oferta_id = @ofertaid AND compra_oferta_descr = @ofertadesc AND compra_cliente_id = @clienteid AND compra_cantidad = @cantidad AND compra_fecha = GETDATE() --cambiar a la funcion q encontro juan
 		
+		RETURN @compraid 
+		
 		UPDATE LIL_MIX.oferta
 		SET oferta_stock = oferta_stock - @cantidad
 		WHERE oferta_codigo = @oferta_codigo
-		
-		RETURN @compraid 
 		
 		-- Generación automática del cupón
 		
@@ -1436,7 +1436,7 @@ END
 -- Funcionalidad que permite a un proveedor dar de baja una oferta entregada por un cliente al momento de realizarse el canje.  
 
 CREATE PROCEDURE LIL_MIX.consumoDeOferta
-@cuponid INT, @proveedorcuit VARCHAR(13), @fechaconsumo DATETIME
+@cuponid INT, @nombre_usuario VARCHAR(13), @diadeconsumo DATETIME
 AS
 BEGIN
 	BEGIN TRY
@@ -1453,7 +1453,9 @@ BEGIN
 				       JOIN LIL_MIX.oferta of ON (of.oferta_id = co.compra_oferta_numero)
 		WHERE cupon_id = @cuponid
 		
-		SELECT @proveedorid = proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = @proveedorcuit
+		SELECT @proveedorid = p.proveedor_id 
+		FROM LIL_MIX.proveedor p JOIN LIL_MIX.usuario u ON (p.proveedor_usuario_id = u.usuario_id)
+		WHERE u.usuario_nombre = @nombre_usuario
 		
 		-- Este proceso tiene como restricciones que un cupón no puede ser canjeado más de una vez
 	
@@ -1462,7 +1464,7 @@ BEGIN
 
 		-- Si el cupón se venció tampoco podrá ser canjeado 
 		
-		IF @fechavenc < GETDATE() --cambiar a la funcion q encontro juan
+		IF @fechavenc < @diadeconsumo
 			THROW 50020, 'El cupón está vencido', 1
 			
 		-- Validarse que dicho cupón entrega corresponda al proveedor
@@ -1473,10 +1475,11 @@ BEGIN
 	-- Para dar de baja un cupón disponible para consumir es necesario que se registre: Fecha de consumo, Código de cupón, Cliente 
 		
 		UPDATE LIL_MIX.cupon
-		SET cupon_fecha_consumo = @fechaconsumo
+		SET cupon_fecha_consumo = @diadeconsumo
 		WHERE cupon_id = @cuponid
 			
 		COMMIT TRANSACTION
+		
 	END TRY
 	
 	BEGIN CATCH
