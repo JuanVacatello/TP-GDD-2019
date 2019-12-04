@@ -123,7 +123,7 @@ CREATE TABLE LIL_MIX.cliente ( 	cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KE
 				cliente_dni INT,
 				cliente_credito BIGINT,
 				cliente_habilitado BIT,
-				cliente_user_id INT FOREIGN KEY REFERENCES LIL_MIX.usuario(usuario_id)
+				cliente_usuario_id INT FOREIGN KEY REFERENCES LIL_MIX.usuario(usuario_id)
 				) 
 
 CREATE TABLE LIL_MIX.compra ( 	compra_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
