@@ -463,12 +463,18 @@ IF OBJECT_ID('LIL_MIX.habilitarCliente') IS NOT NULL
   DROP PROCEDURE LIL_MIX.habilitarCliente
 
 CREATE PROCEDURE LIL_MIX.habilitarCliente
-@dni_del_cliente INT
+@usuario_nombre VARCHAR(255)
 AS
 BEGIN
+	DECLARE @usuarioid INT
+	
+	SELECT @usuarioid = c.cliente_usuario_id
+	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
+	WHERE u.usuario_nombre = @usuario_nombre
+	
 	UPDATE LIL_MIX.cliente
 	SET cliente_habilitado = 1
-	WHERE cliente_dni = @dni_del_cliente
+	WHERE cliente_usuario_id = @usuarioid
 END
 
 -- Todos los datos mencionados anteriormente son modificables: Nombre, Apellido, DNI, Mail, Teléfono,
@@ -481,7 +487,8 @@ CREATE PROCEDURE LIL_MIX.modificarClienteNombre
 @nombre_nuevo VARCHAR(255)
 AS
 BEGIN
-
+BEGIN TRY
+	BEGIN TRANSACTION
 	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
 		
 	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
@@ -495,7 +502,13 @@ BEGIN
 	UPDATE LIL_MIX.cliente 
 	SET cliente_nombre = @nombre_nuevo 
 	WHERE cliente_usuario_id = @usuario_id_del_cliente
-			
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
 END
 
 -- 11.3) Modificación de apellido
@@ -505,7 +518,8 @@ CREATE PROCEDURE LIL_MIX.modificarClienteApellido
 @apellido_nuevo VARCHAR(255)
 AS
 BEGIN
-
+BEGIN TRY
+	BEGIN TRANSACTION
 	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
 		
 	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
@@ -519,7 +533,13 @@ BEGIN
 	UPDATE LIL_MIX.cliente 
 	SET cliente_apellido = @apellido_nuevo 
 	WHERE cliente_usuario_id = @usuario_id_del_cliente
-			
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
 END
 
 -- 11.4) Modificación de DNI
@@ -529,7 +549,8 @@ CREATE PROCEDURE LIL_MIX.modificarClienteDNI
 @dni_nuevo INT
 AS
 BEGIN
-
+BEGIN TRY	
+	BEGIN TRANSACTION
 	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
 		
 	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
@@ -543,7 +564,13 @@ BEGIN
 	UPDATE LIL_MIX.cliente 
 	SET cliente_dni = @dni_nuevo
 	WHERE cliente_usuario_id = @usuario_id_del_cliente
-			
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
 END
 
 -- 11.5) Modificación de e-mail
@@ -553,7 +580,8 @@ CREATE PROCEDURE LIL_MIX.modificarClienteMail
 @mail_nuevo VARCHAR(255)
 AS
 BEGIN
-
+BEGIN TRY
+	BEGIN TRANSACTION
 	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
 		
 	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
@@ -567,7 +595,13 @@ BEGIN
 	UPDATE LIL_MIX.cliente 
 	SET cliente_mail = @mail_nuevo
 	WHERE cliente_usuario_id = @usuario_id_del_cliente
-			
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
 END
 
 -- 11.6) Modificación de telefono
@@ -577,7 +611,8 @@ CREATE PROCEDURE LIL_MIX.modificarClienteTelefono
 @telefono_nuevo INT
 AS
 BEGIN
-
+BEGIN TRY
+	BEGIN TRANSACTION
 	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
 		
 	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
@@ -591,7 +626,13 @@ BEGIN
 	UPDATE LIL_MIX.cliente 
 	SET cliente_telefono = @telefono_nuevo
 	WHERE cliente_usuario_id = @usuario_id_del_cliente
-			
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
 END
 
 -- 11.7) Modificación de fecha de nacimiento
@@ -601,7 +642,8 @@ CREATE PROCEDURE LIL_MIX.modificarClienteFechaNacimiento
 @fechanacimiento_nueva DATETIME
 AS
 BEGIN
-
+BEGIN TRY
+	BEGIN TRANSACTION
 	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
 		
 	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
@@ -615,7 +657,13 @@ BEGIN
 	UPDATE LIL_MIX.cliente 
 	SET cliente_fecha_nacimiento = @fechanacimiento_nueva
 	WHERE cliente_usuario_id = @usuario_id_del_cliente
-			
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
 END
 
 -- 11.8) Modificación de codigo postal
@@ -625,7 +673,8 @@ CREATE PROCEDURE LIL_MIX.modificarClienteCP
 @codigopostal_nuevo SMALLINT
 AS
 BEGIN
-
+BEGIN TRY
+	BEGIN TRANSACTION
 	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
 		
 	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
@@ -639,7 +688,13 @@ BEGIN
 	UPDATE LIL_MIX.cliente 
 	SET cliente_cp = @codigopostal_nuevo
 	WHERE cliente_usuario_id = @usuario_id_del_cliente
-			
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
 END
 
 -- 11.9) Modificación de direccion (calle)
@@ -649,7 +704,8 @@ CREATE PROCEDURE LIL_MIX.modificarClienteCalleDirec
 @direccion_calle_nuevo VARCHAR(255) 
 AS
 BEGIN
-
+BEGIN TRY
+	BEGIN TRANSACTION
 	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
 		
 	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
@@ -664,7 +720,13 @@ BEGIN
 	UPDATE LIL_MIX.direccion 
 	SET direccion_calle = @direccion_calle_nuevo 
 	WHERE direccion_id = @direccionid
-	
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
 END
 
 -- 11.10) Modificación de direccion (numero de piso)
@@ -673,8 +735,9 @@ CREATE PROCEDURE LIL_MIX.modificarClientePisoDirec
 @contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
 @direccion_piso_nuevo TINYINT
 AS
-BEGIN
-
+BEGIN 
+BEGIN TRY
+	BEGIN TRANSACTION
 	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
 		
 	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
@@ -689,6 +752,12 @@ BEGIN
 	UPDATE LIL_MIX.direccion 
 	SET direccion_piso = @direccion_piso_nuevo
 	WHERE direccion_id = @direccionid
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
 				
 END
 
@@ -699,7 +768,8 @@ CREATE PROCEDURE LIL_MIX.modificarClienteDptoDirec
 @direccion_dpto_nuevo CHAR(1)
 AS
 BEGIN
-
+BEGIN TRY 
+	BEGIN TRANSACTION
 	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
 		
 	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
@@ -714,6 +784,12 @@ BEGIN
 	UPDATE LIL_MIX.direccion 
 	SET direccion_dpto = @direccion_dpto_nuevo
 	WHERE direccion_id = @direccionid
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
 				
 END
 
@@ -724,7 +800,8 @@ CREATE PROCEDURE LIL_MIX.modificarClienteCiudad
 @ciudad_nueva VARCHAR(255)
 AS
 BEGIN
-
+BEGIN TRY
+	BEGIN TRANSACTION
 	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
 		
 	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
@@ -739,31 +816,37 @@ BEGIN
 	UPDATE LIL_MIX.direccion 
 	SET direccion_ciudad = @ciudad_nueva
 	WHERE direccion_id = @direccionid
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
 				
 END
 
 ---------------------------------------------  AMB DE PROVEEDOR  ---------------------------------------------
 
--- 14)
+-- 12)
+
+-- La eliminación de un proveedor implica la baja lógica del mismo.
 
 IF OBJECT_ID('LIL_MIX.eliminarProveedor') IS NOT NULL
   DROP PROCEDURE LIL_MIX.eliminarProveedor
-
--- La eliminación de un proveedor implica la baja lógica del mismo.
 
 CREATE PROCEDURE LIL_MIX.eliminarProveedor
 @razon_social VARCHAR(255), @cuit VARCHAR(13)
 AS
 BEGIN
-
 	UPDATE LIL_MIX.proveedor
 	SET proveedor_habilitado = 0
 	WHERE proveedor_rs = @razon_social AND proveedor_cuit = @cuit
 
 END
 
+-- 13) SECCIÓN DE MODIFICACIÓN DEL PROVEEDOR
 
--- 15)
+-- 13.1)
 
 -- Se debe poder volver a habilitar el proveedor deshabilitado desde la sección de modificación. 
 
@@ -771,84 +854,366 @@ CREATE PROCEDURE LIL_MIX.habilitarProveedor
 @cuit VARCHAR(13), @razon_social VARCHAR(255)
 AS
 BEGIN
-
+	DECLARE @usuarioid INT
+	
+	SELECT @usuarioid = p.proveedor_usuario_id
+	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (u.usuario_id = p.proveedor_usuario_id)
+	WHERE u.usuario_nombre = @usuario_nombre
+	
 	UPDATE LIL_MIX.proveedor
 	SET proveedor_habilitado = 1
-	WHERE proveedor_cuit = @cuit AND proveedor_rs = @razon_social
-
+	WHERE proveedor_usuario_id = @usuarioid
 END
-
--- 16)
 
 -- Todos los datos mencionados anteriormente son modificables: Razón Social, Mail, Teléfono, Dirección calle, nro piso, depto 
 -- y localidad, Código Postal, Ciudad, CIUT, Rubro en el cual se desempeña, Nombre de Contacto  
 
-CREATE PROCEDURE LIL_MIX.modificarProveedor
+-- 13.2) Modificar razon social
+
+CREATE PROCEDURE LIL_MIX.modificarProveedorRS
 @contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
-@razon_social_nuevo VARCHAR(255), @mail_nuevo VARCHAR(255), @telefono_nuevo INT, @codigopostal_nuevo SMALLINT, 
-@direccion_calle_nuevo VARCHAR(255), @direccion_piso_nuevo TINYINT, @direccion_dpto_nuevo CHAR(1), @ciudad_nuevo VARCHAR(255)
-@cuit_nuevo VARCHAR(13), @rubro_nuevo VARCHAR(255), @nombre_de_contacto_nuevo VARCHAR(255)
+@razon_social_nueva VARCHAR(255)
 AS
 BEGIN
-	BEGIN TRY
-		BEGIN TRAN
+BEGIN TRY
+	BEGIN TRANSACTION
+	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
 		
-		-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
-		
-		IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
-			THROW 50010, 'Usuario y/o contraseña incorrecta', 1
-		
-		DECLARE @cuit_proveedor VARCHAR(13),
-			@razon_social_proveedor VARCHAR(255),
-			@usuario_id_del_proveedor INT,
-			@direccion_id_del_proveedor INT
+	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
+		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
+				
+	DECLARE @usuario_id_del_proveedor INT
 			
-		DECLARE cuitrazonsocialdireccionyusuario CURSOR FOR
-		SELECT @direccion_id_del_proveedor = p.proveedor_direccion_id, @usuario_id_del_proveedor = u.usuario_id,  
-		@cuit_proveedor = p.proveedor_cuit, @razon_social_proveedor = p.proveedor_rs
-		FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (p.proveedor_usuario_id = u.usuario_id) 
-		WHERE usuario_nombre = @nombre_usuario 
-		
-		BEGIN
-			IF @razon_social_nuevo IS NOT NULL
-				UPDATE LIL_MIX.proveedor SET proveedor_rs = @razon_social_nuevo WHERE proveedor_usuario_id = @usuario_id_del_proveedor
-			IF @mail_nuevo IS NOT NULL
-				UPDATE LIL_MIX.proveedor SET proveedor_mail = @mail_nuevo WHERE proveedor_usuario_id = @usuario_id_del_proveedor
-			IF @telefono_nuevo IS NOT NULL
-				UPDATE LIL_MIX.proveedor SET proveedor_telefono = @telefono_nuevo WHERE proveedor_usuario_id = @usuario_id_del_proveedor
-			IF @codigopostal_nuevo IS NOT NULL
-				UPDATE LIL_MIX.proveedor SET proveedor_cp = @codigopostal_nuevo WHERE proveedor_usuario_id = @usuario_id_del_proveedor
-			IF @cuit_nuevo IS NOT NULL
-				UPDATE LIL_MIX.proveedor SET proveedor_cuit = @cuit_nuevo_nuevo WHERE proveedor_usuario_id = @usuario_id_del_proveedor
-			IF @rubro_nuevo IS NOT NULL
-				UPDATE LIL_MIX.proveedor SET proveedor_rubro = @rubro_nuevo WHERE proveedor_usuario_id = @usuario_id_del_proveedor
-			IF @nombre_de_contacto_nuevo IS NOT NULL
-				UPDATE LIL_MIX.proveedor SET proveedor_nombre_contacto = @nombre_de_contacto_nuevo WHERE proveedor_usuario_id = @usuario_id_del_proveedor
-			
-		END			
-		
-		BEGIN
-			IF @direccion_calle_nuevo IS NOT NULL
-				UPDATE LIL_MIX.direccion SET direccion_calle = @direccion_calle_nuevo WHERE direccion_id = @direccion_id_del_proveedor
-			IF @direccion_piso_nuevo IS NOT NULL
-				UPDATE LIL_MIX.direccion SET direccion_piso = @direccion_piso_nuevo WHERE direccion_id = @direccion_id_del_proveedor
-			IF @direccion_dpto_nuevo IS NOT NULL
-				UPDATE LIL_MIX.direccion SET direccion_dpto = @direccion_dpto_nuevo WHERE direccion_id = @direccion_id_del_proveedor
-			IF @ciudad_nuevo IS NOT NULL
-				UPDATE LIL_MIX.direccion SET direccion_ciudad = @ciudad_nuevo WHERE direccion_id = @direccion_id_del_proveedor
-		END
-		
-		COMMIT
-		
-	END TRY
+	SELECT @usuario_id_del_proveedor = u.usuario_id 
+	FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario 
 	
-	BEGIN CATCH
-		
-		ROLLBACK
-	
-	END CATCH
+	UPDATE LIL_MIX.proveedor 
+	SET proveedor_rs = @razon_social_nueva 
+	WHERE proveedor_usuario_id = @usuario_id_del_proveedor		
 
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
 END
+
+-- 13.3) Modificar mail
+
+CREATE PROCEDURE LIL_MIX.modificarProveedorMail
+@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@mail_nuevo VARCHAR(255)
+AS
+BEGIN
+BEGIN TRY
+	BEGIN TRANSACTION
+	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
+		
+	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
+		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
+				
+	DECLARE @usuario_id_del_proveedor INT
+			
+	SELECT @usuario_id_del_proveedor = u.usuario_id 
+	FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario 
+	
+	UPDATE LIL_MIX.proveedor 
+	SET proveedor_mail = @mail_nuevo
+	WHERE proveedor_usuario_id = @usuario_id_del_proveedor		
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
+END
+
+-- 13.4) Modificar telefono
+
+CREATE PROCEDURE LIL_MIX.modificarProveedorTelefono
+@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@telefono_nuevo INT
+AS
+BEGIN
+BEGIN TRY
+	BEGIN TRANSACTION
+	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
+		
+	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
+		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
+				
+	DECLARE @usuario_id_del_proveedor INT
+			
+	SELECT @usuario_id_del_proveedor = u.usuario_id 
+	FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario 
+	
+	UPDATE LIL_MIX.proveedor 
+	SET proveedor_telefono = @telefono_nuevo
+	WHERE proveedor_usuario_id = @usuario_id_del_proveedor		
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
+END
+
+-- 13.5) Modificar codigo postal
+
+CREATE PROCEDURE LIL_MIX.modificarProveedorCP
+@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@codigopostal_nuevo SMALLINT
+AS
+BEGIN
+BEGIN TRY
+	BEGIN TRANSACTION
+	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
+		
+	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
+		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
+				
+	DECLARE @usuario_id_del_proveedor INT
+			
+	SELECT @usuario_id_del_proveedor = u.usuario_id 
+	FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario 
+	
+	UPDATE LIL_MIX.proveedor 
+	SET proveedor_cp = @codigopostal_nuevo
+	WHERE proveedor_usuario_id = @usuario_id_del_proveedor		
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
+END
+
+-- 13.6) Modificar cuit
+
+CREATE PROCEDURE LIL_MIX.modificarProveedorCiudad
+@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@cuit_nuevo VARCHAR(13)
+AS
+BEGIN
+BEGIN TRY
+	BEGIN TRANSACTION
+	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
+		
+	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
+		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
+				
+	DECLARE @usuario_id_del_proveedor INT
+			
+	SELECT @usuario_id_del_proveedor = u.usuario_id 
+	FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario 
+	
+	UPDATE LIL_MIX.proveedor 
+	SET proveedor_cuit = @cuit_nuevo
+	WHERE proveedor_usuario_id = @usuario_id_del_proveedor		
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
+END
+
+-- 13.7) Modificar rubro en el cual se desempeña
+
+CREATE PROCEDURE LIL_MIX.modificarProveedorRubro
+@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@rubro_nuevo VARCHAR(255)
+AS
+BEGIN 
+BEGIN TRY
+	BEGIN TRANSACTION
+	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
+		
+	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
+		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
+				
+	DECLARE @usuario_id_del_proveedor INT
+			
+	SELECT @usuario_id_del_proveedor = u.usuario_id 
+	FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario 
+	
+	UPDATE LIL_MIX.proveedor 
+	SET proveedor_rubro = @rubro_nuevo
+	WHERE proveedor_usuario_id = @usuario_id_del_proveedor		
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
+END
+
+-- 13.8) Modificar nombre de contacto
+
+CREATE PROCEDURE LIL_MIX.modificarProveedorNombreDeContacto
+@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@nombre_de_contacto_nuevo VARCHAR(255)
+AS
+BEGIN
+BEGIN TRY
+	BEGIN TRANSACTION
+	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
+		
+	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
+		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
+				
+	DECLARE @usuario_id_del_proveedor INT
+			
+	SELECT @usuario_id_del_proveedor = u.usuario_id 
+	FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario 
+	
+	UPDATE LIL_MIX.proveedor 
+	SET proveedor_nombre_contacto  = @nombre_de_contacto_nuevo
+	WHERE proveedor_usuario_id = @usuario_id_del_proveedor		
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
+END
+
+-- 13.9) Modificación de direccion (calle)
+  
+CREATE PROCEDURE LIL_MIX.modificarClienteCalleDirec
+@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@direccion_calle_nuevo VARCHAR(255) 
+AS
+BEGIN
+BEGIN TRY
+	BEGIN TRANSACTION
+	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
+		
+	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
+		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
+		
+	DECLARE @direccionid INT
+			
+	SELECT @direccionid = p.proveedor_direccion_id 
+	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (p.proveedor_usuario_id = u.usuario_id)
+	WHERE u.usuario_nombre = @nombre_usuario
+			
+	UPDATE LIL_MIX.direccion 
+	SET direccion_calle = @direccion_calle_nuevo 
+	WHERE direccion_id = @direccionid
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
+END
+
+-- 13.10) Modificación de direccion (numero de piso)
+  
+CREATE PROCEDURE LIL_MIX.modificarClientePisoDirec
+@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@direccion_piso_nuevo TINYINT
+AS
+BEGIN
+BEGIN TRY
+	BEGIN TRANSACTION
+	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
+		
+	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
+		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
+		
+	DECLARE @direccionid INT
+			
+	SELECT @direccionid = p.proveedor_direccion_id 
+	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (p.proveedor_usuario_id = u.usuario_id)
+	WHERE u.usuario_nombre = @nombre_usuario
+			
+	UPDATE LIL_MIX.direccion 
+	SET direccion_piso = @direccion_piso_nuevo
+	WHERE direccion_id = @direccionid
+
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
+END
+
+-- 13.11) Modificación de direccion (departamento)
+  
+CREATE PROCEDURE LIL_MIX.modificarClienteDptoDirec
+@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@direccion_dpto_nuevo CHAR(1)
+AS
+BEGIN
+BEGIN TRY
+	BEGIN TRANSACTION
+	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
+		
+	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
+		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
+		
+	DECLARE @direccionid INT
+			
+	SELECT @direccionid = p.proveedor_direccion_id 
+	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (p.proveedor_usuario_id = u.usuario_id)
+	WHERE u.usuario_nombre = @nombre_usuario
+			
+	UPDATE LIL_MIX.direccion 
+	SET direccion_dpto = @direccion_dpto_nuevo
+	WHERE direccion_id = @direccionid
+				
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
+END
+
+-- 13.12) Modificación de direccion (ciudad)
+  
+CREATE PROCEDURE LIL_MIX.modificarClienteCiudad
+@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@ciudad_nueva VARCHAR(255)
+AS
+BEGIN
+BEGIN TRY
+	BEGIN TRANSACTION
+
+	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
+		
+	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
+		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
+		
+	DECLARE @direccionid INT
+			
+	SELECT @direccionid = p.proveedor_direccion_id 
+	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (p.proveedor_usuario_id = u.usuario_id)
+	WHERE u.usuario_nombre = @nombre_usuario
+			
+	UPDATE LIL_MIX.direccion 
+	SET direccion_ciudad = @ciudad_nueva
+	WHERE direccion_id = @direccionid
+	
+	COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+	ROLLBACK TRANSACTION
+END CATCH
+				
+END
+
 
 --------------------------------------------  CARGA DE CRÉDITO  -----------------------------------------------
 
