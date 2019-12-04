@@ -3,11 +3,11 @@
 --MIGRACION
 
 --CREATE TABLE LIL_MIX.direccion ( direccion_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
---								 direccion_calle VARCHAR(255),
---								 direccion_piso TINYINT,
---								 direccion_dpto VARCHAR(255),
---								 direccion_ciudad VARCHAR(255),
---								 )
+--				direccion_calle VARCHAR(255),
+--				direccion_piso TINYINT,
+--				direccion_dpto VARCHAR(255),
+--				direccion_ciudad VARCHAR(255),
+--				)
 
 INSERT INTO LIL_MIX.direccion (direccion_calle, direccion_ciudad)
 SELECT Cli_Direccion, Cli_Ciudad
@@ -32,7 +32,7 @@ GROUP BY Provee_Dom, Provee_Ciudad
 --								 proveedor_usuario_id INT FOREIGN KEY REFERENCES LIL_MIX.usuario(usuario_id)
 --								 )
 
-INSERT INTO LIL_MIX.proveedor ( proveedor_direccion_id, proveedor_telefono, proveedor_cuit, proveedor_rubro, proveedor_mail, 
+INSERT INTO LIL_MIX.proveedor ( proveedor_direccion_id, proveedor_telefono, proveedor_cuit, proveedor_rubro, proveedor_mail,
 	proveedor_rs, proveedor_habilitado, proveedor_usuario_id)
 SELECT (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = Provee_Dom AND direccion_ciudad = Provee_Ciudad),
 	Provee_Telefono, Provee_CUIT, Provee_Rubro, Provee_RS+'@gmail.com', Provee_RS, 1,
@@ -42,16 +42,16 @@ WHERE Provee_CUIT IS NOT NULL --Para que solo aparezan los proveedores y no clie
 group by Provee_CUIT, Provee_Telefono, Provee_Rubro, Provee_RS, Provee_Dom
 
 --CREATE TABLE LIL_MIX.oferta ( oferta_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
---							  oferta_precio_oferta INT,
---							  oferta_precio_lista INT,
---							  oferta_fecha_publicacion DATETIME,
---							  oferta_fecha_vencimiento DATETIME,
---							  oferta_decripcion VARCHAR(255),
---							  oferta_stock INT,
---							  oferta_proveedor_id INT FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
---							  oferta_restriccion_compra TINYINT,
---							  oferta_codigo VARCHAR(255)
---							  )
+--				oferta_precio_oferta INT,
+--				oferta_precio_lista INT,
+--				oferta_fecha_publicacion DATETIME,
+--				oferta_fecha_vencimiento DATETIME,
+--				oferta_decripcion VARCHAR(255),
+--				oferta_stock INT,
+--				oferta_proveedor_id INT FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
+--				oferta_restriccion_compra TINYINT,
+--				oferta_codigo VARCHAR(255)
+--				)
 
 INSERT INTO LIL_MIX.oferta (oferta_proveedor_id, oferta_precio_oferta , oferta_precio_lista, oferta_fecha_publicacion ,
 							oferta_fecha_vencimiento , oferta_decripcion , oferta_stock , oferta_codigo)
@@ -76,7 +76,7 @@ WHERE Oferta_Fecha IS NOT NULL
 */
 
 INSERT INTO LIL_MIX.cliente (cliente_nombre , cliente_apellido , cliente_direccion_id, cliente_mail,
-							 cliente_telefono , cliente_fecha_nacimiento , cliente_dni , cliente_credito , cliente_habilitado )
+			cliente_telefono , cliente_fecha_nacimiento , cliente_dni , cliente_credito , cliente_habilitado )
 SELECT Cli_Nombre , Cli_Apellido , (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle LIKE Cli_Direccion),
 	   Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , Cli_Dni , SUM(Carga_Credito), 1
 FROM gd_esquema.Maestra
@@ -94,7 +94,7 @@ GROUP BY Cli_Nombre , Cli_Apellido , Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , C
 */
 
 INSERT INTO LIL_MIX.factura (factura_numero , factura_proveedor_id, factura_fecha_inicio, factura_fecha_fin, factura_importe)
-SELECT Factura_Nro , (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE Provee_CUIT = proveedor_cuit) , MIN(Oferta_Fecha_Compra) , Factura_Fecha , SUM(Oferta_Precio) 
+SELECT Factura_Nro , (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE Provee_CUIT = proveedor_cuit) , MIN(Oferta_Fecha_Compra) , Factura_Fecha , SUM(Oferta_Precio)
 FROM gd_esquema.Maestra
 WHERE Factura_Nro IS NOT NULL
 GROUP BY Factura_Nro , Factura_Fecha , Provee_CUIT
@@ -113,7 +113,10 @@ INSERT INTO LIL_MIX.usuario(usuario_nombre, usuario_password)
 SELECT DISTINCT Cli_Nombre+'_'+Cli_Apellido , Cli_Dni
 FROM gd_esquema.Maestra
 
-
 INSERT INTO LIL_MIX.usuario(usuario_nombre, usuario_password)
 SELECT DISTINCT Provee_Telefono , Provee_CUIT
 FROM gd_esquema.Maestra
+
+INSERT INTO LIL_MIX.rolxusuario(rol_id, usuario_id)
+SELECT 2,
+FROM gd_esquema.maestra
