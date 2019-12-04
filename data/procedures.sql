@@ -549,7 +549,7 @@ BEGIN
 
 	UPDATE LIL_MIX.proveedor
 	SET proveedor_habilitado = 1
-	WHERE proveedor_cuir = @cuit AND proveedor_rs = @razon_social
+	WHERE proveedor_cuit = @cuit AND proveedor_rs = @razon_social
 
 END
 
@@ -717,7 +717,7 @@ BEGIN
 		DECLARE @proveedorid INT,
 			@proveedorhabilitado BIT
 		
-		SELECT @proveedorid = @proveedor_id, @proveedorhabilitado = proveedor_habilitado
+		SELECT @proveedorid = proveedor_id, @proveedorhabilitado = proveedor_habilitado
 		FROM LIL_MIX.proveedor
 		WHERE proveedor_cuit = @proveedor_cuit
 		
@@ -788,7 +788,7 @@ BEGIN
 		
 		-- Un cliente inhabilitado no podrá comprar ofertas ni cargarse crédito bajo ninguna forma
 		
-		IF @clientehabiliado = 0
+		IF @clientehabilitado = 0
 			THROW 50064, 'Cliente inhabilitado. No puede comprar ofertas.', 1
 		
 		-- Chequear si hay stock disponible
