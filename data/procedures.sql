@@ -43,6 +43,15 @@ END
 
 --2) SECCIÓN DE MODIFICACIÓN DEL ROL
 
+-- Para elegir el rol que se desea modificar o eliminar 
+-- se debe mostrar un listado con todos los roles existentes en el sistema. 
+
+CREATE PROCEDURE LIL_MIX.mostrarRolesExistentesEnElSistema
+AS
+BEGIN
+	SELECT rol_nombre FROM LIL_MIX.rol 
+END
+
 -- 2.1) Modificar nombre
 
 IF OBJECT_ID('LIL_MIX.modificarRol') IS NOT NULL
@@ -408,11 +417,26 @@ CREATE PROCEDURE LIL_MIX.modificarContrasenia
 @usuario_nombre VARCHAR(255), @anteriorcontra VARCHAR(255), @nuevacontra VARCHAR(255)
 AS
 BEGIN
+BEGIN TRY
+	BEGIN TRANSACTION
+	
+	DECLARE @usuariohabilitado BIT
+	
+	SELECT @usuariohabilitado = usuario_habilitado FROM LIL_MIX.usuario
+	WHERE usuario_nombre = @usuario_nombre
+	
+	IF @usuariohabilitado = 0
+		THROW 50090, 'El usuario esta inhabilitado. Por lo tanto no puede cambiar su contraseña.', 1
 
 	UPDATE LIL_MIX.usuario
 	SET usuario_password = HASHBYTES('SHA2_256', @nuevacontra)
 	WHERE usuario_password = HASHBYTES('SHA2_256', @anteriorcontra) AND usuario_nombre = @usuario_nombre
-
+	
+	COMMIT
+END TRY
+BEGIN CATCH
+	ROLLBACK
+END CATCH
 END
 
 -- 9)
@@ -454,6 +478,21 @@ BEGIN
 END
 
 -- 11) SECCIÓN DE MODIFICACIÓN DEL CLIENTE
+
+-- Para elegir que cliente se desea modificar o eliminar se debe presentar un buscador con listado, 
+-- que permita filtrar simultáneamente por alguno o todos los siguientes campos: 
+--  Nombre (texto libre)  Apellido (texto libre)  DNI (texto libre exacto)  Email (texto libre) 
+
+CREATE PROCEDURE LIL_MIX.clientesAModificarOEliminar
+@nombre VARCHAR(255), @apellido VARCHAR(255), @dni INT, @email VARCHAR(255)
+AS
+BEGIN
+
+	SELECT u.usuario_nombre
+	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
+	WHERE c.cliente_dni = @dni OR c.cliente_mail = @email OR c.cliente_nombre = @nombre OR c.cliente_apellido = @apellido
+
+END
 
 -- 11.1)
 
@@ -846,12 +885,27 @@ END
 
 -- 13) SECCIÓN DE MODIFICACIÓN DEL PROVEEDOR
 
+-- Para elegir que proveedor se desea modificar o eliminar se debe presentar un buscador con listado, 
+--- que permita filtrar simultáneamente por alguno o todos los siguientes campos: 
+--  Razón Social (texto libre)  CUIT (texto libre exacto)  Email (texto libre) 
+
+CREATE PROCEDURE LIL_MIX.elegirProveedorAModificaroEliminar
+@razonsocial VARCHAR(255), @cuit VARCHAR(13), @mail VARCHAR(255)
+AS
+BEGIN
+
+	SELECT u.usuario_nombre
+	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (p.proveedor_usuario_id = u.usuario_id)
+	WHERE p.proveedor_rs = @razonsocial OR p.proveedor_cuit = @cuit OR p.proveedor_mail = @mail
+
+END
+
 -- 13.1)
 
 -- Se debe poder volver a habilitar el proveedor deshabilitado desde la sección de modificación. 
 
 CREATE PROCEDURE LIL_MIX.habilitarProveedor
-@cuit VARCHAR(13), @razon_social VARCHAR(255)
+@usuario_nombre VARCHAR(255)
 AS
 BEGIN
 	DECLARE @usuarioid INT
@@ -871,17 +925,10 @@ END
 -- 13.2) Modificar razon social
 
 CREATE PROCEDURE LIL_MIX.modificarProveedorRS
-@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@nombre_usuario VARCHAR(255), -- El username no es modificable
 @razon_social_nueva VARCHAR(255)
 AS
 BEGIN
-BEGIN TRY
-	BEGIN TRANSACTION
-	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
-		
-	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
-		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
-				
 	DECLARE @usuario_id_del_proveedor INT
 			
 	SELECT @usuario_id_del_proveedor = u.usuario_id 
@@ -889,30 +936,18 @@ BEGIN TRY
 	
 	UPDATE LIL_MIX.proveedor 
 	SET proveedor_rs = @razon_social_nueva 
-	WHERE proveedor_usuario_id = @usuario_id_del_proveedor		
-
-	COMMIT TRANSACTION
-END TRY
-BEGIN CATCH
-	ROLLBACK TRANSACTION
-END CATCH
-				
+	WHERE proveedor_usuario_id = @usuario_id_del_proveedor					
 END
 
 -- 13.3) Modificar mail
 
 CREATE PROCEDURE LIL_MIX.modificarProveedorMail
-@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@nombre_usuario VARCHAR(255), -- El username no es modificable
 @mail_nuevo VARCHAR(255)
 AS
 BEGIN
 BEGIN TRY
-	BEGIN TRANSACTION
-	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
-		
-	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
-		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
-				
+			
 	DECLARE @usuario_id_del_proveedor INT
 			
 	SELECT @usuario_id_del_proveedor = u.usuario_id 
@@ -920,30 +955,16 @@ BEGIN TRY
 	
 	UPDATE LIL_MIX.proveedor 
 	SET proveedor_mail = @mail_nuevo
-	WHERE proveedor_usuario_id = @usuario_id_del_proveedor		
-
-	COMMIT TRANSACTION
-END TRY
-BEGIN CATCH
-	ROLLBACK TRANSACTION
-END CATCH
-				
+	WHERE proveedor_usuario_id = @usuario_id_del_proveedor					
 END
 
 -- 13.4) Modificar telefono
 
 CREATE PROCEDURE LIL_MIX.modificarProveedorTelefono
-@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@nombre_usuario VARCHAR(255), -- El username no es modificable
 @telefono_nuevo INT
 AS
 BEGIN
-BEGIN TRY
-	BEGIN TRANSACTION
-	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
-		
-	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
-		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
-				
 	DECLARE @usuario_id_del_proveedor INT
 			
 	SELECT @usuario_id_del_proveedor = u.usuario_id 
@@ -951,30 +972,16 @@ BEGIN TRY
 	
 	UPDATE LIL_MIX.proveedor 
 	SET proveedor_telefono = @telefono_nuevo
-	WHERE proveedor_usuario_id = @usuario_id_del_proveedor		
-
-	COMMIT TRANSACTION
-END TRY
-BEGIN CATCH
-	ROLLBACK TRANSACTION
-END CATCH
-				
+	WHERE proveedor_usuario_id = @usuario_id_del_proveedor				
 END
 
 -- 13.5) Modificar codigo postal
 
 CREATE PROCEDURE LIL_MIX.modificarProveedorCP
-@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@nombre_usuario VARCHAR(255), -- El username no es modificable
 @codigopostal_nuevo SMALLINT
 AS
 BEGIN
-BEGIN TRY
-	BEGIN TRANSACTION
-	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
-		
-	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
-		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
-				
 	DECLARE @usuario_id_del_proveedor INT
 			
 	SELECT @usuario_id_del_proveedor = u.usuario_id 
@@ -982,30 +989,16 @@ BEGIN TRY
 	
 	UPDATE LIL_MIX.proveedor 
 	SET proveedor_cp = @codigopostal_nuevo
-	WHERE proveedor_usuario_id = @usuario_id_del_proveedor		
-
-	COMMIT TRANSACTION
-END TRY
-BEGIN CATCH
-	ROLLBACK TRANSACTION
-END CATCH
-				
+	WHERE proveedor_usuario_id = @usuario_id_del_proveedor					
 END
 
 -- 13.6) Modificar cuit
 
 CREATE PROCEDURE LIL_MIX.modificarProveedorCiudad
-@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@nombre_usuario VARCHAR(255), -- El username no es modificable
 @cuit_nuevo VARCHAR(13)
 AS
 BEGIN
-BEGIN TRY
-	BEGIN TRANSACTION
-	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
-		
-	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
-		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
-				
 	DECLARE @usuario_id_del_proveedor INT
 			
 	SELECT @usuario_id_del_proveedor = u.usuario_id 
@@ -1013,30 +1006,17 @@ BEGIN TRY
 	
 	UPDATE LIL_MIX.proveedor 
 	SET proveedor_cuit = @cuit_nuevo
-	WHERE proveedor_usuario_id = @usuario_id_del_proveedor		
-
-	COMMIT TRANSACTION
-END TRY
-BEGIN CATCH
-	ROLLBACK TRANSACTION
-END CATCH
-				
+	WHERE proveedor_usuario_id = @usuario_id_del_proveedor					
 END
 
 -- 13.7) Modificar rubro en el cual se desempeña
 
 CREATE PROCEDURE LIL_MIX.modificarProveedorRubro
-@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@nombre_usuario VARCHAR(255), -- El username no es modificable
 @rubro_nuevo VARCHAR(255)
 AS
 BEGIN 
-BEGIN TRY
-	BEGIN TRANSACTION
-	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
 		
-	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
-		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
-				
 	DECLARE @usuario_id_del_proveedor INT
 			
 	SELECT @usuario_id_del_proveedor = u.usuario_id 
@@ -1044,30 +1024,16 @@ BEGIN TRY
 	
 	UPDATE LIL_MIX.proveedor 
 	SET proveedor_rubro = @rubro_nuevo
-	WHERE proveedor_usuario_id = @usuario_id_del_proveedor		
-
-	COMMIT TRANSACTION
-END TRY
-BEGIN CATCH
-	ROLLBACK TRANSACTION
-END CATCH
-				
+	WHERE proveedor_usuario_id = @usuario_id_del_proveedor					
 END
 
 -- 13.8) Modificar nombre de contacto
 
 CREATE PROCEDURE LIL_MIX.modificarProveedorNombreDeContacto
-@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@nombre_usuario VARCHAR(255), -- El username no es modificable
 @nombre_de_contacto_nuevo VARCHAR(255)
 AS
-BEGIN
-BEGIN TRY
-	BEGIN TRANSACTION
-	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
-		
-	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
-		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
-				
+BEGIN			
 	DECLARE @usuario_id_del_proveedor INT
 			
 	SELECT @usuario_id_del_proveedor = u.usuario_id 
@@ -1075,30 +1041,16 @@ BEGIN TRY
 	
 	UPDATE LIL_MIX.proveedor 
 	SET proveedor_nombre_contacto  = @nombre_de_contacto_nuevo
-	WHERE proveedor_usuario_id = @usuario_id_del_proveedor		
-
-	COMMIT TRANSACTION
-END TRY
-BEGIN CATCH
-	ROLLBACK TRANSACTION
-END CATCH
-				
+	WHERE proveedor_usuario_id = @usuario_id_del_proveedor					
 END
 
 -- 13.9) Modificación de direccion (calle)
   
 CREATE PROCEDURE LIL_MIX.modificarClienteCalleDirec
-@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@nombre_usuario VARCHAR(255), -- El username no es modificable
 @direccion_calle_nuevo VARCHAR(255) 
 AS
 BEGIN
-BEGIN TRY
-	BEGIN TRANSACTION
-	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
-		
-	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
-		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
-		
 	DECLARE @direccionid INT
 			
 	SELECT @direccionid = p.proveedor_direccion_id 
@@ -1107,30 +1059,16 @@ BEGIN TRY
 			
 	UPDATE LIL_MIX.direccion 
 	SET direccion_calle = @direccion_calle_nuevo 
-	WHERE direccion_id = @direccionid
-
-	COMMIT TRANSACTION
-END TRY
-BEGIN CATCH
-	ROLLBACK TRANSACTION
-END CATCH
-				
+	WHERE direccion_id = @direccionid			
 END
 
 -- 13.10) Modificación de direccion (numero de piso)
   
 CREATE PROCEDURE LIL_MIX.modificarClientePisoDirec
-@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@nombre_usuario VARCHAR(255), -- El username no es modificable
 @direccion_piso_nuevo TINYINT
 AS
 BEGIN
-BEGIN TRY
-	BEGIN TRANSACTION
-	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
-		
-	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
-		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
-		
 	DECLARE @direccionid INT
 			
 	SELECT @direccionid = p.proveedor_direccion_id 
@@ -1139,30 +1077,16 @@ BEGIN TRY
 			
 	UPDATE LIL_MIX.direccion 
 	SET direccion_piso = @direccion_piso_nuevo
-	WHERE direccion_id = @direccionid
-
-	COMMIT TRANSACTION
-END TRY
-BEGIN CATCH
-	ROLLBACK TRANSACTION
-END CATCH
-				
+	WHERE direccion_id = @direccionid			
 END
 
 -- 13.11) Modificación de direccion (departamento)
   
 CREATE PROCEDURE LIL_MIX.modificarClienteDptoDirec
-@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@nombre_usuario VARCHAR(255), -- El username no es modificable
 @direccion_dpto_nuevo CHAR(1)
 AS
 BEGIN
-BEGIN TRY
-	BEGIN TRANSACTION
-	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
-		
-	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
-		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
-		
 	DECLARE @direccionid INT
 			
 	SELECT @direccionid = p.proveedor_direccion_id 
@@ -1173,29 +1097,15 @@ BEGIN TRY
 	SET direccion_dpto = @direccion_dpto_nuevo
 	WHERE direccion_id = @direccionid
 				
-	COMMIT TRANSACTION
-END TRY
-BEGIN CATCH
-	ROLLBACK TRANSACTION
-END CATCH
-				
 END
 
 -- 13.12) Modificación de direccion (ciudad)
   
 CREATE PROCEDURE LIL_MIX.modificarClienteCiudad
-@contrasenia VARCHAR(255), @nombre_usuario VARCHAR(255), -- El username no es modificable
+@nombre_usuario VARCHAR(255), -- El username no es modificable
 @ciudad_nueva VARCHAR(255)
 AS
 BEGIN
-BEGIN TRY
-	BEGIN TRANSACTION
-
-	-- Por mas que ya haya hecho el LOGIN, que ingrese una vez más usuario y contraseña si pretende modificar cosas 
-		
-	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario AND usuario_password = HASHBYTES('SHA2_256', @contrasenia))
-		THROW 50010, 'Usuario y/o contraseña incorrecta', 1
-		
 	DECLARE @direccionid INT
 			
 	SELECT @direccionid = p.proveedor_direccion_id 
@@ -1205,13 +1115,7 @@ BEGIN TRY
 	UPDATE LIL_MIX.direccion 
 	SET direccion_ciudad = @ciudad_nueva
 	WHERE direccion_id = @direccionid
-	
-	COMMIT TRANSACTION
-END TRY
-BEGIN CATCH
-	ROLLBACK TRANSACTION
-END CATCH
-				
+			
 END
 
 --------------------------------------------  CARGA DE CRÉDITO  -----------------------------------------------
@@ -1331,8 +1235,6 @@ BEGIN
 			oferta_fecha_vencimiento, oferta_decripcion, oferta_stock, oferta_proveedor_id, oferta_restriccion_compra)
 		VALUES (@oferta_codigo, @oferta_precio_oferta, @oferta_precio_lista, @fechaactualdelsistema, @oferta_fecha_vencimiento,
 			@oferta_decripcion, @oferta_stock, @oferta_restriccion_compra) 
-			
-	-- ULTIMO PARRAFO: Y SI UN ADMINISTRATIVO HACE UNA OFERTA=?=?=?=?=?
 		
 		COMMIT TRANSACTION
 	END TRY
@@ -1349,6 +1251,21 @@ END
 -- 19)
 
 -- Esta funcionalidad permite a un cliente comprar una oferta publicada por los diferentes proveedores. 
+
+-- Se debe tener en cuenta que el usuario solo podrá ver las ofertas que se encuentren vigentes para el 
+-- día en el cual se ingresa al sistema.
+
+CREATE PROCEDURE LIL_MIX.ofertasVigentesHastaDiaActual
+@diaactual DATETIME
+AS
+BEGIN
+	SELECT oferta_codigo as 'Codigo de oferta', oferta_descripcion as 'Descripcion', oferta_precio_lista as 'Precio de lista', 
+	oferta_precio_oferta as 'Precio de oferta', oferta_stock as 'Stock disponible', oferta_restriccion_compra as 'Cantidad máxima que puede comprar cada cliente'
+	FROM LIL_MIX.oferta
+	WHERE oferta_fecha_vencimiento < @diaactual
+END
+
+-- 20)
 
 CREATE PROCEDURE LIL_MIX.comprarOferta
 @nombre_usuario INT, @oferta_codigo VARCHAR(255), @cantidad TINYINT, @diadecompra DATETIME			
@@ -1431,7 +1348,7 @@ END
 
 ---------------------------------------  ENTREGA/CONSUMO DE OFERTA ------------------------------------------
 
--- 20)
+-- 21)
 
 -- Funcionalidad que permite a un proveedor dar de baja una oferta entregada por un cliente al momento de realizarse el canje.  
 
@@ -1445,7 +1362,8 @@ BEGIN
 		DECLARE @fechaconsumo DATETIME,
 			@fechacomp DATETIME,
 			@proveedorid INT,
-			@proveedoridchequear INT
+			@proveedoridchequear INT,
+			@usuariohabilitado BIT
 		
 		SELECT @fechaconsumo = cu.cupon_fecha_consumo, @fechacomp = co.compra_fecha,
 		@proveedoridchequear = of.oferta_proveedor_id
@@ -1453,9 +1371,12 @@ BEGIN
 				       JOIN LIL_MIX.oferta of ON (of.oferta_id = co.compra_oferta_numero)
 		WHERE cupon_id = @cuponid
 		
-		SELECT @proveedorid = p.proveedor_id 
+		SELECT @proveedorid = p.proveedor_id, @usuariohabilitado = p.proveedor_habilitado 
 		FROM LIL_MIX.proveedor p JOIN LIL_MIX.usuario u ON (p.proveedor_usuario_id = u.usuario_id)
 		WHERE u.usuario_nombre = @nombre_usuario
+		
+		IF @usuariohabilitado = 0
+			THROW 50091, 'El proveedor está inhabilitado. No puede entregar ofertas.', 1
 		
 		-- Este proceso tiene como restricciones que un cupón no puede ser canjeado más de una vez
 	
@@ -1492,11 +1413,25 @@ END
 
 ------------------------------------- FACTURACION PROVEEDOR -------------------------------------------------
 
--- 21)
+-- 22)
 
 -- Esta funcionalidad permite a un administrativo facturar a un proveedor todas las ofertas compradas por los clientes. 
 -- Para ello ingresará el período de facturación por intervalos de fecha, se deberá seleccionar el proveedor 
 -- y a continuación se listaran todos las ofertas que fueron adquiridas por los clientes.  
+
+CREATE PROCEDURE LIL_MIX.todasLasOfertasAdquiridas
+@fecha_inicio DATETIME , @fecha_fin DATETIME , @nombre_usuario_proveedor VARCHAR(255)
+AS
+BEGIN
+	SELECT o.oferta_codigo as 'Codigo de oferta', p.proveedor_cuit as 'Cuit del proveedor'
+	FROM LIL_MIX.proveedor p JOIN LIL_MIX.ofertas o ON (p.proveedor_id = o.oferta_proveedor_id)
+				 JOIN LIL_MIX.compra c ON (c.compra_oferta_numero = o.oferta_id)
+				 JOIN LIL_MIX.usuario u ON (p.proveedor_usuario_id = u.usuario_id)
+	WHERE u.usuario_nombre = @nombre_usuario_proveedor AND 
+		compra_fecha BETWEEN (@fecha_inicio AND @fecha_fin)
+END
+
+-- 23)
 
 CREATE PROCEDURE LIL_MIX.facturacionProveedor
 @fecha_inicio DATETIME , @fecha_fin DATETIME , @proveedor_cuit VARCHAR(13)
@@ -1542,44 +1477,41 @@ END
 -- Dichas consultas son a nivel semestral, para lo cual la pantalla debe permitirnos selección el semestral a consultar.  
 -- Además de ingresar el año a consultar, el sistema nos debe permitir seleccionar que tipo de listado se quiere visualizar. 
 
--- 22) 1. Prov mayor porcentaje descuento
+-- 24) 1. Proveedores con mayor porcentaje de descuento
 
 CREATE PROCEDURE LIL_MIX.listadoEstadistico1   
 @anio INT, @semestre INT   -- 1 o 2
 AS
 BEGIN
-	IF @listadoavisualizar = 1 -- Proveedores con mayor porcentaje de descuento ofrecido en sus ofertas 
-	
-		SELECT TOP 5 o.proveedor_id as 'ID', p.proveedor_nombre_contacto as 'Nombre de contacto', p.proveedor_mail as 'Mail', 
-			p.proveedor_cuit as 'CUIT', p.proveedor_rubro as 'Rubro', p.proveedor_rs as 'Razon social', 
-			(o.oferta_precio_oferta * 100 / o.oferta_precio_lista) as 'Porcentaje de Descuento'				
-		FROM LIL_MIX.proveedor p JOIN LIL_MIX.oferta o ON (o.oferta_proveedor_id = p.proveedor_id), LIL_MIX.semestre s
-		WHERE s.semestre_id = @semestre
-		GROUP BY p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs
-		HAVING o.oferta_fecha_publicacion BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103)
-		ORDER BY [Porcentaje de Descuento] DESC	-- El listado se debe ordenar en forma descendente por monto. 
+	SELECT TOP 5 o.proveedor_id as 'ID', p.proveedor_nombre_contacto as 'Nombre de contacto', p.proveedor_mail as 'Mail', 
+		p.proveedor_cuit as 'CUIT', p.proveedor_rubro as 'Rubro', p.proveedor_rs as 'Razon social', 
+		(o.oferta_precio_oferta * 100 / o.oferta_precio_lista) as 'Porcentaje de Descuento'				
+	FROM LIL_MIX.proveedor p JOIN LIL_MIX.oferta o ON (o.oferta_proveedor_id = p.proveedor_id), LIL_MIX.semestre s
+	WHERE s.semestre_id = @semestre
+	GROUP BY p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs
+	HAVING o.oferta_fecha_publicacion BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103)
+	ORDER BY [Porcentaje de Descuento] DESC	-- El listado se debe ordenar en forma descendente por monto. 
 END
 
 -- Cabe aclarar que los campos a visualizar en la tabla del listado para las 2 consultas no son los mismos, 
 -- y al momento de seleccionar un tipo solo deben visualizarse las columnas pertinentes al tipo de listado elegido. 		
 		
--- 23) 2. Prov mayor facturacion
+-- 25) 2. Proveedores con mayor facturacion
 
 CREATE PROCEDURE LIL_MIX.listadoEstadistico1  
 @anio INT, @semestre INT   -- 1 o 2
      o 2. Prov mayor facturacion
 AS
 BEGIN
-	IF @listadoavisualizar = 2 -- Proveedores con mayor facturación 
-	
-		SELECT TOP 5 o.proveedor_id as 'ID', p.proveedor_nombre_contacto as 'Nombre de contacto', p.proveedor_mail as 'Mail', 
-			p.proveedor_cuit as 'CUIT', p.proveedor_rubro as 'Rubro', p.proveedor_rs as 'Razon social', SUM(f.factura_importe) as 'Total Facturado'
-		FROM LIL_MIX.proveedor p JOIN LIL_MIX.factura f ON (f.factura_proveedor_id = p.proveedor_id), LIL_MIX.semestre s
-		WHERE s.semestre_id = @semestre
-		GROUP BY p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs
-		HAVING (f.factura_fecha_inicio BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103))
-			AND (f.factura_fecha_fin BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103))
-		ORDER BY [Total Facturado] DESC	-- El listado se debe ordenar en forma descendente por monto. 
+
+	SELECT TOP 5 o.proveedor_id as 'ID', p.proveedor_nombre_contacto as 'Nombre de contacto', p.proveedor_mail as 'Mail', 
+		p.proveedor_cuit as 'CUIT', p.proveedor_rubro as 'Rubro', p.proveedor_rs as 'Razon social', SUM(f.factura_importe) as 'Total Facturado'
+	FROM LIL_MIX.proveedor p JOIN LIL_MIX.factura f ON (f.factura_proveedor_id = p.proveedor_id), LIL_MIX.semestre s
+	WHERE s.semestre_id = @semestre
+	GROUP BY p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs
+	HAVING (f.factura_fecha_inicio BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103))
+		AND (f.factura_fecha_fin BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103))
+	ORDER BY [Total Facturado] DESC	-- El listado se debe ordenar en forma descendente por monto. 
 	
 END
 
