@@ -8,7 +8,7 @@
 
 IF OBJECT_ID('LIL_MIX.crearRol') IS NOT NULL
   DROP PROCEDURE LIL_MIX.crearRol
-
+GO
 -- Crear un rol implica cargar los siguientes datos: Nombre y Listado de Funcionalidades (selección acotada) 
  
 CREATE PROCEDURE LIL_MIX.crearRol 
@@ -40,6 +40,7 @@ BEGIN
 
 	END CATCH
 END 
+GO
 
 --2) SECCIÓN DE MODIFICACIÓN DEL ROL
 
@@ -56,7 +57,7 @@ END
 
 IF OBJECT_ID('LIL_MIX.modificarRol') IS NOT NULL
   DROP PROCEDURE LIL_MIX.modificarRol
-
+GO
 -- En la modificación de un rol solo se pueden alterar ambos campos: el nombre y el listado de funcionalidades. 
 
 CREATE PROCEDURE LIL_MIX.modificarRolNombre
@@ -64,10 +65,10 @@ CREATE PROCEDURE LIL_MIX.modificarRolNombre
 AS
 BEGIN
 	UPDATE LIL_MIX.rol
-	SET rol_nombre = rol_nombre_nuevo
+	SET rol_nombre = @rol_nombre_nuevo
 	WHERE rol_nombre = @rol_nombre
 END
-
+GO
 --Se deben poder quitar de a una las funcionalidades como así  también agregar nuevas funcionalidades a rol que 
 --se está modificando
 
@@ -94,7 +95,7 @@ BEGIN
 		ROLLBACK
 	END CATCH
 END
-
+GO
 -- 2.3) Eliminar funcionalidad
 
 CREATE PROCEDURE LIL_MIX.modificarRolEliminarFuncionalidad
@@ -131,7 +132,7 @@ END
 
 IF OBJECT_ID('LIL_MIX.habilitarRol') IS NOT NULL
   DROP PROCEDURE LIL_MIX.habilitarRol
-
+ GO
 --Se debe poder volver a habilitar un rol inhabilitado desde la sección de modificación. 
 
 CREATE PROCEDURE LIL_MIX.habilitarRol
@@ -143,12 +144,12 @@ BEGIN
 	WHERE rol_nombre = @rol_nombre
 
 END
-
+GO
 --3) 
 
 IF OBJECT_ID('LIL_MIX.eliminarRol') IS NOT NULL
   DROP PROCEDURE LIL_MIX.eliminarRol
-
+GO
 -- La eliminación del rol implica una baja lógica del mismo. El rol debe poder inhabilitarse.
 
 CREATE PROCEDURE LIL_MIX.eliminarRol
@@ -161,7 +162,7 @@ BEGIN
 	WHERE rol_nombre = @rol_nombre
 
 END
-
+GO
 ----------------------------------------  LOGIN Y SEGURIDAD  ----------------------------------------
 
 -- 4)
@@ -232,6 +233,7 @@ BEGIN
 		RETURN
 	END
 END
+GO
 
 ------------------------------------  REGISTRO DE USUARIO  -----------------------------------
 
@@ -241,6 +243,7 @@ END
 
 IF OBJECT_ID('LIL_MIX.crearUsuario') IS NOT NULL
   DROP PROCEDURE LIL_MIX.crearUsuarioCliente
+GO
 
 CREATE PROCEDURE LIL_MIX.crearUsuarioCliente
 @usuario_nombre VARCHAR(255), @usuario_password VARCHAR(255), @rol_nombre VARCHAR(30), -- Datos de usuario
@@ -307,7 +310,7 @@ BEGIN
 
 	END CATCH
 END
-
+GO
 -- 6) CREAR USUARIO TIPO PROVEEDOR
 
 CREATE PROCEDURE LIL_MIX.crearUsuarioProveedor
@@ -357,7 +360,7 @@ BEGIN
 		VALUES (@telefono, @cuit, @rubro, @mail, @codigo_postal, @nombre_contacto, @razon_social, 1,
 			(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre),
 			(SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = @calle AND direccion_piso = @piso AND
-				direccion_dpto = @dpto AND direccion_ciudad = @ciudad)
+				direccion_dpto = @dpto AND direccion_ciudad = @ciudad))
 		
 		COMMIT
 	END TRY
@@ -368,7 +371,7 @@ BEGIN
 
 	END CATCH
 END
-
+GO
 -- 7) 
 
 -- A un usuario se le asigna un solo rol, 

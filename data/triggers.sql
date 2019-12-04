@@ -7,6 +7,7 @@
 
 IF OBJECT_ID('LIL_MIX.noRepetirFuncionalidadesEnUnRol') IS NOT NULL
   DROP TRIGGER LIL_MIX.noRepetirFuncionalidadesEnUnRol
+GO
 
 CREATE TRIGGER LIL_MIX.noRepetirFuncionalidadesEnUnRol ON LIL_MIX.funcionalidadxrol
 INSTEAD OF INSERT AS
@@ -62,11 +63,13 @@ BEGIN
 	DEALLOCATE cursorInsertados
 
 END
+GO
 
 --2)
 
 IF OBJECT_ID('LIL_MIX.eliminarRolesInhabilitados') IS NOT NULL
   DROP TRIGGER LIL_MIX.eliminarRolesInhabilitados
+GO
 
 CREATE TRIGGER LIL_MIX.eliminarRolesInhabilitados ON LIL_MIX.rol
 AFTER UPDATE AS
@@ -85,6 +88,7 @@ END
 
 IF OBJECT_ID('LIL_MIX.cargarCreditoAlCliente') IS NOT NULL
   DROP TRIGGER LIL_MIX.cargarCreditoAlCliente
+GO
 
 CREATE TRIGGER cargarCreditoAlCliente ON cargaDeCredito
 AFTER INSERT AS
@@ -113,4 +117,4 @@ BEGIN
 	CLOSE cursorCreditoInsertado
 	DEALLOCATE cursorCreditoInsertado
 END
-
+GO

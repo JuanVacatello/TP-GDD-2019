@@ -87,5 +87,5 @@ GO
 --                        Formas de pago
 
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Efectivo')
-INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Credito')
+INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Crédito')
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Debito')

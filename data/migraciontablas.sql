@@ -32,12 +32,13 @@ GROUP BY Provee_Dom, Provee_Ciudad
 --								 proveedor_usuario_id INT FOREIGN KEY REFERENCES LIL_MIX.usuario(usuario_id)
 --								 )
 
-
-INSERT INTO LIL_MIX.proveedor ( proveedor_direccion_id, proveedor_telefono, proveedor_cuit, proveedor_rubro , proveedor_rs, proveedor_habilitado)
-SELECT (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle LIKE Provee_Dom),
-		Provee_Telefono, Provee_CUIT, Provee_Rubro, Provee_RS, 1
+INSERT INTO LIL_MIX.proveedor ( proveedor_direccion_id, proveedor_telefono, proveedor_cuit, proveedor_rubro, proveedor_mail, 
+	proveedor_rs, proveedor_habilitado, proveedor_usuario_id)
+SELECT (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = Provee_Dom AND direccion_ciudad = Provee_Ciudad),
+	Provee_Telefono, Provee_CUIT, Provee_Rubro, Provee_RS+'@gmail.com', Provee_RS, 1,
+	(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = Provee_Telefono)
 FROM gd_esquema.Maestra
-WHERE Provee_CUIT IS NOT NULL --Para que solo aparezan los provvedores y no clientes
+WHERE Provee_CUIT IS NOT NULL --Para que solo aparezan los proveedores y no clientes
 group by Provee_CUIT, Provee_Telefono, Provee_Rubro, Provee_RS, Provee_Dom
 
 --CREATE TABLE LIL_MIX.oferta ( oferta_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
