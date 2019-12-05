@@ -163,7 +163,6 @@ CREATE TABLE LIL_MIX.factura ( factura_id INT NOT NULL PRIMARY KEY,
 CREATE TABLE LIL_MIX.cupon ( cupon_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 			                 cupon_fecha_vencimiento DATETIME NOT NULL,
 			                 cupon_fecha_consumo DATETIME,
-							         cupon_codigo VARCHAR(15) NOT NULL,
 			                 cupon_compra_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.compra(compra_id),
 			                 cupon_cliente_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id) )
 
