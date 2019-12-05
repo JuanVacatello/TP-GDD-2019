@@ -153,8 +153,7 @@ SELECT (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = Provee
 FROM gd_esquema.Maestra
 WHERE Oferta_Fecha IS NOT NULL
 GROUP BY SUBSTRING(Oferta_Codigo, 1, 10), Oferta_Precio, Oferta_Precio_Ficticio, Oferta_Fecha, Oferta_Fecha_Venc , 
-		Oferta_Descripcion , Oferta_Cantidad , Provee_CUIT, Cli_Dni, Provee_Cuit
-ORDER BY SUBSTRING(Oferta_Codigo, 1, 10)
+		Oferta_Descripcion , Oferta_Cantidad , Provee_Cuit
 
 
 -- CREATE TABLE LIL_MIX.factura ( factura_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
