@@ -399,6 +399,13 @@ SELECT o.oferta_id, o.oferta_decripcion, (SELECT cliente_id FROM LIL_MIX.cliente
 FROM gd_esquema.Maestra m JOIN LIL_MIX.oferta o ON (o.oferta_codigo = SUBSTRING(m.Oferta_Codigo, 1, 10))
 GROUP BY m.Oferta_Codigo, o.oferta_id, o.oferta_decripcion, m.Oferta_Fecha_Compra, Cli_Dni
 
+--                        Cupon
+
+INSERT INTO LIL_MIX.cupon (cupon_fecha_vencimiento, cupon_compra_id, cupon_cliente_id)
+SELECT (DATEADD(day, 30, c.compra_fecha)), c.compra_id, c.compra_cliente_id
+FROM LIL_MIX.oferta o JOIN LIL_MIX.compra c ON (c.compra_oferta_numero = o.oferta_id)
+					  JOIN gd_esquema.Maestra m ON (o.oferta_codigo = SUBSTRING(m.Oferta_Codigo, 1, 10))
+
 --                        Factura
 
 INSERT INTO LIL_MIX.factura (factura_id , factura_proveedor_id, factura_fecha_inicio, factura_fecha_fin, factura_importe)
@@ -409,11 +416,19 @@ WHERE Factura_Nro IS NOT NULL
 GROUP BY Factura_Nro , Factura_Fecha , Provee_CUIT
 
 
-select * from LIL_MIX.cliente
-
-
 SELECT * FROM LIL_MIX.funcionalidad
 SELECT * FROM LIL_MIX.rol
 SELECT * FROM LIL_MIX.funcionalidadxrol
 SELECT * FROM LIL_MIX.semestre
 SELECT * FROM LIL_MIX.tipoDePago
+SELECT * FROM LIL_MIX.cliente
+SELECT * FROM LIL_MIX.proveedor
+SELECT * FROM LIL_MIX.compra
+SELECT * FROM LIL_MIX.cupon
+SELECT * FROM LIL_MIX.usuario
+SELECT * FROM LIL_MIX.rolxusuario
+SELECT * FROM LIL_MIX.factura
+SELECT * FROM LIL_MIX.cargaDeCredito
+SELECT * FROM LIL_MIX.oferta
+SELECT * FROM LIL_MIX.direccion
+SELECT * FROM LIL_MIX.tarjeta
