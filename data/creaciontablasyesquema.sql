@@ -132,7 +132,7 @@ CREATE TABLE LIL_MIX.oferta ( oferta_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 			      oferta_decripcion VARCHAR(255) NOT NULL,
 			      oferta_stock INT NOT NULL,
 			      oferta_proveedor_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
-			      oferta_restriccion_compra TINYINT NOT NULL )
+			      oferta_restriccion_compra TINYINT )
 
 CREATE TABLE LIL_MIX.cliente ( cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --el cliente id comenzará en 1 y se incrementará en 1 a medida que se vayan agregando nuevos clientes
 			       cliente_nombre VARCHAR(255) NOT NULL ,
