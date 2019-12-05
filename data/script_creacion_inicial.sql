@@ -1,5 +1,5 @@
 USE GD2C2019
-
+GO
 ------DROPS FKs
 
 DECLARE cursor_tablas CURSOR FOR
@@ -270,6 +270,8 @@ INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,5)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,6)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,7)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,8)
+INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,9)
+INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,10)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,11)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,12) --No sabemos quien tiene esa función
 
@@ -295,7 +297,7 @@ GO
 
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Efectivo')
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Crédito')
-INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Debito')
+INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Débito')
 
 SELECT * FROM LIL_MIX.funcionalidad
 SELECT * FROM LIL_MIX.rol
