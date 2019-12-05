@@ -73,7 +73,7 @@ SELECT (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = Prove
 	(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = Provee_Telefono)
 FROM gd_esquema.Maestra
 WHERE Provee_CUIT IS NOT NULL -- Para que solo aparezan los proveedores y no clientes
-group by Provee_CUIT, Provee_Telefono, Provee_Rubro, Provee_RS, Provee_Dom
+group by Provee_CUIT, Provee_Telefono, Provee_Rubro, Provee_RS, Provee_Dom, Provee_Ciudad
 
 
 -- CREATE TABLE LIL_MIX.cliente ( cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, 
@@ -158,15 +158,16 @@ ORDER BY SUBSTRING(Oferta_Codigo, 1, 10)
 
 
 -- CREATE TABLE LIL_MIX.factura ( factura_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
---							   factura_numero INT,
---							   factura_proveedor_id INT FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
---							   factura_fecha_inicio DATETIME,
---							   factura_fecha_fin DATETIME,
---							   factura_importe FLOAT
---							   )
+--				 factura_numero INT,
+--		                 factura_proveedor_id INT FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
+--				 factura_fecha_inicio DATETIME,
+--				 factura_fecha_fin DATETIME,
+--				 factura_importe FLOAT
+--				 )
 
 INSERT INTO LIL_MIX.factura (factura_numero , factura_proveedor_id, factura_fecha_inicio, factura_fecha_fin, factura_importe)
-SELECT Factura_Nro , (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = Provee_CUIT) , MIN(Oferta_Fecha_Compra) , Factura_Fecha , SUM(Oferta_Precio) 
+SELECT Factura_Nro , (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = Provee_CUIT) , MIN(Oferta_Fecha_Compra) , 
+	Factura_Fecha , SUM(Oferta_Precio) 
 FROM gd_esquema.Maestra
 WHERE Factura_Nro IS NOT NULL
 GROUP BY Factura_Nro , Factura_Fecha , Provee_CUIT
