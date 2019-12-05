@@ -47,6 +47,10 @@ GO
 -- Para elegir el rol que se desea modificar o eliminar 
 -- se debe mostrar un listado con todos los roles existentes en el sistema. 
 
+IF OBJECT_ID('LIL_MIX.mostrarRolesExistentesEnElSistema') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.mostrarRolesExistentesEnElSistema
+GO
+
 CREATE PROCEDURE LIL_MIX.mostrarRolesExistentesEnElSistema
 AS
 BEGIN
@@ -74,6 +78,10 @@ GO
 
 -- 2.2) Agregar funcionalidad
 
+IF OBJECT_ID('LIL_MIX.modificarRolAgregarFuncionalidad') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarRolAgregarFuncionalidad
+GO
+
 CREATE PROCEDURE LIL_MIX.modificarRolAgregarFuncionalidad
 @rol_nombre VARCHAR(30), @funcionalidad_descripcion VARCHAR(30)
 AS
@@ -97,6 +105,10 @@ BEGIN
 END
 GO
 -- 2.3) Eliminar funcionalidad
+
+IF OBJECT_ID('LIL_MIX.modificarRolEliminarFuncionalidad') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarRolEliminarFuncionalidad
+GO
 
 CREATE PROCEDURE LIL_MIX.modificarRolEliminarFuncionalidad
 @rol_nombre VARCHAR(30), @funcionalidad_descripcion VARCHAR(30)
@@ -133,6 +145,7 @@ END
 IF OBJECT_ID('LIL_MIX.habilitarRol') IS NOT NULL
   DROP PROCEDURE LIL_MIX.habilitarRol
  GO
+ 
 --Se debe poder volver a habilitar un rol inhabilitado desde la sección de modificación. 
 
 CREATE PROCEDURE LIL_MIX.habilitarRol
@@ -145,6 +158,7 @@ BEGIN
 
 END
 GO
+
 --3) 
 
 IF OBJECT_ID('LIL_MIX.eliminarRol') IS NOT NULL
@@ -166,6 +180,10 @@ GO
 ----------------------------------------  LOGIN Y SEGURIDAD  ----------------------------------------
 
 -- 4)
+
+IF OBJECT_ID('LIL_MIX.login') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.login
+GO
 
 -- Al ejecutar la aplicación el usuario no podrá acceder a ninguna funcionalidad del sistema hasta 
 -- completar el proceso de Login. 
@@ -241,7 +259,7 @@ GO
 
 -- 5) CREAR USUARIO TIPO CLIENTE
 
-IF OBJECT_ID('LIL_MIX.crearUsuario') IS NOT NULL
+IF OBJECT_ID('LIL_MIX.crearUsuarioCliente') IS NOT NULL
   DROP PROCEDURE LIL_MIX.crearUsuarioCliente
 GO
 
@@ -311,7 +329,12 @@ BEGIN
 	END CATCH
 END
 GO
+
 -- 6) CREAR USUARIO TIPO PROVEEDOR
+
+IF OBJECT_ID('LIL_MIX.crearUsuarioProveedor') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.crearUsuarioProveedor
+GO
 
 CREATE PROCEDURE LIL_MIX.crearUsuarioProveedor
 @usuario_nombre VARCHAR(255), @usuario_password VARCHAR(255), @rol_nombre VARCHAR(30), -- Datos de usuario
@@ -372,7 +395,12 @@ BEGIN
 	END CATCH
 END
 GO
+
 -- 7) 
+
+IF OBJECT_ID('LIL_MIX.agregarRolAUsuario') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.agregarRolAUsuario
+GO
 
 -- A un usuario se le asigna un solo rol, 
 -- pero no se descarta que pueda tener más de un rol al mismo tiempo en un futuro no muy lejano. 
@@ -486,6 +514,10 @@ END
 -- que permita filtrar simultáneamente por alguno o todos los siguientes campos: 
 --  Nombre (texto libre)  Apellido (texto libre)  DNI (texto libre exacto)  Email (texto libre) 
 
+IF OBJECT_ID('LIL_MIX.clientesAModificarOEliminar') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.clientesAModificarOEliminar
+GO
+
 CREATE PROCEDURE LIL_MIX.clientesAModificarOEliminar
 @nombre VARCHAR(255), @apellido VARCHAR(255), @dni INT, @email VARCHAR(255)
 AS
@@ -542,7 +574,11 @@ BEGIN
 END
 
 -- 11.3) Modificación de apellido
-  
+
+
+IF OBJECT_ID('LIL_MIX.modificarClienteApellido') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarClienteApellido
+
 CREATE PROCEDURE LIL_MIX.modificarClienteApellido
 @nombre_usuario VARCHAR(255), -- El username no es modificable
 @apellido_nuevo VARCHAR(255)
@@ -560,6 +596,10 @@ BEGIN
 END
 
 -- 11.4) Modificación de DNI
+
+
+IF OBJECT_ID('LIL_MIX.modificarClienteDNI') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarClienteDNI
   
 CREATE PROCEDURE LIL_MIX.modificarClienteDNI
 @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -578,6 +618,10 @@ BEGIN
 END
 
 -- 11.5) Modificación de e-mail
+
+
+IF OBJECT_ID('LIL_MIX.modificarClienteMail') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarClienteMail
   
 CREATE PROCEDURE LIL_MIX.modificarClienteMail
 @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -596,7 +640,10 @@ BEGIN
 END
 
 -- 11.6) Modificación de telefono
-  
+ 
+ IF OBJECT_ID('LIL_MIX.modificarClienteTelefono') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarClienteTelefono
+ 
 CREATE PROCEDURE LIL_MIX.modificarClienteTelefono
 @nombre_usuario VARCHAR(255), -- El username no es modificable
 @telefono_nuevo INT
@@ -613,6 +660,9 @@ BEGIN
 END
 
 -- 11.7) Modificación de fecha de nacimiento
+ 
+ IF OBJECT_ID('LIL_MIX.modificarClienteFechaNacimiento') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarClienteFechaNacimiento
   
 CREATE PROCEDURE LIL_MIX.modificarClienteFechaNacimiento
 @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -631,6 +681,9 @@ BEGIN
 END
 
 -- 11.8) Modificación de codigo postal
+
+ IF OBJECT_ID('LIL_MIX.modificarClienteCP') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarClienteCP
   
 CREATE PROCEDURE LIL_MIX.modificarClienteCP
 @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -649,6 +702,9 @@ BEGIN
 END
 
 -- 11.9) Modificación de direccion (calle)
+
+ IF OBJECT_ID('LIL_MIX.modificarClienteCalleDirec') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarClienteCalleDirec
   
 CREATE PROCEDURE LIL_MIX.modificarClienteCalleDirec
 @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -668,6 +724,9 @@ BEGIN
 END
 
 -- 11.10) Modificación de direccion (numero de piso)
+
+ IF OBJECT_ID('LIL_MIX.modificarClientePisoDirec') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarClientePisoDirec
   
 CREATE PROCEDURE LIL_MIX.modificarClientePisoDirec
 @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -686,6 +745,9 @@ BEGIN
 END
 
 -- 11.11) Modificación de direccion (departamento)
+
+ IF OBJECT_ID('LIL_MIX.modificarClienteDptoDirec') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarClienteDptoDirec
   
 CREATE PROCEDURE LIL_MIX.modificarClienteDptoDirec
 @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -704,6 +766,9 @@ BEGIN
 END
 
 -- 11.12) Modificación de direccion (ciudad)
+
+ IF OBJECT_ID('LIL_MIX.modificarClienteCiudad') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarClienteCiudad
   
 CREATE PROCEDURE LIL_MIX.modificarClienteCiudad
 @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -743,6 +808,9 @@ END
 
 -- 13) SECCIÓN DE MODIFICACIÓN DEL PROVEEDOR
 
+IF OBJECT_ID('LIL_MIX.elegirProveedorAModificaroEliminar') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.elegirProveedorAModificaroEliminar
+
 -- Para elegir que proveedor se desea modificar o eliminar se debe presentar un buscador con listado, 
 --- que permita filtrar simultáneamente por alguno o todos los siguientes campos: 
 --  Razón Social (texto libre)  CUIT (texto libre exacto)  Email (texto libre) 
@@ -759,6 +827,9 @@ BEGIN
 END
 
 -- 13.1)
+
+IF OBJECT_ID('LIL_MIX.habilitarProveedor') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.habilitarProveedor
 
 -- Se debe poder volver a habilitar el proveedor deshabilitado desde la sección de modificación. 
 
@@ -782,6 +853,10 @@ END
 
 -- 13.2) Modificar razon social
 
+IF OBJECT_ID('LIL_MIX.modificarProveedorRS') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarProveedorRS
+
+
 CREATE PROCEDURE LIL_MIX.modificarProveedorRS
 @nombre_usuario VARCHAR(255), -- El username no es modificable
 @razon_social_nueva VARCHAR(255)
@@ -798,6 +873,9 @@ BEGIN
 END
 
 -- 13.3) Modificar mail
+
+IF OBJECT_ID('LIL_MIX.modificarProveedorMail') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarProveedorMail
 
 CREATE PROCEDURE LIL_MIX.modificarProveedorMail
 @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -818,6 +896,9 @@ END
 
 -- 13.4) Modificar telefono
 
+IF OBJECT_ID('LIL_MIX.modificarProveedorTelefono') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarProveedorTelefono
+
 CREATE PROCEDURE LIL_MIX.modificarProveedorTelefono
 @nombre_usuario VARCHAR(255), -- El username no es modificable
 @telefono_nuevo INT
@@ -834,6 +915,10 @@ BEGIN
 END
 
 -- 13.5) Modificar codigo postal
+
+
+IF OBJECT_ID('LIL_MIX.modificarProveedorCP') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarProveedorCP
 
 CREATE PROCEDURE LIL_MIX.modificarProveedorCP
 @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -852,6 +937,9 @@ END
 
 -- 13.6) Modificar cuit
 
+IF OBJECT_ID('LIL_MIX.modificarProveedorCiudad') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarProveedorCiudad
+
 CREATE PROCEDURE LIL_MIX.modificarProveedorCiudad
 @nombre_usuario VARCHAR(255), -- El username no es modificable
 @cuit_nuevo VARCHAR(13)
@@ -868,6 +956,9 @@ BEGIN
 END
 
 -- 13.7) Modificar rubro en el cual se desempeña
+
+IF OBJECT_ID('LIL_MIX.modificarProveedorRubro') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarProveedorRubro
 
 CREATE PROCEDURE LIL_MIX.modificarProveedorRubro
 @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -887,6 +978,9 @@ END
 
 -- 13.8) Modificar nombre de contacto
 
+IF OBJECT_ID('LIL_MIX.modificarProveedorNombreDeContacto') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarProveedorNombreDeContacto
+
 CREATE PROCEDURE LIL_MIX.modificarProveedorNombreDeContacto
 @nombre_usuario VARCHAR(255), -- El username no es modificable
 @nombre_de_contacto_nuevo VARCHAR(255)
@@ -903,6 +997,9 @@ BEGIN
 END
 
 -- 13.9) Modificación de direccion (calle)
+
+IF OBJECT_ID('LIL_MIX.modificarClienteCalleDirec') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarClienteCalleDirec
   
 CREATE PROCEDURE LIL_MIX.modificarClienteCalleDirec
 @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -921,6 +1018,9 @@ BEGIN
 END
 
 -- 13.10) Modificación de direccion (numero de piso)
+
+IF OBJECT_ID('LIL_MIX.modificarClientePisoDirec') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarClientePisoDirec
   
 CREATE PROCEDURE LIL_MIX.modificarClientePisoDirec
 @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -939,6 +1039,9 @@ BEGIN
 END
 
 -- 13.11) Modificación de direccion (departamento)
+
+IF OBJECT_ID('LIL_MIX.modificarClienteDptoDirec') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarClienteDptoDirec
   
 CREATE PROCEDURE LIL_MIX.modificarClienteDptoDirec
 @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -958,6 +1061,9 @@ BEGIN
 END
 
 -- 13.12) Modificación de direccion (ciudad)
+
+IF OBJECT_ID('LIL_MIX.modificarClienteCiudad') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificarClienteCiudad
   
 CREATE PROCEDURE LIL_MIX.modificarClienteCiudad
 @nombre_usuario VARCHAR(255), -- El username no es modificable
@@ -1053,6 +1159,9 @@ END
 
 -- 18)
 
+IF OBJECT_ID('LIL_MIX.crearOferta') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.crearOferta
+
 --Este caso de uso es utilizado por los proveedores para armar y publicar las ofertas que formarán parte de la plataforma.
 
 CREATE PROCEDURE LIL_MIX.crearOferta
@@ -1108,6 +1217,9 @@ END
 
 -- 19)
 
+IF OBJECT_ID('LIL_MIX.ofertasVigentesHastaDiaActual') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.ofertasVigentesHastaDiaActual
+
 -- Esta funcionalidad permite a un cliente comprar una oferta publicada por los diferentes proveedores. 
 
 -- Se debe tener en cuenta que el usuario solo podrá ver las ofertas que se encuentren vigentes para el 
@@ -1124,6 +1236,10 @@ BEGIN
 END
 
 -- 20)
+
+
+IF OBJECT_ID('LIL_MIX.comprarOferta') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.comprarOferta
 
 CREATE PROCEDURE LIL_MIX.comprarOferta
 @nombre_usuario INT, @oferta_codigo VARCHAR(255), @cantidad TINYINT, @diadecompra DATETIME			
@@ -1208,6 +1324,9 @@ END
 
 -- 21)
 
+IF OBJECT_ID('LIL_MIX.consumoDeOferta') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.consumoDeOferta
+
 -- Funcionalidad que permite a un proveedor dar de baja una oferta entregada por un cliente al momento de realizarse el canje.  
 
 CREATE PROCEDURE LIL_MIX.consumoDeOferta
@@ -1273,6 +1392,9 @@ END
 
 -- 22)
 
+IF OBJECT_ID('LIL_MIX.todasLasOfertasAdquiridas') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.todasLasOfertasAdquiridas
+
 -- Esta funcionalidad permite a un administrativo facturar a un proveedor todas las ofertas compradas por los clientes. 
 -- Para ello ingresará el período de facturación por intervalos de fecha, se deberá seleccionar el proveedor 
 -- y a continuación se listaran todos las ofertas que fueron adquiridas por los clientes.  
@@ -1290,6 +1412,9 @@ BEGIN
 END
 
 -- 23)
+
+IF OBJECT_ID('LIL_MIX.facturacionProveedor') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.facturacionProveedor
 
 CREATE PROCEDURE LIL_MIX.facturacionProveedor
 @fecha_inicio DATETIME , @fecha_fin DATETIME , @proveedor_cuit VARCHAR(13)
@@ -1337,6 +1462,9 @@ END
 
 -- 24) 1. Proveedores con mayor porcentaje de descuento
 
+IF OBJECT_ID('LIL_MIX.listadoEstadistico1') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoEstadistico1
+
 CREATE PROCEDURE LIL_MIX.listadoEstadistico1   
 @anio INT, @semestre INT   -- 1 o 2
 AS
@@ -1356,7 +1484,10 @@ END
 		
 -- 25) 2. Proveedores con mayor facturacion
 
-CREATE PROCEDURE LIL_MIX.listadoEstadistico1  
+IF OBJECT_ID('LIL_MIX.listadoEstadistico2') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoEstadistico2
+
+CREATE PROCEDURE LIL_MIX.listadoEstadistico2  
 @anio INT, @semestre INT   -- 1 o 2
      o 2. Prov mayor facturacion
 AS
