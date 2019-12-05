@@ -100,38 +100,38 @@ GO
 --CREACION DE TABLAS 
 
 CREATE TABLE LIL_MIX.usuario ( usuario_id INT NOT NULL IDENTITY(1000,1) PRIMARY KEY,
-			                   usuario_nombre VARCHAR(255) NOT NULL UNIQUE,
+			           usuario_nombre VARCHAR(255) NOT NULL UNIQUE,
 	                           usuario_password VARCHAR(255) NOT NULL,
-			                   usuario_intentos TINYINT DEFAULT 0,
-			                   usuario_habilitado BIT DEFAULT 1 )
+			           usuario_intentos TINYINT DEFAULT 0,
+			           usuario_habilitado BIT DEFAULT 1 )
 									   					 
 CREATE TABLE LIL_MIX.direccion ( direccion_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-				                 direccion_calle VARCHAR(255),
-				                 direccion_piso TINYINT,
-				                 direccion_dpto CHAR(1),
-				                 direccion_ciudad VARCHAR(255) )
+				   direccion_calle VARCHAR(255),
+				   direccion_piso TINYINT,
+				   direccion_dpto CHAR(1),
+				   direccion_ciudad VARCHAR(255) )
 
 CREATE TABLE LIL_MIX.proveedor ( proveedor_id INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
-				                 proveedor_direccion_id INT FOREIGN KEY REFERENCES LIL_MIX.direccion(direccion_id),
-				                 proveedor_telefono INT,
-				                 proveedor_cuit VARCHAR(13) UNIQUE,
-				                 proveedor_rubro VARCHAR(255),
-				                 proveedor_mail VARCHAR(255),
-				                 proveedor_cp SMALLINT,
-				                 proveedor_nombre_contacto VARCHAR(255),
-				                 proveedor_rs VARCHAR(255) UNIQUE,
-				                 proveedor_habilitado BIT DEFAULT 1,
-				                 proveedor_usuario_id INT FOREIGN KEY REFERENCES LIL_MIX.usuario(usuario_id) )
+				   proveedor_direccion_id INT FOREIGN KEY REFERENCES LIL_MIX.direccion(direccion_id),
+				   proveedor_telefono INT,
+				   proveedor_cuit VARCHAR(13) UNIQUE,
+				   proveedor_rubro VARCHAR(255),
+				   proveedor_mail VARCHAR(255),
+				   proveedor_cp SMALLINT,
+				   proveedor_nombre_contacto VARCHAR(255),
+				   proveedor_rs VARCHAR(255) UNIQUE,
+				   proveedor_habilitado BIT DEFAULT 1,
+				   proveedor_usuario_id INT FOREIGN KEY REFERENCES LIL_MIX.usuario(usuario_id) )
 
 CREATE TABLE LIL_MIX.oferta ( oferta_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-			                  oferta_codigo VARCHAR(255) NOT NULL,
-			                  oferta_precio_oferta INT NOT NULL,
-			                  oferta_precio_lista INT NOT NULL,
-			                  oferta_fecha_publicacion DATETIME NOT NULL,
-			                  oferta_fecha_vencimiento DATETIME NOT NULL,
-			                  oferta_decripcion VARCHAR(255) NOT NULL,
-			                  oferta_stock INT NOT NULL,
-			                  oferta_proveedor_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
+			           oferta_codigo VARCHAR(255) NOT NULL,
+			           oferta_precio_oferta INT NOT NULL,
+			           oferta_precio_lista INT NOT NULL,
+			           oferta_fecha_publicacion DATETIME NOT NULL,
+			           oferta_fecha_vencimiento DATETIME NOT NULL,
+			           oferta_decripcion VARCHAR(255) NOT NULL,
+			           oferta_stock INT NOT NULL,
+			           oferta_proveedor_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
 			                  oferta_restriccion_compra INT NOT NULL )
 
 CREATE TABLE LIL_MIX.cliente ( cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --el cliente id comenzará en 1 y se incrementará en 1 a medida que se vayan agregando nuevos clientes
@@ -154,17 +154,17 @@ CREATE TABLE LIL_MIX.compra ( compra_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 			                  compra_cantidad INT NOT NULL,
 			                  compra_fecha DATETIME NOT NULL )
 
-CREATE TABLE LIL_MIX.factura ( factura_id INT NOT NULL IDENTITY(1000,1) PRIMARY KEY,
-			                   factura_proveedor_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
-			                   factura_fecha_inicio DATETIME NOT NULL,
-			                   factura_fecha_fin DATETIME NOT NULL,
-			                   factura_importe FLOAT NOT NULL )
+CREATE TABLE LIL_MIX.factura ( factura_id INT NOT NULL PRIMARY KEY,
+			       factura_proveedor_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
+			       factura_fecha_inicio DATETIME NOT NULL,
+			       factura_fecha_fin DATETIME NOT NULL,
+			       factura_importe FLOAT NOT NULL )
 
 CREATE TABLE LIL_MIX.cupon ( cupon_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-			                 cupon_fecha_vencimiento DATETIME NOT NULL,
-			                 cupon_fecha_consumo DATETIME,
-			                 cupon_compra_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.compra(compra_id),
-			                 cupon_cliente_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id) )
+			      cupon_fecha_vencimiento DATETIME NOT NULL,
+			      cupon_fecha_consumo DATETIME,
+			      cupon_compra_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.compra(compra_id),
+			      cupon_cliente_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id) )
 
 CREATE TABLE LIL_MIX.rol ( rol_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 			               rol_nombre VARCHAR(30) NOT NULL,
