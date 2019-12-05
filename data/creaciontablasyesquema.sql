@@ -84,6 +84,10 @@ IF OBJECT_ID('LIL_MIX.tipoDePago') IS NOT NULL
 IF OBJECT_ID('LIL_MIX.cargaDeCredito') IS NOT NULL
   DROP TABLE LIL_MIX.cargaDeCredito
  GO 
+ 
+IF OBJECT_ID('LIL_MIX.semestre') IS NOT NULL
+  DROP TABLE LIL_MIX.semestre
+  GO 
 
 -----DROP ESQUEMA
 
