@@ -303,11 +303,11 @@ INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Débito')
 --                        Usuario
 
 INSERT INTO LIL_MIX.usuario(usuario_nombre, usuario_password)
-SELECT DISTINCT Cli_Nombre+'_'+Cli_Apellido , Cli_Dni
+SELECT DISTINCT Cli_Nombre+'_'+Cli_Apellido , HASHBYTES('SHA2_256', CONVERT(VARCHAR(255),Cli_Dni))
 FROM gd_esquema.Maestra
 
 INSERT INTO LIL_MIX.usuario(usuario_nombre, usuario_password)
-SELECT DISTINCT Provee_Telefono , Provee_CUIT
+SELECT DISTINCT Provee_Telefono , HASHBYTES('SHA2_256', Provee_CUIT )
 FROM gd_esquema.Maestra
 WHERE Provee_Telefono IS NOT NULL
 
