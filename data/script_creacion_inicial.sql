@@ -1,6 +1,6 @@
 USE GD2C2019
 
------DROPS FKs
+------DROPS FKs
 
 DECLARE cursor_tablas CURSOR FOR
 SELECT 'ALTER TABLE [' +  OBJECT_SCHEMA_NAME(parent_object_id) +'].[' + OBJECT_NAME(parent_object_id) + '] DROP CONSTRAINT [' + name + ']'
@@ -134,7 +134,7 @@ CREATE TABLE LIL_MIX.oferta ( oferta_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 			                  oferta_proveedor_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
 			                  oferta_restriccion_compra TINYINT NOT NULL )
 
-CREATE TABLE LIL_MIX.cliente ( cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --el cliente id comenzar· en 1 y se incrementar· en 1 a medida que se vayan agregando nuevos clientes
+CREATE TABLE LIL_MIX.cliente ( cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --el cliente id comenzar√° en 1 y se incrementar√° en 1 a medida que se vayan agregando nuevos clientes
 			                   cliente_nombre VARCHAR(255) NOT NULL ,
 			                   cliente_apellido VARCHAR(255) NOT NULL , 
 			                   cliente_direccion_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.direccion(direccion_id),
@@ -225,8 +225,8 @@ GO
 -- 5) Carga de credito
 INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('Carga de credito')
 GO
--- 6) Cambio de contraseÒa
-INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('Cambio de contraseÒa')
+-- 6) Cambio de contrase√±a
+INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('Cambio de contrase√±a')
 GO
 -- 7) Baja de usuario
 INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('Baja de usuario')
@@ -243,7 +243,7 @@ GO
 -- 11) Facturacion a proveedor
 INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('Facturacion a proveedor')
 GO
--- 12) Listado EstadÌstico
+-- 12) Listado Estad√≠stico
 INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('Listado Estadistico')
 GO
 
@@ -271,7 +271,7 @@ INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,6)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,7)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,8)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,11)
-INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,12) --No sabemos quien tiene esa funciÛn
+INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,12) --No sabemos quien tiene esa funci√≥n
 
 -- Funciones Cliente
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,2)
@@ -294,7 +294,7 @@ GO
 --                        Formas de pago
 
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Efectivo')
-INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('CrÈdito')
+INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Cr√©dito')
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Debito')
 
 SELECT * FROM LIL_MIX.funcionalidad
