@@ -164,7 +164,7 @@ GROUP BY SUBSTRING(Oferta_Codigo, 1, 10), Oferta_Precio, Oferta_Precio_Ficticio,
 --				 factura_importe FLOAT
 --				 )
 
-INSERT INTO LIL_MIX.factura (factura_numero , factura_proveedor_id, factura_fecha_inicio, factura_fecha_fin, factura_importe)
+INSERT INTO LIL_MIX.factura (factura_id , factura_proveedor_id, factura_fecha_inicio, factura_fecha_fin, factura_importe)
 SELECT Factura_Nro , (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = Provee_CUIT) , MIN(Oferta_Fecha_Compra) , 
 	Factura_Fecha , SUM(Oferta_Precio) 
 FROM gd_esquema.Maestra
