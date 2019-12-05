@@ -145,13 +145,16 @@ FROM gd_esquema.Maestra
 --								oferta_codigo VARCHAR(255)
 --								)
 
+
 INSERT INTO LIL_MIX.oferta (oferta_proveedor_id, oferta_precio_oferta , oferta_precio_lista, oferta_fecha_publicacion ,
-							oferta_fecha_vencimiento , oferta_decripcion , oferta_stock , oferta_codigo)
-SELECT (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = Provee_CUIT), 
-	Oferta_Precio, Oferta_Precio_Ficticio, Oferta_Fecha, Oferta_Fecha_Venc , Oferta_Descripcion , Oferta_Cantidad , Oferta_Codigo
+			oferta_fecha_vencimiento , oferta_decripcion , oferta_stock , oferta_codigo, oferta_restriccion_compra)
+SELECT (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = Provee_CUIT), Oferta_Precio, Oferta_Precio_Ficticio, 
+	Oferta_Fecha, Oferta_Fecha_Venc , Oferta_Descripcion , Oferta_Cantidad , SUBSTRING(Oferta_Codigo, 1, 10), 3
 FROM gd_esquema.Maestra
 WHERE Oferta_Fecha IS NOT NULL
-GROUP BY Oferta_Codigo
+GROUP BY SUBSTRING(Oferta_Codigo, 1, 10), Oferta_Precio, Oferta_Precio_Ficticio, Oferta_Fecha, Oferta_Fecha_Venc , 
+		Oferta_Descripcion , Oferta_Cantidad , Provee_CUIT, Cli_Dni, Provee_Cuit
+ORDER BY SUBSTRING(Oferta_Codigo, 1, 10)
 
 
 -- CREATE TABLE LIL_MIX.factura ( factura_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
