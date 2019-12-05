@@ -212,40 +212,40 @@ CREATE TABLE LIL_MIX.semestre ( semestre_id INT NOT NULL IDENTITY(1,1) PRIMARY K
 --                        Funcionalidades
 
 -- 1) ABM ROL
-INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('ABM de ROL')
+INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('ABM de ROL')
 GO
 -- 2) Registro de usuario
-INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('Registro de Usuario')
+INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Registro de Usuario')
 GO
 -- 3) ABM CLIENTE.
-INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('ABM de CLIENTE')
+INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('ABM de CLIENTE')
 GO
 -- 4) ABM PROVEEDOR.
-INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('ABM de PROVEEDOR')
+INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('ABM de PROVEEDOR')
 GO
 -- 5) Carga de credito
-INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('Carga de credito')
+INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Carga de credito')
 GO
 -- 6) Cambio de contraseña
-INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('Cambio de contraseña')
+INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Cambio de contraseña')
 GO
 -- 7) Baja de usuario
-INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('Baja de usuario')
+INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Baja de usuario')
 GO
 -- 8) Confeccion y publicacion de oferta
-INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('Conf. y publ. de oferta')
+INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Conf. y publ. de oferta')
 GO
 -- 9) Comprar oferta
-INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('Comprar oferta')
+INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Comprar oferta')
 GO
 -- 10) Entrega
-INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('Entrega')
+INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Entrega')
 GO
 -- 11) Facturacion a proveedor
-INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('Facturacion a proveedor')
+INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Facturacion a proveedor')
 GO
 -- 12) Listado Estadístico
-INSERT INTO LIL_MIX.funcionalidad (funcionalidad_descripcion) VALUES ('Listado Estadistico')
+INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Listado Estadistico')
 GO
 
 --                             Roles
@@ -341,7 +341,7 @@ GROUP BY Provee_Dom, Provee_Ciudad
 INSERT INTO LIL_MIX.cliente (cliente_nombre , cliente_apellido , cliente_direccion_id, cliente_mail,
 			cliente_telefono , cliente_fecha_nacimiento , cliente_dni , cliente_credito , cliente_usuario_id)
 SELECT Cli_Nombre , Cli_Apellido , (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = Cli_Direccion AND direccion_ciudad = Cli_Ciudad),
-	   Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , Cli_Dni , SUM(Carga_Credito),
+	   Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , Cli_Dni , SUM(COALESCE(Carga_Credito,0)),
 	   (SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = Cli_Nombre+'_'+Cli_Apellido)
 FROM gd_esquema.Maestra
 WHERE Cli_Dni IS NOT NULL
