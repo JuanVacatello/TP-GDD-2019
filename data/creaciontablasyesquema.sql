@@ -191,7 +191,7 @@ CREATE TABLE LIL_MIX.tarjeta ( tarjeta_numero BIGINT NOT NULL PRIMARY KEY,
 			       tarjeta_id_cliente INT NOT NULL ) --aca deberia de ser FK??
 
 CREATE TABLE LIL_MIX.tipoDePago ( tipo_de_pago_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --1, 2, 3
-				  tipo_de_pago_descripcion VARCHAR(30) ) NOT NULL --EFECTIVO, CREDITO O DEBITO
+				  tipo_de_pago_descripcion VARCHAR(30) NOT NULL )  --EFECTIVO, CREDITO O DEBITO
 
 CREATE TABLE LIL_MIX.cargaDeCredito ( carga_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 				      carga_fecha DATETIME NOT NULL,
