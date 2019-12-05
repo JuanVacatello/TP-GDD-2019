@@ -188,15 +188,15 @@ CREATE TABLE LIL_MIX.funcionalidadxrol ( rol_id INT NOT NULL,
 CREATE TABLE LIL_MIX.tarjeta ( tarjeta_numero BIGINT NOT NULL PRIMARY KEY,
 			       tarjeta_tipo VARCHAR(30) NOT NULL,
 			       tarjeta_fecha_vencimiento DATETIME NOT NULL,
-			       tarjeta_id_cliente INT NOT NULL ) --aca deberia de ser FK??
-
+			       tarjeta_id_cliente INT NOT NULL FOREGN KEY REFRENCES LIL_MIX.cliente(cliente_id) ) 
+			 
 CREATE TABLE LIL_MIX.tipoDePago ( tipo_de_pago_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --1, 2, 3
 				  tipo_de_pago_descripcion VARCHAR(30) NOT NULL )  --EFECTIVO, CREDITO O DEBITO
 
 CREATE TABLE LIL_MIX.cargaDeCredito ( carga_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 				      carga_fecha DATETIME NOT NULL,
 				      carga_id_cliente INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id),
-				      carga_tipo_de_pago INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.tipoDePago(tipo_de_pago_id), --TODAVIA NO EJECUTAMOS
+				      carga_tipo_de_pago INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.tipoDePago(tipo_de_pago_id), 
 				      carga_monto BIGINT NOT NULL,
 				      carga_tarjeta_numero BIGINT FOREIGN KEY REFERENCES LIL_MIX.tarjeta(tarjeta_numero) )
 
