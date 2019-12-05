@@ -132,7 +132,7 @@ CREATE TABLE LIL_MIX.oferta ( oferta_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 			           oferta_decripcion VARCHAR(255) NOT NULL,
 			           oferta_stock INT NOT NULL,
 			           oferta_proveedor_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
-			                  oferta_restriccion_compra INT NOT NULL )
+			            oferta_restriccion_compra INT NOT NULL )
 
 CREATE TABLE LIL_MIX.cliente ( cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --el cliente id comenzará en 1 y se incrementará en 1 a medida que se vayan agregando nuevos clientes
 			                   cliente_nombre VARCHAR(255) NOT NULL ,
@@ -300,12 +300,6 @@ INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Efectivo')
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Crédito')
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Débito')
 
---                        Tarjeta
-
-INSERT INTO LIL_MIX.tarjeta ( tarjeta_numero, tarjeta_tipo, tarjeta_fecha_vencimiento, tarjeta_id_cliente)
-VALUES ( 12345678901234, 'VISA', convert(datetime,'18-06-22 12:0:00 AM',5),
-	(SELECT cliente_id FROM LIL_MIX.cliente WHERE cliente_mail LIKE 'marga@gmail.com')) -- Únicamente Marga realizó cargas
-
 --                        Usuario
 
 INSERT INTO LIL_MIX.usuario(usuario_nombre, usuario_password)
@@ -355,10 +349,10 @@ GROUP BY Cli_Nombre , Cli_Apellido , Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , C
 
 --                        Proveedor
 
-INSERT INTO LIL_MIX.proveedor ( proveedor_direccion_id, proveedor_telefono, proveedor_cuit, proveedor_rubro, proveedor_mail,
+INSERT INTO LIL_MIX.proveedor ( proveedor_direccion_id, proveedor_telefono, proveedor_cuit, proveedor_rubro,
 	proveedor_rs, proveedor_usuario_id)
 SELECT (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = Provee_Dom AND direccion_ciudad = Provee_Ciudad),
-	Provee_Telefono, Provee_CUIT, Provee_Rubro, Provee_RS+'@gmail.com', Provee_RS,
+	Provee_Telefono, Provee_CUIT, Provee_Rubro, Provee_RS,
 	(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = CONVERT(VARCHAR(255), Provee_Telefono))
 FROM gd_esquema.Maestra
 WHERE Provee_CUIT IS NOT NULL -- Para que solo aparezan los proveedores y no clientes
@@ -374,6 +368,12 @@ FROM gd_esquema.Maestra
 WHERE Oferta_Fecha IS NOT NULL
 GROUP BY SUBSTRING(Oferta_Codigo, 1, 10), Oferta_Precio, Oferta_Precio_Ficticio, Oferta_Fecha, Oferta_Fecha_Venc ,
 		Oferta_Descripcion , Oferta_Cantidad , Provee_Cuit
+
+--                        Tarjeta
+
+INSERT INTO LIL_MIX.tarjeta ( tarjeta_numero, tarjeta_tipo, tarjeta_fecha_vencimiento, tarjeta_id_cliente)
+VALUES ( 12345678901234, 'VISA', convert(datetime,'18-06-22 12:0:00 AM',5),
+	(SELECT cliente_id FROM LIL_MIX.cliente WHERE cliente_mail LIKE 'marga@gmail.com')) -- Únicamente Marga realizó cargas
 
 --                        CargaCredito
 
