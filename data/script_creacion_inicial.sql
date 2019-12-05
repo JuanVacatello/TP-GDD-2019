@@ -143,7 +143,7 @@ CREATE TABLE LIL_MIX.cliente ( cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY
 			                   cliente_fecha_nacimiento DATETIME NOT NULL,
 			                   cliente_cp SMALLINT ,
 			                   cliente_dni INT NOT NULL,
-			                   cliente_credito BIGINT ,
+			                   cliente_credito BIGINT DEFAULT 200,
 			                   cliente_habilitado BIT DEFAULT 1,
 			                   cliente_usuario_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.usuario(usuario_id) ) 
 
@@ -163,6 +163,7 @@ CREATE TABLE LIL_MIX.factura ( factura_id INT NOT NULL IDENTITY(1000,1) PRIMARY 
 CREATE TABLE LIL_MIX.cupon ( cupon_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 			                 cupon_fecha_vencimiento DATETIME NOT NULL,
 			                 cupon_fecha_consumo DATETIME,
+							 cupon_codigo VARCHAR(15) NOT NULL,
 			                 cupon_compra_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.compra(compra_id),
 			                 cupon_cliente_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id) )
 
@@ -188,7 +189,8 @@ CREATE TABLE LIL_MIX.funcionalidadxrol ( rol_id INT NOT NULL,
 CREATE TABLE LIL_MIX.tarjeta ( tarjeta_numero BIGINT NOT NULL PRIMARY KEY,
 			                   tarjeta_tipo VARCHAR(30) NOT NULL,
 			                   tarjeta_fecha_vencimiento DATETIME NOT NULL,
-			                   tarjeta_id_cliente INT NOT NULL ) --aca deberia de ser FK??
+			                   tarjeta_id_cliente INT NOT NULL,
+							   FOREIGN KEY (tarjeta_id_cliente) REFERENCES LIL_MIX.cliente(cliente_id)) 
 
 CREATE TABLE LIL_MIX.tipoDePago ( tipo_de_pago_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --1, 2, 3
 				                  tipo_de_pago_descripcion VARCHAR(30) NOT NULL ) --EFECTIVO, CREDITO O DEBITO
@@ -298,6 +300,110 @@ GO
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Efectivo')
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Crédito')
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Débito')
+
+--                        Tarjeta
+
+INSERT INTO LIL_MIX.tarjeta ( tarjeta_numero, tarjeta_tipo, tarjeta_fecha_vencimiento, tarjeta_id_cliente)
+VALUES ( 12345678901234, 'VISA', convert(datetime,'18-06-22 12:0:00 AM',5),
+	(SELECT cliente_id FROM LIL_MIX.cliente WHERE cliente_mail LIKE 'marga@gmail.com')) -- Únicamente Marga realizó cargas
+
+--                        Usuario
+
+INSERT INTO LIL_MIX.usuario(usuario_nombre, usuario_password)
+SELECT DISTINCT Cli_Nombre+'_'+Cli_Apellido , Cli_Dni
+FROM gd_esquema.Maestra
+
+INSERT INTO LIL_MIX.usuario(usuario_nombre, usuario_password)
+SELECT DISTINCT Provee_Telefono , Provee_CUIT
+FROM gd_esquema.Maestra
+WHERE Provee_Telefono IS NOT NULL
+
+--                        RolxUsuario
+
+INSERT INTO LIL_MIX.rolxusuario(rol_id, usuario_id)
+SELECT 3, u.usuario_id 
+FROM gd_esquema.Maestra m JOIN LIL_MIX.usuario u ON (u.usuario_nombre = CONVERT(VARCHAR(255), m.Provee_Telefono))
+GROUP BY usuario_id 
+
+INSERT INTO LIL_MIX.rolxusuario(rol_id, usuario_id)
+SELECT 2, u.usuario_id 
+FROM gd_esquema.Maestra m JOIN LIL_MIX.usuario u ON (u.usuario_nombre = m.Cli_Nombre+'_'+m.Cli_Apellido)
+GROUP BY usuario_id
+
+--                        Direccion
+
+INSERT INTO LIL_MIX.direccion (direccion_calle, direccion_ciudad)
+SELECT Cli_Direccion, Cli_Ciudad
+FROM gd_esquema.Maestra
+GROUP BY Cli_Direccion, Cli_Ciudad
+
+INSERT INTO LIL_MIX.direccion (direccion_calle, direccion_ciudad)
+SELECT Provee_Dom, Provee_Ciudad
+FROM gd_esquema.Maestra
+WHERE Provee_Dom IS NOT NULL
+GROUP BY Provee_Dom, Provee_Ciudad
+
+--                        Cliente
+
+INSERT INTO LIL_MIX.cliente (cliente_nombre , cliente_apellido , cliente_direccion_id, cliente_mail,
+			cliente_telefono , cliente_fecha_nacimiento , cliente_dni , cliente_credito , cliente_usuario_id)
+SELECT Cli_Nombre , Cli_Apellido , (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = Cli_Direccion AND direccion_ciudad = Cli_Ciudad),
+	   Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , Cli_Dni , SUM(Carga_Credito),
+	   (SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = Cli_Nombre+'_'+Cli_Apellido)
+FROM gd_esquema.Maestra
+WHERE Cli_Dni IS NOT NULL
+GROUP BY Cli_Nombre , Cli_Apellido , Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , Cli_Dni , Cli_Direccion, Cli_Ciudad
+
+--                        Proveedor
+
+INSERT INTO LIL_MIX.proveedor ( proveedor_direccion_id, proveedor_telefono, proveedor_cuit, proveedor_rubro, proveedor_mail, 
+	proveedor_rs, proveedor_usuario_id)
+SELECT (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = Provee_Dom AND direccion_ciudad = Provee_Ciudad),
+	Provee_Telefono, Provee_CUIT, Provee_Rubro, Provee_RS+'@gmail.com', Provee_RS,
+	(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = CONVERT(VARCHAR(255), Provee_Telefono))
+FROM gd_esquema.Maestra
+WHERE Provee_CUIT IS NOT NULL -- Para que solo aparezan los proveedores y no clientes
+GROUP BY Provee_CUIT, Provee_Telefono, Provee_Rubro, Provee_RS, Provee_Dom, Provee_Ciudad
+
+--                        Oferta
+
+INSERT INTO LIL_MIX.oferta (oferta_proveedor_id, oferta_precio_oferta , oferta_precio_lista, oferta_fecha_publicacion ,
+			oferta_fecha_vencimiento , oferta_decripcion , oferta_stock , oferta_codigo, oferta_restriccion_compra)
+SELECT (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = Provee_CUIT), Oferta_Precio, Oferta_Precio_Ficticio, 
+	Oferta_Fecha, Oferta_Fecha_Venc , Oferta_Descripcion , Oferta_Cantidad , SUBSTRING(Oferta_Codigo, 1, 10), 3
+FROM gd_esquema.Maestra
+WHERE Oferta_Fecha IS NOT NULL
+GROUP BY SUBSTRING(Oferta_Codigo, 1, 10), Oferta_Precio, Oferta_Precio_Ficticio, Oferta_Fecha, Oferta_Fecha_Venc , 
+		Oferta_Descripcion , Oferta_Cantidad , Provee_Cuit
+
+--                        CargaCredito
+
+INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_id_cliente, carga_tipo_de_pago, carga_monto, carga_tarjeta_numero)
+SELECT Carga_Fecha, (SELECT cliente_id FROM LIL_MIX.cliente WHERE cliente_dni = Cli_Dni), 
+	(SELECT tipo_de_pago_id FROM LIL_MIX.tipoDePago WHERE tipo_de_pago_descripcion = Tipo_Pago_Desc),
+	Carga_Credito, 12345678901234 -- Número de tarjeta de Marga, fue la única que realizó cargas
+FROM gd_esquema.Maestra 
+WHERE Tipo_Pago_Desc = 'Crédito' AND Carga_Fecha IS NOT NULL
+
+
+INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_id_cliente, carga_tipo_de_pago, carga_monto)
+SELECT Carga_Fecha, (SELECT cliente_id FROM LIL_MIX.cliente WHERE cliente_dni = Cli_Dni), 
+	(SELECT tipo_de_pago_id FROM LIL_MIX.tipoDePago WHERE tipo_de_pago_descripcion = Tipo_Pago_Desc), Carga_Credito
+FROM gd_esquema.Maestra
+WHERE Tipo_Pago_Desc LIKE 'Efectivo' AND Carga_Fecha IS NOT NULL
+
+--                        Factura
+
+INSERT INTO LIL_MIX.factura (factura_id , factura_proveedor_id, factura_fecha_inicio, factura_fecha_fin, factura_importe)
+SELECT Factura_Nro , (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = Provee_CUIT) , MIN(Oferta_Fecha_Compra) , 
+	Factura_Fecha , SUM(Oferta_Precio) 
+FROM gd_esquema.Maestra
+WHERE Factura_Nro IS NOT NULL
+GROUP BY Factura_Nro , Factura_Fecha , Provee_CUIT
+
+
+select * from LIL_MIX.cliente
+
 
 SELECT * FROM LIL_MIX.funcionalidad
 SELECT * FROM LIL_MIX.rol
