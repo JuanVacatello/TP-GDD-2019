@@ -188,3 +188,14 @@ SELECT o.oferta_id, o.oferta_decripcion, (SELECT cliente_id FROM LIL_MIX.cliente
 		COUNT(o.oferta_codigo), m.Oferta_Fecha_Compra
 FROM gd_esquema.Maestra m JOIN LIL_MIX.oferta o ON (o.oferta_codigo = SUBSTRING(m.Oferta_Codigo, 1, 10))
 GROUP BY m.Oferta_Codigo, o.oferta_id, o.oferta_decripcion, m.Oferta_Fecha_Compra, Cli_Dni
+
+-- CREATE TABLE LIL_MIX.cupon ( cupon_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+--								  cupon_fecha_vencimiento DATETIME NOT NULL,
+--								  cupon_fecha_consumo DATETIME,
+--								  cupon_compra_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.compra(compra_id),
+--								  cupon_cliente_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id) )
+
+INSERT INTO LIL_MIX.cupon (cupon_fecha_vencimiento, cupon_compra_id, cupon_cliente_id)
+SELECT (DATEADD(day, 30, c.compra_fecha)), c.compra_id, c.compra_cliente_id
+FROM LIL_MIX.oferta o JOIN LIL_MIX.compra c ON (c.compra_oferta_numero = o.oferta_id)
+					  JOIN gd_esquema.Maestra m ON (o.oferta_codigo = SUBSTRING(m.Oferta_Codigo, 1, 10))
