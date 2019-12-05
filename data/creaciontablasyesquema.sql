@@ -1,14 +1,10 @@
 --use GD2C2019
---GO
---CREACION DE ESQUEMA
 
-IF OBJECT_ID('LIL_MIX.usuario') IS NOT NULL
-  DROP TABLE LIL_MIX.usuario
-GO
 
-CREATE SCHEMA LIL_MIX AUTHORIZATION  gdCupon2019 
 
---CREACION DE TABLAS 
+
+
+-----DROPS FKs
 
 DECLARE cursor_tablas CURSOR FOR
 SELECT 'ALTER TABLE [' +  OBJECT_SCHEMA_NAME(parent_object_id) +'].[' + OBJECT_NAME(parent_object_id) + '] DROP CONSTRAINT [' + name + ']'
@@ -26,6 +22,8 @@ WHILE @@FETCH_STATUS = 0
 CLOSE cursor_tablas
 DEALLOCATE cursor_tablas
 GO
+
+------DROPS TABLAS
 
 IF OBJECT_ID('LIL_MIX.usuario') IS NOT NULL
   DROP TABLE LIL_MIX.usuario
@@ -67,7 +65,6 @@ IF OBJECT_ID('LIL_MIX.funcionalidad') IS NOT NULL
   DROP TABLE LIL_MIX.funcionalidad
  GO
 
-
 IF OBJECT_ID('LIL_MIX.rolxusuario') IS NOT NULL
   DROP TABLE LIL_MIX.rolxusuario
  GO
@@ -87,6 +84,18 @@ IF OBJECT_ID('LIL_MIX.tipoDePago') IS NOT NULL
 IF OBJECT_ID('LIL_MIX.cargaDeCredito') IS NOT NULL
   DROP TABLE LIL_MIX.cargaDeCredito
  GO 
+
+-----DROP ESQUEMA
+
+IF EXISTS (SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'LIL_MIX')
+    DROP SCHEMA LOS_BORBOTONES;
+GO
+
+--CREACION ESQUEMA
+
+CREATE SCHEMA LIL_MIX AUTHORIZATION  gdCupon2019 
+GO
+
 
 --CREACION DE TABLAS 
 
@@ -130,39 +139,39 @@ CREATE TABLE LIL_MIX.oferta (oferta_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 				)
 
 CREATE TABLE LIL_MIX.cliente (cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --el cliente id comenzará en 1 y se incrementará en 1 a medida que se vayan agregando nuevos clientes
-				cliente_nombre VARCHAR(255) ,
-				cliente_apellido VARCHAR(255) , 
-				cliente_direccion_id INT FOREIGN KEY REFERENCES LIL_MIX.direccion(direccion_id),
-				cliente_mail VARCHAR(255),
-				cliente_telefono INT,
-				cliente_fecha_nacimiento DATETIME,
+				cliente_nombre VARCHAR(255) NOT NULL ,
+				cliente_apellido VARCHAR(255) NOT NULL , 
+				cliente_direccion_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.direccion(direccion_id),
+				cliente_mail VARCHAR(255) NOT NULL,
+				cliente_telefono INT NOT NULL,
+				cliente_fecha_nacimiento DATETIME NOT NULL,
 				cliente_cp SMALLINT ,
-				cliente_dni INT,
-				cliente_credito BIGINT,
+				cliente_dni INT NOT NULL,
+				cliente_credito BIGINT ,
 				cliente_habilitado BIT DEFAULT 1,
-				cliente_usuario_id INT FOREIGN KEY REFERENCES LIL_MIX.usuario(usuario_id)
+				cliente_usuario_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.usuario(usuario_id)
 				) 
 
 CREATE TABLE LIL_MIX.compra (compra_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-				compra_oferta_numero INT FOREIGN KEY REFERENCES LIL_MIX.oferta(oferta_id),
-				compra_oferta_descr VARCHAR(255),
-				compra_cliente_id INT FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id),
-				compra_cantidad INT,
-				compra_fecha DATETIME
+				compra_oferta_numero INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.oferta(oferta_id),
+				compra_oferta_descr VARCHAR(255) NOT NULL,
+				compra_cliente_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id),
+				compra_cantidad INT NOT NULL,
+				compra_fecha DATETIME NOT NULL
 				)
 
 CREATE TABLE LIL_MIX.factura (factura_id INT NOT NULL IDENTITY(1000,1) PRIMARY KEY,
-				factura_proveedor_id INT FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
-				factura_fecha_inicio DATETIME,
-				factura_fecha_fin DATETIME,
-				factura_importe FLOAT
+				factura_proveedor_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
+				factura_fecha_inicio DATETIME NOT NULL,
+				factura_fecha_fin DATETIME NOT NULL,
+				factura_importe FLOAT NOT NULL
 				)
 
 CREATE TABLE LIL_MIX.cupon (cupon_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-				cupon_fecha_vencimiento DATETIME,
+				cupon_fecha_vencimiento DATETIME NOT NULL,
 				cupon_fecha_consumo DATETIME,
-				cupon_compra_id INT FOREIGN KEY REFERENCES LIL_MIX.compra(compra_id),
-				cupon_cliente_id INT FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id)
+				cupon_compra_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.compra(compra_id),
+				cupon_cliente_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id)
 				)
 
 CREATE TABLE LIL_MIX.rol (rol_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
@@ -171,31 +180,31 @@ CREATE TABLE LIL_MIX.rol (rol_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 			   )
 
 CREATE TABLE LIL_MIX.funcionalidad ( funcionalidad_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-				     funcionalidad_descipcion VARCHAR(30)
+				     funcionalidad_descipcion VARCHAR(30) NOT NULL
 					 )
 
-CREATE TABLE LIL_MIX.rolxusuario ( rol_id INT,
-				   usuario_id INT,
+CREATE TABLE LIL_MIX.rolxusuario ( rol_id INT NOT NULL,
+				   usuario_id INT NOT NULL,
 				   PRIMARY KEY (rol_id, usuario_id),
 				   FOREIGN KEY (rol_id) REFERENCES LIL_MIX.rol(rol_id),
 				   FOREIGN KEY (usuario_id) REFERENCES LIL_MIX.usuario(usuario_id)
 				   )
 
-CREATE TABLE LIL_MIX.funcionalidadxrol (rol_id INT,
-					 funcionalidad_id INT,
+CREATE TABLE LIL_MIX.funcionalidadxrol (rol_id INT NOT NULL,
+					 funcionalidad_id INT NOT NULL,
 					 PRIMARY KEY (rol_id, funcionalidad_id),
 					 FOREIGN KEY (rol_id) REFERENCES LIL_MIX.rol(rol_id),
 					 FOREIGN KEY (funcionalidad_id) REFERENCES LIL_MIX.funcionalidad(funcionalidad_id)
 					 )
 
 CREATE TABLE LIL_MIX.tarjeta (tarjeta_numero BIGINT NOT NULL PRIMARY KEY,
-				tarjeta_tipo VARCHAR(30),
-				tarjeta_fecha_vencimiento DATETIME,
-				tarjeta_id_cliente INT
+				tarjeta_tipo VARCHAR(30) NOT NULL,
+				tarjeta_fecha_vencimiento DATETIME NOT NULL,
+				tarjeta_id_cliente INT NOT NULL --aca deberia de ser FK??
 				)
 
 CREATE TABLE LIL_MIX.tipoDePago (tipo_de_pago_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --1, 2, 3
-				  tipo_de_pago_descripcion VARCHAR(30) --EFECTIVO, CREDITO O DEBITO
+				  tipo_de_pago_descripcion VARCHAR(30) NOT NULL --EFECTIVO, CREDITO O DEBITO
 				 )
 
 CREATE TABLE LIL_MIX.cargaDeCredito (carga_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
@@ -207,6 +216,6 @@ CREATE TABLE LIL_MIX.cargaDeCredito (carga_id INT NOT NULL IDENTITY(1,1) PRIMARY
 				     )
 
 CREATE TABLE LIL_MIX.semestre (semestre_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-				semestre_fecha_inicio VARCHAR(5),
-				semestre_fecha_fin VARCHAR(5)
+				semestre_fecha_inicio VARCHAR(5) NOT NULL,
+				semestre_fecha_fin VARCHAR(5) NOT NULL
 				)
