@@ -27,12 +27,12 @@ WHERE Provee_Telefono IS NOT NULL
 --				   )
 
 INSERT INTO LIL_MIX.rolxusuario(rol_id, usuario_id)
-SELECT 3, u.usuario_id 
+SELECT 3, u.usuario_id
 FROM gd_esquema.Maestra m JOIN LIL_MIX.usuario u ON (u.usuario_nombre = CONVERT(VARCHAR(255), m.Provee_Telefono))
-GROUP BY usuario_id 
+GROUP BY usuario_id
 
 INSERT INTO LIL_MIX.rolxusuario(rol_id, usuario_id)
-SELECT 2, u.usuario_id 
+SELECT 2, u.usuario_id
 FROM gd_esquema.Maestra m JOIN LIL_MIX.usuario u ON (u.usuario_nombre = m.Cli_Nombre+'_'+m.Cli_Apellido)
 GROUP BY usuario_id
 
@@ -71,7 +71,7 @@ GROUP BY Provee_Dom, Provee_Ciudad
 --				)
 
 
-INSERT INTO LIL_MIX.proveedor ( proveedor_direccion_id, proveedor_telefono, proveedor_cuit, proveedor_rubro, proveedor_mail, 
+INSERT INTO LIL_MIX.proveedor ( proveedor_direccion_id, proveedor_telefono, proveedor_cuit, proveedor_rubro, proveedor_mail,
 	proveedor_rs, proveedor_usuario_id)
 SELECT (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = Provee_Dom AND direccion_ciudad = Provee_Ciudad),
 	Provee_Telefono, Provee_CUIT, Provee_Rubro, Provee_RS+'@gmail.com', Provee_RS,
@@ -81,7 +81,7 @@ WHERE Provee_CUIT IS NOT NULL -- Para que solo aparezan los proveedores y no cli
 GROUP BY Provee_CUIT, Provee_Telefono, Provee_Rubro, Provee_RS, Provee_Dom, Provee_Ciudad
 ORDER BY 1
 
--- CREATE TABLE LIL_MIX.cliente ( cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, 
+-- CREATE TABLE LIL_MIX.cliente ( cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 --					cliente_nombre VARCHAR(255) ,
 --					cliente_apellido VARCHAR(255) ,
 --					cliente_direccion_id INT FOREIGN KEY REFERENCES LIL_MIX.direccion(direccion_id),
@@ -98,7 +98,7 @@ ORDER BY 1
 INSERT INTO LIL_MIX.cliente (cliente_nombre , cliente_apellido , cliente_direccion_id, cliente_mail,
 			cliente_telefono , cliente_fecha_nacimiento , cliente_dni , cliente_credito , cliente_usuario_id)
 SELECT Cli_Nombre , Cli_Apellido , (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = Cli_Direccion AND direccion_ciudad = Cli_Ciudad),
-	   Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , Cli_Dni , SUM(Carga_Credito),
+	   Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , Cli_Dni , (SUM(Carga_Credito) - SUM(Oferta_Precio_Ficticio)), 1,
 	   (SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = Cli_Nombre+'_'+Cli_Apellido)
 FROM gd_esquema.Maestra
 WHERE Cli_Dni IS NOT NULL
@@ -119,21 +119,21 @@ VALUES ( 12345678901234, 'VISA', convert(datetime,'18-06-22 12:0:00 AM',5),
 -- CREATE TABLE LIL_MIX.cargaDeCredito ( carga_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 --				      carga_fecha DATETIME NOT NULL,
 --				      carga_id_cliente INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id),
---				      carga_tipo_de_pago INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.tipoDePago(tipo_de_pago_id), 
+--				      carga_tipo_de_pago INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.tipoDePago(tipo_de_pago_id),
 --				      carga_monto BIGINT NOT NULL,
---				      carga_tarjeta_numero BIGINT FOREIGN KEY REFERENCES LIL_MIX.tarjeta(tarjeta_numero) 
+--				      carga_tarjeta_numero BIGINT FOREIGN KEY REFERENCES LIL_MIX.tarjeta(tarjeta_numero)
 --				      )
 
 INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_id_cliente, carga_tipo_de_pago, carga_monto, carga_tarjeta_numero)
-SELECT Carga_Fecha, (SELECT cliente_id FROM LIL_MIX.cliente WHERE cliente_dni = Cli_Dni), 
+SELECT Carga_Fecha, (SELECT cliente_id FROM LIL_MIX.cliente WHERE cliente_dni = Cli_Dni),
 	(SELECT tipo_de_pago_id FROM LIL_MIX.tipoDePago WHERE tipo_de_pago_descripcion = Tipo_Pago_Desc),
 	Carga_Credito, 12345678901234 -- Número de tarjeta de Marga, fue la única que realizó cargas
-FROM gd_esquema.Maestra 
+FROM gd_esquema.Maestra
 WHERE Tipo_Pago_Desc = 'Crédito' AND Carga_Fecha IS NOT NULL
 
 
 INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_id_cliente, carga_tipo_de_pago, carga_monto)
-SELECT Carga_Fecha, (SELECT cliente_id FROM LIL_MIX.cliente WHERE cliente_dni = Cli_Dni), 
+SELECT Carga_Fecha, (SELECT cliente_id FROM LIL_MIX.cliente WHERE cliente_dni = Cli_Dni),
 	(SELECT tipo_de_pago_id FROM LIL_MIX.tipoDePago WHERE tipo_de_pago_descripcion = Tipo_Pago_Desc), Carga_Credito
 FROM gd_esquema.Maestra
 WHERE Tipo_Pago_Desc LIKE 'Efectivo' AND Carga_Fecha IS NOT NULL
@@ -153,11 +153,11 @@ WHERE Tipo_Pago_Desc LIKE 'Efectivo' AND Carga_Fecha IS NOT NULL
 
 INSERT INTO LIL_MIX.oferta (oferta_proveedor_id, oferta_precio_oferta , oferta_precio_lista, oferta_fecha_publicacion ,
 			oferta_fecha_vencimiento , oferta_decripcion , oferta_stock , oferta_codigo, oferta_restriccion_compra)
-SELECT (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = Provee_CUIT), Oferta_Precio, Oferta_Precio_Ficticio, 
+SELECT (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = Provee_CUIT), Oferta_Precio, Oferta_Precio_Ficticio,
 	Oferta_Fecha, Oferta_Fecha_Venc , Oferta_Descripcion , Oferta_Cantidad , SUBSTRING(Oferta_Codigo, 1, 10), 3
 FROM gd_esquema.Maestra
 WHERE Oferta_Fecha IS NOT NULL
-GROUP BY SUBSTRING(Oferta_Codigo, 1, 10), Oferta_Precio, Oferta_Precio_Ficticio, Oferta_Fecha, Oferta_Fecha_Venc , 
+GROUP BY SUBSTRING(Oferta_Codigo, 1, 10), Oferta_Precio, Oferta_Precio_Ficticio, Oferta_Fecha, Oferta_Fecha_Venc ,
 		Oferta_Descripcion , Oferta_Cantidad , Provee_Cuit
 
 -- CREATE TABLE LIL_MIX.factura ( factura_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
@@ -169,10 +169,22 @@ GROUP BY SUBSTRING(Oferta_Codigo, 1, 10), Oferta_Precio, Oferta_Precio_Ficticio,
 --							   )
 
 INSERT INTO LIL_MIX.factura (factura_id , factura_proveedor_id, factura_fecha_inicio, factura_fecha_fin, factura_importe)
-SELECT Factura_Nro , (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = Provee_CUIT) , MIN(Oferta_Fecha_Compra) , 
-	Factura_Fecha , SUM(Oferta_Precio) 
+SELECT Factura_Nro , (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = Provee_CUIT) , MIN(Oferta_Fecha_Compra) ,
+	Factura_Fecha , SUM(Oferta_Precio)
 FROM gd_esquema.Maestra
 WHERE Factura_Nro IS NOT NULL
 GROUP BY Factura_Nro , Factura_Fecha , Provee_CUIT
 
 
+-- CREATE TABLE LIL_MIX.compra ( compra_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+--			                  compra_oferta_numero INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.oferta(oferta_id),
+--			                  compra_oferta_descr VARCHAR(255) NOT NULL,
+--			                  compra_cliente_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id),
+--			                  compra_cantidad INT NOT NULL,
+--			                  compra_fecha DATETIME NOT NULL )
+
+INSERT INTO LIL_MIX.compra ( compra_oferta_numero, compra_oferta_descr, compra_cliente_id, compra_cantidad, compra_fecha)
+SELECT o.oferta_id, o.oferta_decripcion, (SELECT cliente_id FROM LIL_MIX.cliente WHERE cliente_dni = Cli_Dni),
+		COUNT(o.oferta_codigo), m.Oferta_Fecha_Compra
+FROM gd_esquema.Maestra m JOIN LIL_MIX.oferta o ON (o.oferta_codigo = SUBSTRING(m.Oferta_Codigo, 1, 10))
+GROUP BY m.Oferta_Codigo, o.oferta_id, o.oferta_decripcion, m.Oferta_Fecha_Compra, Cli_Dni

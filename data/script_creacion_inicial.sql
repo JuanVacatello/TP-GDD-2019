@@ -79,11 +79,11 @@ IF OBJECT_ID('LIL_MIX.tipoDePago') IS NOT NULL
 
 IF OBJECT_ID('LIL_MIX.cargaDeCredito') IS NOT NULL
   DROP TABLE LIL_MIX.cargaDeCredito
- GO 
- 
+ GO
+
 IF OBJECT_ID('LIL_MIX.semestre') IS NOT NULL
   DROP TABLE LIL_MIX.semestre
-  GO 
+  GO
 
 -----DROP ESQUEMA
 
@@ -93,50 +93,50 @@ GO
 
 --CREACION ESQUEMA
 
-CREATE SCHEMA LIL_MIX AUTHORIZATION  gdCupon2019 
+CREATE SCHEMA LIL_MIX AUTHORIZATION  gdCupon2019
 GO
 
 
---CREACION DE TABLAS 
+--CREACION DE TABLAS
 
 CREATE TABLE LIL_MIX.usuario ( usuario_id INT NOT NULL IDENTITY(1000,1) PRIMARY KEY,
-			                   usuario_nombre VARCHAR(255) NOT NULL UNIQUE,
+			           usuario_nombre VARCHAR(255) NOT NULL UNIQUE,
 	                           usuario_password VARCHAR(255) NOT NULL,
-			                   usuario_intentos TINYINT DEFAULT 0,
-			                   usuario_habilitado BIT DEFAULT 1 )
-									   					 
+			           usuario_intentos TINYINT DEFAULT 0,
+			           usuario_habilitado BIT DEFAULT 1 )
+
 CREATE TABLE LIL_MIX.direccion ( direccion_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-				                 direccion_calle VARCHAR(255),
-				                 direccion_piso TINYINT,
-				                 direccion_dpto CHAR(1),
-				                 direccion_ciudad VARCHAR(255) )
+				   direccion_calle VARCHAR(255),
+				   direccion_piso TINYINT,
+				   direccion_dpto CHAR(1),
+				   direccion_ciudad VARCHAR(255) )
 
 CREATE TABLE LIL_MIX.proveedor ( proveedor_id INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
-				                 proveedor_direccion_id INT FOREIGN KEY REFERENCES LIL_MIX.direccion(direccion_id),
-				                 proveedor_telefono INT,
-				                 proveedor_cuit VARCHAR(13) UNIQUE,
-				                 proveedor_rubro VARCHAR(255),
-				                 proveedor_mail VARCHAR(255),
-				                 proveedor_cp SMALLINT,
-				                 proveedor_nombre_contacto VARCHAR(255),
-				                 proveedor_rs VARCHAR(255) UNIQUE,
-				                 proveedor_habilitado BIT DEFAULT 1,
-				                 proveedor_usuario_id INT FOREIGN KEY REFERENCES LIL_MIX.usuario(usuario_id) )
+				   proveedor_direccion_id INT FOREIGN KEY REFERENCES LIL_MIX.direccion(direccion_id),
+				   proveedor_telefono INT,
+				   proveedor_cuit VARCHAR(13) UNIQUE,
+				   proveedor_rubro VARCHAR(255),
+				   proveedor_mail VARCHAR(255),
+				   proveedor_cp SMALLINT,
+				   proveedor_nombre_contacto VARCHAR(255),
+				   proveedor_rs VARCHAR(255) UNIQUE,
+				   proveedor_habilitado BIT DEFAULT 1,
+				   proveedor_usuario_id INT FOREIGN KEY REFERENCES LIL_MIX.usuario(usuario_id) )
 
 CREATE TABLE LIL_MIX.oferta ( oferta_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-			                  oferta_codigo VARCHAR(255) NOT NULL,
-			                  oferta_precio_oferta INT NOT NULL,
-			                  oferta_precio_lista INT NOT NULL,
-			                  oferta_fecha_publicacion DATETIME NOT NULL,
-			                  oferta_fecha_vencimiento DATETIME NOT NULL,
-			                  oferta_decripcion VARCHAR(255) NOT NULL,
-			                  oferta_stock INT NOT NULL,
-			                  oferta_proveedor_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
+			           oferta_codigo VARCHAR(255) NOT NULL,
+			           oferta_precio_oferta INT NOT NULL,
+			           oferta_precio_lista INT NOT NULL,
+			           oferta_fecha_publicacion DATETIME NOT NULL,
+			           oferta_fecha_vencimiento DATETIME NOT NULL,
+			           oferta_decripcion VARCHAR(255) NOT NULL,
+			           oferta_stock INT NOT NULL,
+			           oferta_proveedor_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
 			                  oferta_restriccion_compra INT NOT NULL )
 
 CREATE TABLE LIL_MIX.cliente ( cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --el cliente id comenzará en 1 y se incrementará en 1 a medida que se vayan agregando nuevos clientes
 			                   cliente_nombre VARCHAR(255) NOT NULL ,
-			                   cliente_apellido VARCHAR(255) NOT NULL , 
+			                   cliente_apellido VARCHAR(255) NOT NULL ,
 			                   cliente_direccion_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.direccion(direccion_id),
 			                   cliente_mail VARCHAR(255) NOT NULL,
 			                   cliente_telefono INT NOT NULL,
@@ -145,7 +145,7 @@ CREATE TABLE LIL_MIX.cliente ( cliente_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY
 			                   cliente_dni INT NOT NULL,
 			                   cliente_credito BIGINT DEFAULT 200,
 			                   cliente_habilitado BIT DEFAULT 1,
-			                   cliente_usuario_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.usuario(usuario_id) ) 
+			                   cliente_usuario_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.usuario(usuario_id) )
 
 CREATE TABLE LIL_MIX.compra ( compra_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 			                  compra_oferta_numero INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.oferta(oferta_id),
@@ -154,16 +154,16 @@ CREATE TABLE LIL_MIX.compra ( compra_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 			                  compra_cantidad INT NOT NULL,
 			                  compra_fecha DATETIME NOT NULL )
 
-CREATE TABLE LIL_MIX.factura ( factura_id INT NOT NULL IDENTITY(1000,1) PRIMARY KEY,
-			                   factura_proveedor_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
-			                   factura_fecha_inicio DATETIME NOT NULL,
-			                   factura_fecha_fin DATETIME NOT NULL,
-			                   factura_importe FLOAT NOT NULL )
+CREATE TABLE LIL_MIX.factura ( factura_id INT NOT NULL PRIMARY KEY,
+			       factura_proveedor_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
+			       factura_fecha_inicio DATETIME NOT NULL,
+			       factura_fecha_fin DATETIME NOT NULL,
+			       factura_importe FLOAT NOT NULL )
 
 CREATE TABLE LIL_MIX.cupon ( cupon_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 			                 cupon_fecha_vencimiento DATETIME NOT NULL,
 			                 cupon_fecha_consumo DATETIME,
-							 cupon_codigo VARCHAR(15) NOT NULL,
+							         cupon_codigo VARCHAR(15) NOT NULL,
 			                 cupon_compra_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.compra(compra_id),
 			                 cupon_cliente_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id) )
 
@@ -190,7 +190,7 @@ CREATE TABLE LIL_MIX.tarjeta ( tarjeta_numero BIGINT NOT NULL PRIMARY KEY,
 			                   tarjeta_tipo VARCHAR(30) NOT NULL,
 			                   tarjeta_fecha_vencimiento DATETIME NOT NULL,
 			                   tarjeta_id_cliente INT NOT NULL,
-							   FOREIGN KEY (tarjeta_id_cliente) REFERENCES LIL_MIX.cliente(cliente_id)) 
+							   FOREIGN KEY (tarjeta_id_cliente) REFERENCES LIL_MIX.cliente(cliente_id))
 
 CREATE TABLE LIL_MIX.tipoDePago ( tipo_de_pago_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, --1, 2, 3
 				                  tipo_de_pago_descripcion VARCHAR(30) NOT NULL ) --EFECTIVO, CREDITO O DEBITO
@@ -206,8 +206,8 @@ CREATE TABLE LIL_MIX.semestre ( semestre_id INT NOT NULL IDENTITY(1,1) PRIMARY K
 				                semestre_fecha_inicio VARCHAR(5) NOT NULL,
 				                semestre_fecha_fin VARCHAR(5) NOT NULL )
 
-                                            
-											
+
+
 											               /*Creacion de datos*/
 
 --                        Funcionalidades
@@ -251,7 +251,7 @@ GO
 
 --                             Roles
 
--- Debe tenerse en cuenta, que actualmente existen 3 roles, Proveedor, Administrativo, Cliente. 
+-- Debe tenerse en cuenta, que actualmente existen 3 roles, Proveedor, Administrativo, Cliente.
 
 INSERT INTO LIL_MIX.rol (rol_nombre) VALUES ('ADMINISTRATIVO')
 GO
@@ -262,7 +262,7 @@ GO
 
 --                          funcionalidadxrol
 
--- Un rol posee un conjunto de funcionalidades y las mismas no pueden estar repetidas dentro de un rol en particular. 
+-- Un rol posee un conjunto de funcionalidades y las mismas no pueden estar repetidas dentro de un rol en particular.
 
 -- Funciones Administrador
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,1)
@@ -321,12 +321,12 @@ WHERE Provee_Telefono IS NOT NULL
 --                        RolxUsuario
 
 INSERT INTO LIL_MIX.rolxusuario(rol_id, usuario_id)
-SELECT 3, u.usuario_id 
+SELECT 3, u.usuario_id
 FROM gd_esquema.Maestra m JOIN LIL_MIX.usuario u ON (u.usuario_nombre = CONVERT(VARCHAR(255), m.Provee_Telefono))
-GROUP BY usuario_id 
+GROUP BY usuario_id
 
 INSERT INTO LIL_MIX.rolxusuario(rol_id, usuario_id)
-SELECT 2, u.usuario_id 
+SELECT 2, u.usuario_id
 FROM gd_esquema.Maestra m JOIN LIL_MIX.usuario u ON (u.usuario_nombre = m.Cli_Nombre+'_'+m.Cli_Apellido)
 GROUP BY usuario_id
 
@@ -356,7 +356,7 @@ GROUP BY Cli_Nombre , Cli_Apellido , Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , C
 
 --                        Proveedor
 
-INSERT INTO LIL_MIX.proveedor ( proveedor_direccion_id, proveedor_telefono, proveedor_cuit, proveedor_rubro, proveedor_mail, 
+INSERT INTO LIL_MIX.proveedor ( proveedor_direccion_id, proveedor_telefono, proveedor_cuit, proveedor_rubro, proveedor_mail,
 	proveedor_rs, proveedor_usuario_id)
 SELECT (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = Provee_Dom AND direccion_ciudad = Provee_Ciudad),
 	Provee_Telefono, Provee_CUIT, Provee_Rubro, Provee_RS+'@gmail.com', Provee_RS,
@@ -369,25 +369,25 @@ GROUP BY Provee_CUIT, Provee_Telefono, Provee_Rubro, Provee_RS, Provee_Dom, Prov
 
 INSERT INTO LIL_MIX.oferta (oferta_proveedor_id, oferta_precio_oferta , oferta_precio_lista, oferta_fecha_publicacion ,
 			oferta_fecha_vencimiento , oferta_decripcion , oferta_stock , oferta_codigo, oferta_restriccion_compra)
-SELECT (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = Provee_CUIT), Oferta_Precio, Oferta_Precio_Ficticio, 
+SELECT (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = Provee_CUIT), Oferta_Precio, Oferta_Precio_Ficticio,
 	Oferta_Fecha, Oferta_Fecha_Venc , Oferta_Descripcion , Oferta_Cantidad , SUBSTRING(Oferta_Codigo, 1, 10), 3
 FROM gd_esquema.Maestra
 WHERE Oferta_Fecha IS NOT NULL
-GROUP BY SUBSTRING(Oferta_Codigo, 1, 10), Oferta_Precio, Oferta_Precio_Ficticio, Oferta_Fecha, Oferta_Fecha_Venc , 
+GROUP BY SUBSTRING(Oferta_Codigo, 1, 10), Oferta_Precio, Oferta_Precio_Ficticio, Oferta_Fecha, Oferta_Fecha_Venc ,
 		Oferta_Descripcion , Oferta_Cantidad , Provee_Cuit
 
 --                        CargaCredito
 
 INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_id_cliente, carga_tipo_de_pago, carga_monto, carga_tarjeta_numero)
-SELECT Carga_Fecha, (SELECT cliente_id FROM LIL_MIX.cliente WHERE cliente_dni = Cli_Dni), 
+SELECT Carga_Fecha, (SELECT cliente_id FROM LIL_MIX.cliente WHERE cliente_dni = Cli_Dni),
 	(SELECT tipo_de_pago_id FROM LIL_MIX.tipoDePago WHERE tipo_de_pago_descripcion = Tipo_Pago_Desc),
 	Carga_Credito, 12345678901234 -- Número de tarjeta de Marga, fue la única que realizó cargas
-FROM gd_esquema.Maestra 
+FROM gd_esquema.Maestra
 WHERE Tipo_Pago_Desc = 'Crédito' AND Carga_Fecha IS NOT NULL
 
 
 INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_id_cliente, carga_tipo_de_pago, carga_monto)
-SELECT Carga_Fecha, (SELECT cliente_id FROM LIL_MIX.cliente WHERE cliente_dni = Cli_Dni), 
+SELECT Carga_Fecha, (SELECT cliente_id FROM LIL_MIX.cliente WHERE cliente_dni = Cli_Dni),
 	(SELECT tipo_de_pago_id FROM LIL_MIX.tipoDePago WHERE tipo_de_pago_descripcion = Tipo_Pago_Desc), Carga_Credito
 FROM gd_esquema.Maestra
 WHERE Tipo_Pago_Desc LIKE 'Efectivo' AND Carga_Fecha IS NOT NULL
@@ -395,8 +395,8 @@ WHERE Tipo_Pago_Desc LIKE 'Efectivo' AND Carga_Fecha IS NOT NULL
 --                        Factura
 
 INSERT INTO LIL_MIX.factura (factura_id , factura_proveedor_id, factura_fecha_inicio, factura_fecha_fin, factura_importe)
-SELECT Factura_Nro , (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = Provee_CUIT) , MIN(Oferta_Fecha_Compra) , 
-	Factura_Fecha , SUM(Oferta_Precio) 
+SELECT Factura_Nro , (SELECT proveedor_id FROM LIL_MIX.proveedor WHERE proveedor_cuit = Provee_CUIT) , MIN(Oferta_Fecha_Compra) ,
+	Factura_Fecha , SUM(Oferta_Precio)
 FROM gd_esquema.Maestra
 WHERE Factura_Nro IS NOT NULL
 GROUP BY Factura_Nro , Factura_Fecha , Provee_CUIT
