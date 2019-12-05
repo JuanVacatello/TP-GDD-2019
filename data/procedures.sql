@@ -1094,8 +1094,7 @@ IF OBJECT_ID('LIL_MIX.cargarCredito') IS NOT NULL
 CREATE PROCEDURE LIL_MIX.cargarCredito
 @usuario_nombre VARCHAR(255), @monto BIGINT, 
 @tipo_de_pago VARCHAR(30), --efectivo, credito o debito
-@fechadecarga DATETIME, --supongo que se ve en c# este tema
-@tarjeta_numero INT, @tarjeta_tipo VARCHAR(30), @tarjeta_fecha_vencimiento DATETIME
+@fechadecarga DATETIME, @tarjeta_numero INT, @tarjeta_tipo VARCHAR(30), @tarjeta_fecha_vencimiento DATETIME
 AS
 BEGIN
 	BEGIN TRY
@@ -1125,15 +1124,18 @@ BEGIN
 			-- Chequeo si los datos de la tarjeta ingresada están en la tabla TARJETA pero algún dato no concuerda
 		
 			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente = @cliente AND tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento != @tarjeta_fecha_vencimiento)
-				THROW 50012, 'Error al ingresar tarjeta', 1
+				THROW 50012, 'Error al ingresar tarjeta.', 1
 
 			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente = @cliente AND tarjeta_numero = @tarjeta_numero AND tarjeta_tipo != @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento AND tarjeta_id_cliente = @cliente)
-				THROW 50013, 'Error al ingresar tarjeta', 1
+				THROW 50013, 'Error al ingresar tarjeta.', 1
 
 			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente = @cliente AND tarjeta_numero != @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento AND tarjeta_id_cliente != @cliente)
-				THROW 50014, 'Error al ingresar tarjeta', 1
+				THROW 50014, 'Error al ingresar tarjeta.', 1
 				
-			-- Si en la tabla TARJETAS no está registrada dicha tarjeta para dicho cliente, la registro
+			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente != @cliente AND tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento AND tarjeta_id_cliente != @cliente)
+				THROW 50100, 'La tarjeta pertenece a otro cliente.', 1
+				
+			-- Si en la tabla TARJETA no está registrada dicha tarjeta para dicho cliente, la registro
 
 			IF NOT EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento AND tarjeta_id_cliente = @cliente)
 				INSERT INTO LIL_MIX.tarjeta (tarjeta_numero, tarjeta_tipo, tarjeta_fecha_vencimiento, tarjeta_id_cliente)
