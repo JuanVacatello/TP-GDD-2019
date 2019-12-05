@@ -392,6 +392,14 @@ SELECT Carga_Fecha, (SELECT cliente_id FROM LIL_MIX.cliente WHERE cliente_dni = 
 FROM gd_esquema.Maestra
 WHERE Tipo_Pago_Desc LIKE 'Efectivo' AND Carga_Fecha IS NOT NULL
 
+--                        Compra
+
+INSERT INTO LIL_MIX.compra ( compra_oferta_numero, compra_oferta_descr, compra_cliente_id, compra_cantidad, compra_fecha)
+SELECT o.oferta_id, o.oferta_decripcion, (SELECT cliente_id FROM LIL_MIX.cliente WHERE cliente_dni = Cli_Dni),
+		COUNT(o.oferta_codigo), m.Oferta_Fecha_Compra
+FROM gd_esquema.Maestra m JOIN LIL_MIX.oferta o ON (o.oferta_codigo = SUBSTRING(m.Oferta_Codigo, 1, 10))
+GROUP BY m.Oferta_Codigo, o.oferta_id, o.oferta_decripcion, m.Oferta_Fecha_Compra, Cli_Dni
+
 --                        Factura
 
 INSERT INTO LIL_MIX.factura (factura_id , factura_proveedor_id, factura_fecha_inicio, factura_fecha_fin, factura_importe)
