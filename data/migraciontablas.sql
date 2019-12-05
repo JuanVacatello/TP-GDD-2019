@@ -93,11 +93,11 @@ group by Provee_CUIT, Provee_Telefono, Provee_Rubro, Provee_RS, Provee_Dom, Prov
 INSERT INTO LIL_MIX.cliente (cliente_nombre , cliente_apellido , cliente_direccion_id, cliente_mail,
 			cliente_telefono , cliente_fecha_nacimiento , cliente_dni , cliente_credito , cliente_habilitado, cliente_usuario_id)
 SELECT Cli_Nombre , Cli_Apellido , (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = Cli_Direccion AND direccion_ciudad = Cli_Ciudad),
-	   Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , Cli_Dni , SUM(Carga_Credito), 1,
+	   Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , Cli_Dni , (SUM(Carga_Credito) - SUM(Oferta_Precio_Ficticio)), 1,
 	   (SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = Cli_Nombre+'_'+Cli_Apellido)
 FROM gd_esquema.Maestra
 WHERE Cli_Dni IS NOT NULL
-GROUP BY Cli_Nombre , Cli_Apellido , Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , Cli_Dni , Cli_Direccion
+GROUP BY Cli_Nombre , Cli_Apellido , Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , Cli_Dni , Cli_Direccion, Cli_Ciudad
 
 
 -- CREATE TABLE LIL_MIX.tarjeta ( tarjeta_numero BIGINT NOT NULL PRIMARY KEY,
