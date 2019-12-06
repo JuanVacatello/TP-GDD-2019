@@ -237,7 +237,7 @@ IF OBJECT_ID('LIL_MIX.modificarProveedorNombreDeContacto') IS NOT NULL
 GO
 
 IF OBJECT_ID('LIL_MIX.modificarCalleDirecCliente') IS NOT NULL
-  DROP PROCEDURE LIL_MIX.modificareCalleDirecCliente
+  DROP PROCEDURE LIL_MIX.modificarCalleDirecCliente
 GO 
 
 IF OBJECT_ID('LIL_MIX.modificarPisoDirecCliente') IS NOT NULL
@@ -300,6 +300,65 @@ GO
 IF OBJECT_ID('LIL_MIX.cargarCreditoAlCliente') IS NOT NULL
   DROP TRIGGER LIL_MIX.cargarCreditoAlCliente
 GO
+
+-----DROP INDICES
+/*
+DROP INDEX IDX_USUARIO ON LIL_MIX.usuario
+
+GO
+
+DROP INDEX IDX_DIRECCION ON LIL_MIX.direccion
+
+GO
+
+DROP INDEX IDX_PROVEEDOR ON LIL_MIX.proveedor
+
+GO
+
+DROP INDEX IDX_OFERTA ON LIL_MIX.oferta
+
+GO
+
+DROP INDEX IDX_CLIENTE ON LIL_MIX.cliente
+
+GO
+
+DROP INDEX IDX_COMPRA ON LIL_MIX.compra
+
+GO
+
+DROP INDEX IDX_FACTURA ON LIL_MIX.factura
+
+GO
+
+DROP INDEX IDX_CUPON ON LIL_MIX.cupon
+
+GO
+
+DROP INDEX IDX_ROL ON LIL_MIX.rol
+
+GO
+
+DROP INDEX IDX_FUNCIONALIDAD ON LIL_MIX.funcionalidad
+
+GO
+
+DROP INDEX IDX_TARJETA ON LIL_MIX.tarjeta
+
+GO
+
+DROP INDEX IDX_TIPO_DE_PAGO ON LIL_MIX.tipoDePago
+
+GO
+
+DROP INDEX IDX_CARGA_DE_CREDITO ON LIL_MIX.cargaDeCredito
+
+GO
+
+DROP INDEX IDX_SEMESTRE ON LIL_MIX.semestre
+
+GO
+*/
 
 -----DROP ESQUEMA
 
@@ -440,9 +499,52 @@ CREATE TABLE LIL_MIX.semestre ( semestre_id INT NOT NULL IDENTITY(1,1) PRIMARY K
 				                semestre_fecha_fin VARCHAR(5) NOT NULL )
 GO
 
+--							 Indices
+/*
+CREATE INDEX IDX_USUARIO ON LIL_MIX.usuario (usuario_id)
+GO
 
+CREATE INDEX IDX_DIRECCION ON LIL_MIX.direccion (direccion_id)
+GO
 
-											               /*Creacion de datos*/
+CREATE INDEX IDX_PROVEEDOR ON LIL_MIX.proveedor (proveedor_id,proveedor_direccion_id,proveedor_usuario_id,proveedor_cuit)
+GO
+
+CREATE INDEX IDX_OFERTA ON LIL_MIX.oferta (oferta_id,oferta_proveedor_id)
+GO
+
+CREATE INDEX IDX_CLIENTE ON LIL_MIX.cliente (cliente_id,cliente_direccion_id,cliente_usuario_id,cliente_dni)
+GO
+
+CREATE INDEX IDX_COMPRA ON LIL_MIX.compra (compra_id,compra_oferta_numero,compra_cliente_id)
+GO
+
+CREATE INDEX IDX_FACTURA ON LIL_MIX.factura (factura_id,factura_proveedor_id)
+GO
+
+CREATE INDEX IDX_CUPON ON LIL_MIX.cupon (cupon_id,cupon_compra_id,cupon_cliente_id)
+GO
+
+CREATE INDEX IDX_ROL ON LIL_MIX.rol (rol_id)
+GO
+
+CREATE INDEX IDX_FUNCIONALIDAD ON LIL_MIX.funcionalidad (funcionalidad_id)
+GO
+
+CREATE INDEX IDX_TARJETA ON LIL_MIX.tarjeta (tarjeta_numero,tarjeta_id_cliente)
+GO
+
+CREATE INDEX IDX_TIPO_DE_PAGO ON LIL_MIX.tipoDePago (tipo_de_pago_id)
+GO
+
+CREATE INDEX IDX_CARGA_DE_CREDITO ON LIL_MIX.cargaDeCredito (carga_id,carga_id_cliente,carga_tipo_de_pago,carga_tarjeta_numero)
+GO
+
+CREATE INDEX IDX_SEMESTRE ON LIL_MIX.semestre (semestre_id)
+GO
+*/
+
+						/*Creacion de datos*/
 
 --                        Funcionalidades
 
@@ -1672,7 +1774,7 @@ AS
 BEGIN
 	SELECT * FROM LIL_MIX.tipoDePago
 END
-
+GO
 -- 14.2)
 
 CREATE PROCEDURE LIL_MIX.cargarCredito
