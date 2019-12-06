@@ -690,10 +690,10 @@ END
 
 -- 11.9) Modificación de direccion (calle)
 
- IF OBJECT_ID('LIL_MIX.modificarClienteCalleDirec') IS NOT NULL
+ IF OBJECT_ID('LIL_MIX.modificarCalleDirecCliente') IS NOT NULL
   DROP PROCEDURE LIL_MIX.modificarClienteCalleDirec
   
-CREATE PROCEDURE LIL_MIX.modificarClienteCalleDirec
+CREATE PROCEDURE LIL_MIX.modificarCalleDirecCliente
 @nombre_usuario VARCHAR(255), @direccion_calle_nuevo VARCHAR(255) 
 AS
 BEGIN
@@ -711,10 +711,10 @@ END
 
 -- 11.10) Modificación de direccion (numero de piso)
 
- IF OBJECT_ID('LIL_MIX.modificarClientePisoDirec') IS NOT NULL
+ IF OBJECT_ID('LIL_MIX.modificarPisoDirecCliente') IS NOT NULL
   DROP PROCEDURE LIL_MIX.modificarClientePisoDirec
   
-CREATE PROCEDURE LIL_MIX.modificarClientePisoDirec
+CREATE PROCEDURE LIL_MIX.modificarPisoDirecCliente
 @nombre_usuario VARCHAR(255), @direccion_piso_nuevo TINYINT
 AS
 BEGIN 
@@ -731,10 +731,10 @@ END
 
 -- 11.11) Modificación de direccion (departamento)
 
- IF OBJECT_ID('LIL_MIX.modificarClienteDptoDirec') IS NOT NULL
+ IF OBJECT_ID('LIL_MIX.modificarDptoDirecCliente') IS NOT NULL
   DROP PROCEDURE LIL_MIX.modificarClienteDptoDirec
   
-CREATE PROCEDURE LIL_MIX.modificarClienteDptoDirec
+CREATE PROCEDURE LIL_MIX.modificarDptoDirecCliente
 @nombre_usuario VARCHAR(255), @direccion_dpto_nuevo CHAR(1)
 AS
 BEGIN
@@ -751,10 +751,10 @@ END
 
 -- 11.12) Modificación de direccion (ciudad)
 
- IF OBJECT_ID('LIL_MIX.modificarClienteCiudad') IS NOT NULL
+ IF OBJECT_ID('LIL_MIX.modificarCiudadCliente') IS NOT NULL
   DROP PROCEDURE LIL_MIX.modificarClienteCiudad
   
-CREATE PROCEDURE LIL_MIX.modificarClienteCiudad
+CREATE PROCEDURE LIL_MIX.modificarCiudadCliente
 @nombre_usuario VARCHAR(255), @ciudad_nueva VARCHAR(255)
 AS
 BEGIN
