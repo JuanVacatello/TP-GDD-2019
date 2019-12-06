@@ -672,11 +672,17 @@ GO
 
 ----------------------------------------  ABM DE ROL  ----------------------------------------
 
--- 1) 
+-- 1) Funcionalidad para poder crear, modificar y eliminar el acceso de un usuario a una opción del sistema. 
 
--- Funcionalidad para poder crear, modificar y eliminar el acceso de un usuario a una opción del sistema. 
+-- 1.1) Crear un rol implica cargar los siguientes datos: Nombre y Listado de Funcionalidades (selección acotada) 
 
--- Crear un rol implica cargar los siguientes datos: Nombre y Listado de Funcionalidades (selección acotada) 
+CREATE PROCEDURE LIL_MIX.listadoFuncionalidades
+AS
+BEGIN
+	SELECT * FROM LIL_MIX.funcionalidad
+END
+ 
+ -- 2)
  
 CREATE PROCEDURE LIL_MIX.altaRol 
 @rol_nombre VARCHAR(30), @funcionalidad_descripcion VARCHAR(30)
@@ -1145,10 +1151,22 @@ CREATE PROCEDURE LIL_MIX.listadoClientes
 @nombre VARCHAR(255), @apellido VARCHAR(255), @dni INT, @email VARCHAR(255)
 AS
 BEGIN
-	SELECT u.usuario_nombre as 'Nombre de usuario', c.cliente_nombre as 'Nombre del cliente',
-		c.cliente_apellido as 'Apellido del cliente', c.cliente_dni as 'DNI del cliente'
+	SELECT c.cliente_dni as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
 	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
-	WHERE c.cliente_dni = @dni OR c.cliente_mail = @email OR c.cliente_nombre = @nombre OR c.cliente_apellido = @apellido
+	WHERE c.cliente_dni = @dni
+	
+	SELECT c.cliente_nombre as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
+	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
+	WHERE c.cliente_nombre LIKE %@nombre%
+	
+	SELECT c.cliente_apellido as 'Apellido del cliente', u.usuario_nombre as 'Nombre de usuario'
+	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
+	WHERE c.cliente_apellido LIKE %@apellido%
+	
+	SELECT c.cliente_mail as 'Apellido del cliente', u.usuario_nombre as 'Nombre de usuario'
+	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
+	WHERE c.cliente_mail LIKE %@mail%
+
 END
 GO
 
@@ -1405,9 +1423,18 @@ CREATE PROCEDURE LIL_MIX.listadoProveedores
 @razonsocial VARCHAR(255), @cuit VARCHAR(13), @mail VARCHAR(255)
 AS
 BEGIN
-	SELECT u.usuario_nombre
-	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (p.proveedor_usuario_id = u.usuario_id)
-	WHERE p.proveedor_rs = @razonsocial OR p.proveedor_cuit = @cuit OR p.proveedor_mail = @mail
+	SELECT p.proveedor_rs as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
+	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (u.usuario_id = p.proveedor_usuario_id)
+	WHERE p.proveedor_rs LIKE %@razonsocial%
+	
+	SELECT p.proveedor_mail as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
+	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (u.usuario_id = p.proveedor_usuario_id)
+	WHERE p.proveedor_mail LIKE %@mail%
+	
+	SELECT p.proveedor_cuit as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
+	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (u.usuario_id = p.proveedor_usuario_id)
+	WHERE p.proveedor_cuit LIKE %@cuit%
+	
 END
 GO
 
@@ -1629,9 +1656,18 @@ GO
 
 --------------------------------------------  CARGA DE CRÉDITO  -----------------------------------------------
 
--- 14)
+-- 14) Esta funcionalidad permite la carga de crédito a la cuenta de un cliente para poder operar en este nuevo sistema
 
--- Esta funcionalidad permite la carga de crédito a la cuenta de un cliente para poder operar en este nuevo sistema
+-- 14.1) Para dar de alta una nueva carga implicará registrar los siguientes datos: 
+--  Fecha  Cliente  Tipo de pago (selección acotada)  Monto  Datos de la tarjeta (a determinar por los alumnos) 
+
+CREATE PROCEDURE LIL_MIX.listadoTiposDePago
+AS
+BEGIN
+	SELECT * FROM LIL_MIX.tipoDePago
+END
+
+-- 14.2)
 
 CREATE PROCEDURE LIL_MIX.cargarCredito
 @usuario_nombre VARCHAR(255), @monto BIGINT, 
