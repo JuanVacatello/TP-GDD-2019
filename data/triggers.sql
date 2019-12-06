@@ -78,6 +78,7 @@ BEGIN
 	WHERE rol_id IN (SELECT rol_id FROM inserted WHERE rol_habilitado = 0)
 
 END
+GO
 
 ----------------------------------------- CARGA DE CRÉDITO ----------------------------------------------
 
