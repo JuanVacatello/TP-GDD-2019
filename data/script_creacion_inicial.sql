@@ -236,20 +236,20 @@ IF OBJECT_ID('LIL_MIX.modificarProveedorNombreDeContacto') IS NOT NULL
 	DROP PROCEDURE LIL_MIX.modificarProveedorNombreDeContacto
 GO
 
-IF OBJECT_ID('LIL_MIX.modificarClienteCalleDirec') IS NOT NULL
-  DROP PROCEDURE LIL_MIX.modificarClienteCalleDirec
+IF OBJECT_ID('LIL_MIX.modificarCalleDirecCliente') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.modificareCalleDirecCliente
 GO 
 
-IF OBJECT_ID('LIL_MIX.modificarClientePisoDirec') IS NOT NULL
-	DROP PROCEDURE LIL_MIX.modificarClientePisoDirec
+IF OBJECT_ID('LIL_MIX.modificarPisoDirecCliente') IS NOT NULL
+	DROP PROCEDURE LIL_MIX.modificarPisoDirecCliente
 GO
 
-IF OBJECT_ID('LIL_MIX.modificarClienteDptoDirec') IS NOT NULL
-	DROP PROCEDURE LIL_MIX.modificarClienteDptoDirec
+IF OBJECT_ID('LIL_MIX.modificarDptoDirecCliente') IS NOT NULL
+	DROP PROCEDURE LIL_MIX.modificarDptoDirecCliente
 GO
 
-IF OBJECT_ID('LIL_MIX.modificarClienteCiudad') IS NOT NULL
-	DROP PROCEDURE LIL_MIX.modificarClienteCiudad
+IF OBJECT_ID('LIL_MIX.modificarCiudadCliente') IS NOT NULL
+	DROP PROCEDURE LIL_MIX.modificarCiudadCliente
 GO
 
 IF OBJECT_ID('LIL_MIX.cargarCredito') IS NOT NULL
@@ -721,7 +721,7 @@ AS
 BEGIN
 	SELECT rol_nombre FROM LIL_MIX.rol 
 END
-
+GO
 -- 2.1) Modificar nombre
 
 -- En la modificación de un rol solo se pueden alterar ambos campos: el nombre y el listado de funcionalidades. 
@@ -1254,7 +1254,7 @@ GO
 
 -- 11.6) Modificación de telefono
 
-CCREATE PROCEDURE LIL_MIX.modificarClienteTelefono
+CREATE PROCEDURE LIL_MIX.modificarClienteTelefono
 @nombre_usuario VARCHAR(255), @telefono_nuevo INT
 AS
 BEGIN
@@ -1558,7 +1558,7 @@ GO
 
 -- 13.9) Modificación de direccion (calle)
 
-CREATE PROCEDURE LIL_MIX.modificarClienteCalleDirec
+CREATE PROCEDURE LIL_MIX.modificarCalleDirecCliente
 @nombre_usuario VARCHAR(255), @direccion_calle_nuevo VARCHAR(255) 
 AS
 BEGIN
@@ -1576,7 +1576,7 @@ GO
 
 -- 13.10) Modificación de direccion (numero de piso)
 
-CREATE PROCEDURE LIL_MIX.modificarClientePisoDirec
+CREATE PROCEDURE LIL_MIX.modificarPisoDirecCliente
 @nombre_usuario VARCHAR(255), @direccion_piso_nuevo TINYINT
 AS
 BEGIN
@@ -1594,7 +1594,7 @@ GO
 
 -- 13.11) Modificación de direccion (departamento)
   
-CREATE PROCEDURE LIL_MIX.modificarClienteDptoDirec
+CREATE PROCEDURE LIL_MIX.modificarDptoDirecCliente
 @nombre_usuario VARCHAR(255), @direccion_dpto_nuevo CHAR(1)
 AS
 BEGIN
@@ -1612,7 +1612,7 @@ GO
 
 -- 13.12) Modificación de direccion (ciudad)
 
-CREATE PROCEDURE LIL_MIX.modificarClienteCiudad
+CREATE PROCEDURE LIL_MIX.modificarCiudadCliente
 @nombre_usuario VARCHAR(255), @ciudad_nueva VARCHAR(255)
 AS
 BEGIN
@@ -2135,6 +2135,8 @@ SELECT * FROM LIL_MIX.cliente
 SELECT * FROM LIL_MIX.proveedor
 SELECT * FROM LIL_MIX.compra
 SELECT * FROM LIL_MIX.cupon
+ORDER BY cupon_cliente_id, cupon_compra_id
+
 SELECT * FROM LIL_MIX.usuario
 SELECT * FROM LIL_MIX.rolxusuario
 SELECT * FROM LIL_MIX.factura
