@@ -1163,15 +1163,15 @@ BEGIN
 	
 	SELECT c.cliente_nombre as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
 	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
-	WHERE c.cliente_nombre LIKE %@nombre%
+	WHERE c.cliente_nombre LIKE '%'+@nombre+'%'
 	
 	SELECT c.cliente_apellido as 'Apellido del cliente', u.usuario_nombre as 'Nombre de usuario'
 	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
-	WHERE c.cliente_apellido LIKE %@apellido%
+	WHERE c.cliente_apellido LIKE '%'+@apellido+'%'
 	
 	SELECT c.cliente_mail as 'Apellido del cliente', u.usuario_nombre as 'Nombre de usuario'
 	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
-	WHERE c.cliente_mail LIKE %@mail%
+	WHERE c.cliente_mail LIKE '%'+@mail+'%'
 
 END
 GO
@@ -1431,15 +1431,15 @@ AS
 BEGIN
 	SELECT p.proveedor_rs as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
 	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (u.usuario_id = p.proveedor_usuario_id)
-	WHERE p.proveedor_rs LIKE %@razonsocial%
+	WHERE p.proveedor_rs LIKE '%'+@razonsocial+'%'
 	
 	SELECT p.proveedor_mail as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
 	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (u.usuario_id = p.proveedor_usuario_id)
-	WHERE p.proveedor_mail LIKE %@mail%
+	WHERE p.proveedor_mail LIKE '%'+@mail+'%'
 	
 	SELECT p.proveedor_cuit as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
 	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (u.usuario_id = p.proveedor_usuario_id)
-	WHERE p.proveedor_cuit LIKE %@cuit%
+	WHERE p.proveedor_cuit = @cuit
 	
 END
 GO
@@ -1672,6 +1672,7 @@ AS
 BEGIN
 	SELECT * FROM LIL_MIX.tipoDePago
 END
+GO
 
 -- 14.2)
 
