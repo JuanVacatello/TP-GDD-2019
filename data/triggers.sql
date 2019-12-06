@@ -5,9 +5,6 @@
 
 --1) No puede haber un rol con funcionalidades repetidas
 
-IF OBJECT_ID('LIL_MIX.noRepetirFuncionalidadesEnUnRol') IS NOT NULL
-  DROP TRIGGER LIL_MIX.noRepetirFuncionalidadesEnUnRol
-GO
 
 CREATE TRIGGER LIL_MIX.noRepetirFuncionalidadesEnUnRol ON LIL_MIX.funcionalidadxrol
 INSTEAD OF INSERT AS
@@ -90,7 +87,7 @@ IF OBJECT_ID('LIL_MIX.cargarCreditoAlCliente') IS NOT NULL
   DROP TRIGGER LIL_MIX.cargarCreditoAlCliente
 GO
 
-CREATE TRIGGER cargarCreditoAlCliente ON cargaDeCredito
+CREATE TRIGGER LIL_MIX.cargarCreditoAlCliente ON LIL_MIX.cargaDeCredito
 AFTER INSERT AS
 BEGIN
 	DECLARE @monto_cargado INT,
@@ -106,7 +103,7 @@ BEGIN
 
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
-		UPDATE cliente
+		UPDATE LIL_MIX.cliente
 		SET cliente_credito = cliente_credito + @monto_cargado
 		WHERE cliente_id = @cliente_id
 
@@ -116,5 +113,66 @@ BEGIN
 
 	CLOSE cursorCreditoInsertado
 	DEALLOCATE cursorCreditoInsertado
+END
+GO
+
+--//////////////////////////////////////////////////////////////////
+
+--1) No puede haber un rol con funcionalidades repetidas
+
+IF OBJECT_ID('LIL_MIX.noRepetirFuncionalidadesEnUnRol') IS NOT NULL
+  DROP TRIGGER LIL_MIX.noRepetirFuncionalidadesEnUnRol
+GO
+
+CREATE TRIGGER LIL_MIX.noRepetirFuncionalidadesEnUnRol ON LIL_MIX.funcionalidadxrol
+INSTEAD OF INSERT AS
+BEGIN
+	DECLARE @funcionalidad_id INT,
+		@rol_id INT
+
+	SELECT @funcionalidad_id = funcionalidad_id, @rol_id = rol_id FROM inserted
+
+	
+		BEGIN TRY
+			BEGIN TRAN
+
+			--Un rol posee un conjunto de funcionalidades y las mismas no pueden estar repetidas dentro de un rol en particular:
+
+			IF @funcionalidad_id IN (SELECT funcionalidad_id FROM LIL_MIX.funcionalidadxrol WHERE rol_id = @rol_id)
+				THROW 50001, 'Funcionalidad ya existente para este rol', 1
+
+			--Chequeo de claves foraneas:
+
+			IF @funcionalidad_id NOT IN (SELECT funcionalidad_id FROM LIL_MIX.funcionalidad)
+				THROW 50002, 'Funcionalidad no existente', 1
+
+			IF @rol_id NOT IN (SELECT rol_id FROM LIL_MIX.rol)
+				THROW 50003, 'Rol no existente', 1
+
+			INSERT INTO LIL_MIX.funcionalidadxrol (rol_id, funcionalidad_id)
+			VALUES (@rol_id, @funcionalidad_id)
+
+			COMMIT
+
+		END TRY
+
+		BEGIN CATCH
+
+		DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+
+			ROLLBACK
+
+		END CATCH
+
 END
 GO

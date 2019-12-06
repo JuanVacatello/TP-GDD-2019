@@ -1056,8 +1056,6 @@ END
 
 -- Esta funcionalidad permite la carga de crédito a la cuenta de un cliente para poder operar en este nuevo sistema
 
-IF OBJECT_ID('LIL_MIX.cargarCredito') IS NOT NULL
-  DROP PROCEDURE LIL_MIX.cargarCredito
 
 CREATE PROCEDURE LIL_MIX.cargarCredito
 @usuario_nombre VARCHAR(255), @monto BIGINT, 
@@ -1442,14 +1440,16 @@ CREATE PROCEDURE LIL_MIX.listadoEstadistico1
 @anio INT, @semestre INT   -- 1 o 2
 AS
 BEGIN
-	SELECT TOP 5 o.proveedor_id as 'ID', p.proveedor_nombre_contacto as 'Nombre de contacto', p.proveedor_mail as 'Mail', 
-		p.proveedor_cuit as 'CUIT', p.proveedor_rubro as 'Rubro', p.proveedor_rs as 'Razon social', 
-		(o.oferta_precio_oferta * 100 / o.oferta_precio_lista) as 'Porcentaje de Descuento'				
+
+	SELECT TOP 5 s.semestre_id as 'Semestre', @anio as 'Año', p.proveedor_id as 'Proveedor ID', p.proveedor_nombre_contacto as 'Nombre de contacto', 
+				p.proveedor_mail as 'Mail', p.proveedor_cuit as 'CUIT', p.proveedor_rubro as 'Rubro', p.proveedor_rs as 'Razon social',
+		(100-AVG((o.oferta_precio_oferta * 100) / o.oferta_precio_lista)) as 'Porcentaje de Descuento'			
 	FROM LIL_MIX.proveedor p JOIN LIL_MIX.oferta o ON (o.oferta_proveedor_id = p.proveedor_id), LIL_MIX.semestre s
-	WHERE s.semestre_id = @semestre
-	GROUP BY p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs
-	HAVING o.oferta_fecha_publicacion BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103)
-	ORDER BY [Porcentaje de Descuento] DESC	-- El listado se debe ordenar en forma descendente por monto. 
+	WHERE s.semestre_id = @semestre AND
+		o.oferta_fecha_publicacion BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103)
+	GROUP BY p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs, s.semestre_id, p.proveedor_id
+	ORDER BY [Porcentaje de Descuento] DESC, p.proveedor_id ASC	-- El listado se debe ordenar en forma descendente por monto. 
+	  
 END
 
 -- Cabe aclarar que los campos a visualizar en la tabla del listado para las 2 consultas no son los mismos, 
@@ -1462,21 +1462,21 @@ IF OBJECT_ID('LIL_MIX.listadoEstadistico2') IS NOT NULL
 
 CREATE PROCEDURE LIL_MIX.listadoEstadistico2  
 @anio INT, @semestre INT   -- 1 o 2
-     o 2. Prov mayor facturacion
 AS
 BEGIN
 
-	SELECT TOP 5 o.proveedor_id as 'ID', p.proveedor_nombre_contacto as 'Nombre de contacto', p.proveedor_mail as 'Mail', 
-		p.proveedor_cuit as 'CUIT', p.proveedor_rubro as 'Rubro', p.proveedor_rs as 'Razon social', SUM(f.factura_importe) as 'Total Facturado'
-	FROM LIL_MIX.proveedor p JOIN LIL_MIX.factura f ON (f.factura_proveedor_id = p.proveedor_id), LIL_MIX.semestre s
-	WHERE s.semestre_id = @semestre
-	GROUP BY p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs
-	HAVING (f.factura_fecha_inicio BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103))
-		AND (f.factura_fecha_fin BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103))
+	SELECT TOP 5 s.semestre_id as 'Semestre', @anio as 'Año', p.proveedor_id as 'ID del Proveedor', p.proveedor_nombre_contacto as 'Nombre de contacto', 
+			p.proveedor_mail as 'Mail', p.proveedor_cuit as 'CUIT', p.proveedor_rubro as 'Rubro', p.proveedor_rs as 'Razon social', 
+				SUM(f.factura_importe) as 'Total Facturado'
+	FROM LIL_MIX.proveedor p JOIN LIL_MIX.factura f ON (f.factura_proveedor_id = p.proveedor_id), LIL_MIX.semestre s  
+	WHERE s.semestre_id = @semestre AND
+		(f.factura_fecha_inicio BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND 
+					CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103))
+		AND (f.factura_fecha_fin BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND 
+		CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103))
+	GROUP BY p.proveedor_id, p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs, s.semestre_id
 	ORDER BY [Total Facturado] DESC	-- El listado se debe ordenar en forma descendente por monto. 
 	
 END
-
-
-
-
+	
+	
