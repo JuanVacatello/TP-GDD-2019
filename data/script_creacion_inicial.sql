@@ -681,7 +681,8 @@ AS
 BEGIN
 	SELECT * FROM LIL_MIX.funcionalidad
 END
- 
+GO
+
  -- 2)
  
 CREATE PROCEDURE LIL_MIX.altaRol 
@@ -727,6 +728,7 @@ BEGIN
 	SELECT rol_nombre FROM LIL_MIX.rol 
 END
 GO
+
 -- 2.1) Modificar nombre
 
 -- En la modificación de un rol solo se pueden alterar ambos campos: el nombre y el listado de funcionalidades. 
@@ -735,6 +737,10 @@ CREATE PROCEDURE LIL_MIX.modificarRolNombre
 @rol_nombre VARCHAR(30), @rol_nombre_nuevo VARCHAR(30)
 AS
 BEGIN
+
+	IF @rol_nombre_nuevo IN (SELECT rol_nombre FROM LIL_MIX.rol)
+		THROW 50035, 'Ya existe rol con ese nombre', 1
+		
 	UPDATE LIL_MIX.rol
 	SET rol_nombre = @rol_nombre_nuevo
 	WHERE rol_nombre = @rol_nombre
@@ -1057,7 +1063,7 @@ BEGIN TRY
 		
 	-- Chequeo existencia del usuario
 	
-	IF @rol_nombre NOT IN (SELECT rol_nombre FROM LIL_MIX.rol)
+	IF @usuario_nombre NOT IN (SELECT usuario_nombre FROM LIL_MIX.usuario)
 		THROW 50016, 'Usuario inexistente.', 1
 		
 	INSERT INTO LIL_MIX.rolxusuario (rol_id, usuario_id)
