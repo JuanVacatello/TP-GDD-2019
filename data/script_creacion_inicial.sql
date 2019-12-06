@@ -2226,22 +2226,3 @@ END
 GO
 
 --------------------------------------
-
-SELECT * FROM LIL_MIX.funcionalidad
-SELECT * FROM LIL_MIX.rol
-SELECT * FROM LIL_MIX.funcionalidadxrol
-SELECT * FROM LIL_MIX.semestre
-SELECT * FROM LIL_MIX.tipoDePago
-SELECT * FROM LIL_MIX.cliente
-SELECT * FROM LIL_MIX.proveedor
-SELECT * FROM LIL_MIX.compra
-SELECT * FROM LIL_MIX.cupon
-ORDER BY cupon_cliente_id, cupon_compra_id
-
-SELECT * FROM LIL_MIX.usuario
-SELECT * FROM LIL_MIX.rolxusuario
-SELECT * FROM LIL_MIX.factura
-SELECT * FROM LIL_MIX.cargaDeCredito
-SELECT * FROM LIL_MIX.oferta
-SELECT * FROM LIL_MIX.direccion
-SELECT * FROM LIL_MIX.tarjeta
