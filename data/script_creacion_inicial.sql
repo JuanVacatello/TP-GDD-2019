@@ -88,12 +88,12 @@ IF OBJECT_ID('LIL_MIX.semestre') IS NOT NULL
   
 -----DROP PROCEDURES
 
-IF OBJECT_ID('LIL_MIX.crearRol') IS NOT NULL
-  DROP PROCEDURE LIL_MIX.crearRol
+IF OBJECT_ID('LIL_MIX.altaRol') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.altaRol
 GO
 
-IF OBJECT_ID('LIL_MIX.mostrarRolesExistentesEnElSistema') IS NOT NULL
-  DROP PROCEDURE LIL_MIX.mostrarRolesExistentesEnElSistema
+IF OBJECT_ID('LIL_MIX.listadoRol') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoRol
 GO
 
 IF OBJECT_ID('LIL_MIX.modificarRolNombre') IS NOT NULL
@@ -112,20 +112,20 @@ IF OBJECT_ID('LIL_MIX.habilitarRol') IS NOT NULL
 	DROP PROCEDURE LIL_MIX.habilitarRol
  GO
 
-IF OBJECT_ID('LIL_MIX.eliminarRol') IS NOT NULL
-	DROP PROCEDURE LIL_MIX.eliminarRol
+IF OBJECT_ID('LIL_MIX.bajaRol') IS NOT NULL
+	DROP PROCEDURE LIL_MIX.bajaRol
 GO
 
 IF OBJECT_ID('LIL_MIX.login') IS NOT NULL
 	DROP PROCEDURE LIL_MIX.login
 GO
 
-IF OBJECT_ID('LIL_MIX.crearUsuarioCliente') IS NOT NULL
- DROP PROCEDURE LIL_MIX.crearUsuarioCliente
+IF OBJECT_ID('LIL_MIX.altaUsuarioCliente') IS NOT NULL
+ DROP PROCEDURE LIL_MIX.altaUsuarioCliente
 GO
 
-IF OBJECT_ID('LIL_MIX.crearUsuarioProveedor') IS NOT NULL
-  DROP PROCEDURE LIL_MIX.crearUsuarioProveedor
+IF OBJECT_ID('LIL_MIX.altaUsuarioProveedor') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.altaUsuarioProveedor
 GO
 
 IF OBJECT_ID('LIL_MIX.agregarRolAUsuario') IS NOT NULL
@@ -140,12 +140,12 @@ IF OBJECT_ID('LIL_MIX.darDeBajaUsuario') IS NOT NULL
   DROP PROCEDURE LIL_MIX.darDeBajaUsuario
 GO
 
-IF OBJECT_ID('LIL_MIX.eliminarCliente') IS NOT NULL
-  DROP PROCEDURE LIL_MIX.eliminarCliente
+IF OBJECT_ID('LIL_MIX.bajaCliente') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.bajaCliente
 GO
 
-IF OBJECT_ID('LIL_MIX.clientesAModificarOEliminar') IS NOT NULL
-  DROP PROCEDURE LIL_MIX.clientesAModificarOEliminar
+IF OBJECT_ID('LIL_MIX.listadoClientes') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoClientes
 GO
 
 IF OBJECT_ID('LIL_MIX.habilitarCliente') IS NOT NULL
@@ -196,12 +196,12 @@ GO
   DROP PROCEDURE LIL_MIX.modificarClienteCiudad
 GO
 
-IF OBJECT_ID('LIL_MIX.eliminarProveedor') IS NOT NULL
-  DROP PROCEDURE LIL_MIX.eliminarProveedor
+IF OBJECT_ID('LIL_MIX.bajaProveedor') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.bajaProveedor
 GO
 
-IF OBJECT_ID('LIL_MIX.elegirProveedorAModificaroEliminar') IS NOT NULL
-  DROP PROCEDURE LIL_MIX.elegirProveedorAModificaroEliminar
+IF OBJECT_ID('LIL_MIX.listadoProveedores') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoProveedores
 GO
 
 IF OBJECT_ID('LIL_MIX.habilitarProveedor') IS NOT NULL
@@ -678,7 +678,7 @@ GO
 
 -- Crear un rol implica cargar los siguientes datos: Nombre y Listado de Funcionalidades (selección acotada) 
  
-CREATE PROCEDURE LIL_MIX.crearRol 
+CREATE PROCEDURE LIL_MIX.altaRol 
 @rol_nombre VARCHAR(30), @funcionalidad_descripcion VARCHAR(30)
 AS
 BEGIN
@@ -715,8 +715,7 @@ GO
 -- Para elegir el rol que se desea modificar o eliminar 
 -- se debe mostrar un listado con todos los roles existentes en el sistema. 
 
-
-CREATE PROCEDURE LIL_MIX.mostrarRolesExistentesEnElSistema
+CREATE PROCEDURE LIL_MIX.listadoRol
 AS
 BEGIN
 	SELECT rol_nombre FROM LIL_MIX.rol 
@@ -765,7 +764,6 @@ END
 GO
 
 -- 2.3) Eliminar funcionalidad
-
 
 CREATE PROCEDURE LIL_MIX.modificarRolEliminarFuncionalidad
 @rol_nombre VARCHAR(30), @funcionalidad_descripcion VARCHAR(30)
@@ -818,7 +816,7 @@ GO
 
 -- La eliminación del rol implica una baja lógica del mismo. El rol debe poder inhabilitarse.
 
-CREATE PROCEDURE LIL_MIX.eliminarRol
+CREATE PROCEDURE LIL_MIX.bajaRol
 @rol_nombre VARCHAR(30)
 AS
 BEGIN
@@ -906,7 +904,7 @@ GO
 
 -- 5) CREAR USUARIO TIPO CLIENTE
 
-CREATE PROCEDURE LIL_MIX.crearUsuarioCliente
+CREATE PROCEDURE LIL_MIX.altaUsuarioCliente
 @usuario_nombre VARCHAR(255), @usuario_password VARCHAR(255), @rol_nombre VARCHAR(30), -- Datos de usuario
 @nombre VARCHAR(255), @apellido VARCHAR(255), @dni INT, @mail VARCHAR(255), @telefono INT, @fechanacimiento DATETIME, 
 @codigopostal SMALLINT, @direccion_calle VARCHAR(255), @direccion_piso TINYINT, @direccion_dpto CHAR(1), @ciudad VARCHAR(255) -- Datos de cliente
@@ -971,7 +969,7 @@ GO
 
 -- 6) CREAR USUARIO TIPO PROVEEDOR
 
-CREATE PROCEDURE LIL_MIX.crearUsuarioProveedor
+CREATE PROCEDURE LIL_MIX.altaUsuarioProveedor
 @usuario_nombre VARCHAR(255), @usuario_password VARCHAR(255), @rol_nombre VARCHAR(30), -- Datos de usuario
 @nombre_de_usuario VARCHAR(255), @razon_social VARCHAR(255), @mail VARCHAR(255), @telefono INT, @cuit VARCHAR(13), @rubro VARCHAR(255), 
 @nombre_contacto VARCHAR(255), @codigo_postal SMALLINT, @calle VARCHAR(255), @piso TINYINT, @dpto CHAR(1), @ciudad VARCHAR(255) -- Datos de proveedor
@@ -1127,7 +1125,7 @@ GO
 
 -- La eliminación de un cliente implica la baja lógica del mismo. 
 
-CREATE PROCEDURE LIL_MIX.eliminarCliente
+CREATE PROCEDURE LIL_MIX.bajaCliente
 @dni_del_cliente INT
 AS
 BEGIN
@@ -1143,7 +1141,7 @@ GO
 -- que permita filtrar simultáneamente por alguno o todos los siguientes campos: 
 --  Nombre (texto libre)  Apellido (texto libre)  DNI (texto libre exacto)  Email (texto libre) 
 
-CREATE PROCEDURE LIL_MIX.clientesAModificarOEliminar
+CREATE PROCEDURE LIL_MIX.listadoClientes
 @nombre VARCHAR(255), @apellido VARCHAR(255), @dni INT, @email VARCHAR(255)
 AS
 BEGIN
@@ -1387,7 +1385,7 @@ GO
 
 -- La eliminación de un proveedor implica la baja lógica del mismo.
 
-CREATE PROCEDURE LIL_MIX.eliminarProveedor
+CREATE PROCEDURE LIL_MIX.bajaProveedor
 @razon_social VARCHAR(255), @cuit VARCHAR(13)
 AS
 BEGIN
@@ -1403,7 +1401,7 @@ GO
 --- que permita filtrar simultáneamente por alguno o todos los siguientes campos: 
 --  Razón Social (texto libre)  CUIT (texto libre exacto)  Email (texto libre) 
 
-CREATE PROCEDURE LIL_MIX.elegirProveedorAModificaroEliminar
+CREATE PROCEDURE LIL_MIX.listadoProveedores
 @razonsocial VARCHAR(255), @cuit VARCHAR(13), @mail VARCHAR(255)
 AS
 BEGIN
