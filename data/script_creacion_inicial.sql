@@ -82,9 +82,9 @@ IF OBJECT_ID('LIL_MIX.cargaDeCredito') IS NOT NULL
  GO
 
 IF OBJECT_ID('LIL_MIX.semestre') IS NOT NULL
-			DROP TABLE LIL_MIX.semestre		
+			DROP TABLE LIL_MIX.semestre
   GO
- 
+
 IF OBJECT_ID('LIL_MIX.listadoEstadistico') IS NOT NULL
   DROP TABLE LIL_MIX.listadoEstadistico
  GO
@@ -307,8 +307,8 @@ IF OBJECT_ID('LIL_MIX.facturacionProveedor') IS NOT NULL
 	DROP PROCEDURE LIL_MIX.facturacionProveedor
 GO
 
-IF OBJECT_ID('LIL_MIX.listadoEstadistico') IS NOT NULL
-	DROP PROCEDURE LIL_MIX.listadoEstadistico
+IF OBJECT_ID('LIL_MIX.crearListadoEstadistico') IS NOT NULL
+	DROP PROCEDURE LIL_MIX.crearListadoEstadistico
 GO
 
 IF OBJECT_ID('LIL_MIX.seleccionarSemestre') IS NOT NULL
@@ -595,11 +595,11 @@ GO
 
 -- Creacion del admnistrador general
 
-INSERT INTO LIL_MIX.usuario (usuario_nombre,usuario_password) 
+INSERT INTO LIL_MIX.usuario (usuario_nombre,usuario_password)
 VALUES ('admin','w23e')
 GO
 
-INSERT INTO LIL_MIX.rolxusuario(rol_id,usuario_id) 
+INSERT INTO LIL_MIX.rolxusuario(rol_id,usuario_id)
 VALUES (1,(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre ='admin'))
 GO
 
@@ -2055,13 +2055,14 @@ GO
 -- Para ello ingresará el período de facturación por intervalos de fecha, se deberá seleccionar el proveedor
 -- y a continuación se listaran todos las ofertas que fueron adquiridas por los clientes.
 
--- 19) 
+-- 19)
 
 CREATE PROCEDURE LIL_MIX.proveedores
 AS
 BEGIN
 	SELECT * FROM LIL_MIX.proveedor
 END
+GO
 
 -- 20)
 
@@ -2128,30 +2129,32 @@ GO
 
 CREATE PROCEDURE LIL_MIX.seleccionarSemestre
 AS
-BEGIN 
+BEGIN
 	SELECT * FROM LIL_MIX.semestre
 END
+GO
 
 --23) Seleccionar listado
 
 CREATE PROCEDURE LIL_MIX.seleccionarListado
 AS
-BEGIN 
+BEGIN
 	SELECT * FROM LIL_MIX.listadoEstadistico
 END
+GO
 
 --24)
 
-CREATE PROCEDURE LIL_MIX.listadoEstadistico
-@anio INT, @semestre INT   -- 1 o 2
+CREATE PROCEDURE LIL_MIX.crearListadoEstadistico
+@anio INT, @semestre INT,   -- 1 o 2
 @listado INT
 AS
 BEGIN
 
 	-- 1. Proveedores con mayor porcentaje de descuento
-	
+
 	IF @listado = 1
-	
+
 	SELECT TOP 5 s.semestre_id as 'Semestre', @anio as 'Año', p.proveedor_id as 'Proveedor ID', p.proveedor_nombre_contacto as 'Nombre de contacto',
 				p.proveedor_mail as 'Mail', p.proveedor_cuit as 'CUIT', p.proveedor_rubro as 'Rubro', p.proveedor_rs as 'Razon social',
 		(100-AVG((o.oferta_precio_oferta * 100) / o.oferta_precio_lista)) as 'Porcentaje de Descuento'
@@ -2162,9 +2165,9 @@ BEGIN
 	ORDER BY [Porcentaje de Descuento] DESC, p.proveedor_id ASC	-- El listado se debe ordenar en forma descendente por monto.
 
 	-- 2. Proveedores con mayor facturacion
-	
+
 	IF @listado = 2
-	
+
 	SELECT TOP 5 s.semestre_id as 'Semestre', @anio as 'Año', p.proveedor_id as 'ID del Proveedor', p.proveedor_nombre_contacto as 'Nombre de contacto',
 			p.proveedor_mail as 'Mail', p.proveedor_cuit as 'CUIT', p.proveedor_rubro as 'Rubro', p.proveedor_rs as 'Razon social',
 				SUM(f.factura_importe) as 'Total Facturado'
