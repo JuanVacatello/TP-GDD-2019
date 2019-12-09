@@ -84,7 +84,10 @@ IF OBJECT_ID('LIL_MIX.cargaDeCredito') IS NOT NULL
 IF OBJECT_ID('LIL_MIX.semestre') IS NOT NULL
 			DROP TABLE LIL_MIX.semestre		
   GO
-
+ 
+IF OBJECT_ID('LIL_MIX.listadoEstadistico') IS NOT NULL
+  DROP TABLE LIL_MIX.listadoEstadistico
+ GO
 
 -----DROPS PROCEDURES
 
@@ -304,13 +307,18 @@ IF OBJECT_ID('LIL_MIX.facturacionProveedor') IS NOT NULL
 	DROP PROCEDURE LIL_MIX.facturacionProveedor
 GO
 
-IF OBJECT_ID('LIL_MIX.listadoEstadistico1') IS NOT NULL
-	DROP PROCEDURE LIL_MIX.listadoEstadistico1
+IF OBJECT_ID('LIL_MIX.listadoEstadistico') IS NOT NULL
+	DROP PROCEDURE LIL_MIX.listadoEstadistico
 GO
 
-IF OBJECT_ID('LIL_MIX.listadoEstadistico2') IS NOT NULL
-	DROP PROCEDURE LIL_MIX.listadoEstadistico2
+IF OBJECT_ID('LIL_MIX.seleccionarSemestre') IS NOT NULL
+	DROP PROCEDURE LIL_MIX.seleccionarSemestre
 GO
+
+IF OBJECT_ID('LIL_MIX.seleccionarListado') IS NOT NULL
+	DROP PROCEDURE LIL_MIX.seleccionarListado
+GO
+
 -----DROPS TRIGGERS
 
 IF OBJECT_ID('LIL_MIX.noRepetirFuncionalidadesEnUnRol') IS NOT NULL
@@ -482,6 +490,10 @@ CREATE TABLE LIL_MIX.semestre ( semestre_id INT NOT NULL IDENTITY(1,1) PRIMARY K
 				                semestre_fecha_fin VARCHAR(5) NOT NULL )
 GO
 
+CREATE TABLE LIL_MIX.listadoEstadistico ( listado_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+					 listado_descripcion VARCHAR(255)
+					 )
+
 --							 Indices
 /*
 CREATE INDEX IDX_USUARIO ON LIL_MIX.usuario (usuario_id)
@@ -583,12 +595,6 @@ INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (3,8)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (3,10)
 GO
 
---                       Listado de semestres
-
-INSERT INTO LIL_MIX.semestre(semestre_fecha_inicio, semestre_fecha_fin) VALUES ('01-01', '30-06')
-INSERT INTO LIL_MIX.semestre(semestre_fecha_inicio, semestre_fecha_fin) VALUES ('01-07', '31-12')
-GO
-
 --                        Formas de pago
 
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Efectivo')
@@ -596,7 +602,19 @@ INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Crédito')
 INSERT INTO LIL_MIX.tipoDePago(tipo_de_pago_descripcion) VALUES ('Débito')
 GO
 
---                        Usuario
+--                       Listado de semestres
+
+INSERT INTO LIL_MIX.semestre(semestre_fecha_inicio, semestre_fecha_fin) VALUES ('01-01', '30-06')
+INSERT INTO LIL_MIX.semestre(semestre_fecha_inicio, semestre_fecha_fin) VALUES ('01-07', '31-12')
+GO
+
+--                       Listado de semestres
+
+INSERT INTO LIL_MIX.listadoEstadistico(listado_descripcion) VALUES ('Proveedores con mayor porcentaje de descuento ofrecido en sus ofertas')
+INSERT INTO LIL_MIX.listadoEstadistico(listado_descripcion) VALUES ('Proveedores con mayor facturación')
+GO
+
+--                      Usuario
 
 INSERT INTO LIL_MIX.usuario(usuario_nombre, usuario_password)
 SELECT DISTINCT Cli_Nombre+'_'+Cli_Apellido , HASHBYTES('SHA2_256', CONVERT(VARCHAR(255),Cli_Dni))
@@ -2098,13 +2116,34 @@ GO
 -- Dichas consultas son a nivel semestral, para lo cual la pantalla debe permitirnos selección el semestral a consultar.
 -- Además de ingresar el año a consultar, el sistema nos debe permitir seleccionar que tipo de listado se quiere visualizar.
 
---21) 1. Proveedores con mayor porcentaje de descuento
+--21) Seleccionar semestre
 
-CREATE PROCEDURE LIL_MIX.listadoEstadistico1
+CREATE PROCEDURE LIL_MIX.seleccionarSemestre
+AS
+BEGIN 
+	SELECT * FROM LIL_MIX.semestre
+END
+
+--22) Seleccionar listado
+
+CREATE PROCEDURE LIL_MIX.seleccionarListado
+AS
+BEGIN 
+	SELECT * FROM LIL_MIX.listadoEstadistico
+END
+
+--23)
+
+CREATE PROCEDURE LIL_MIX.listadoEstadistico
 @anio INT, @semestre INT   -- 1 o 2
+@listado INT
 AS
 BEGIN
 
+	-- 1. Proveedores con mayor porcentaje de descuento
+	
+	IF @listado = 1
+	
 	SELECT TOP 5 s.semestre_id as 'Semestre', @anio as 'Año', p.proveedor_id as 'Proveedor ID', p.proveedor_nombre_contacto as 'Nombre de contacto',
 				p.proveedor_mail as 'Mail', p.proveedor_cuit as 'CUIT', p.proveedor_rubro as 'Rubro', p.proveedor_rs as 'Razon social',
 		(100-AVG((o.oferta_precio_oferta * 100) / o.oferta_precio_lista)) as 'Porcentaje de Descuento'
@@ -2114,19 +2153,10 @@ BEGIN
 	GROUP BY p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs, s.semestre_id, p.proveedor_id
 	ORDER BY [Porcentaje de Descuento] DESC, p.proveedor_id ASC	-- El listado se debe ordenar en forma descendente por monto.
 
-END
-GO
-
--- Cabe aclarar que los campos a visualizar en la tabla del listado para las 2 consultas no son los mismos,
--- y al momento de seleccionar un tipo solo deben visualizarse las columnas pertinentes al tipo de listado elegido.
-
---22) 2. Proveedores con mayor facturacion
-
-CREATE PROCEDURE LIL_MIX.listadoEstadistico2
-@anio INT, @semestre INT   -- 1 o 2
-AS
-BEGIN
-
+	-- 2. Proveedores con mayor facturacion
+	
+	IF @listado = 2
+	
 	SELECT TOP 5 s.semestre_id as 'Semestre', @anio as 'Año', p.proveedor_id as 'ID del Proveedor', p.proveedor_nombre_contacto as 'Nombre de contacto',
 			p.proveedor_mail as 'Mail', p.proveedor_cuit as 'CUIT', p.proveedor_rubro as 'Rubro', p.proveedor_rs as 'Razon social',
 				SUM(f.factura_importe) as 'Total Facturado'
@@ -2141,6 +2171,9 @@ BEGIN
 
 END
 GO
+
+-- Cabe aclarar que los campos a visualizar en la tabla del listado para las 2 consultas no son los mismos,
+-- y al momento de seleccionar un tipo solo deben visualizarse las columnas pertinentes al tipo de listado elegido.
 
 
 -------------------------------::::::::::::::::::::::  TRIGGERS  ::::::::::::::::::::::----------------------------------
