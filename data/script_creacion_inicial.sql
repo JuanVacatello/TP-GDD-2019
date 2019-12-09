@@ -517,40 +517,34 @@ GO
 
 --                        Funcionalidades
 
--- 1) ABM ROL
+-- 1) Login y seguridad
+INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Login y seguridad')
+GO
+-- 2) ABM ROL
 INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('ABM de ROL')
 GO
--- 2) Registro de usuario
+-- 3) Registro de usuario
 INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Registro de Usuario')
 GO
--- 3) ABM CLIENTE.
+-- 4) ABM CLIENTE.
 INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('ABM de CLIENTE')
 GO
--- 4) ABM PROVEEDOR.
+-- 5) ABM PROVEEDOR.
 INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('ABM de PROVEEDOR')
 GO
--- 5) Carga de credito
+-- 6) Carga de credito
 INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Carga de credito')
 GO
--- 6) Cambio de contraseña
-INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Cambio de contraseña')
-GO
--- 7) Baja de usuario
-INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Baja de usuario')
+-- 7) Comprar oferta
+INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Comprar oferta')
 GO
 -- 8) Confeccion y publicacion de oferta
 INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Conf. y publ. de oferta')
 GO
--- 9) Comprar oferta
-INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Comprar oferta')
-GO
--- 10) Entrega
-INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Entrega')
-GO
--- 11) Facturacion a proveedor
+-- 9) Facturacion a proveedor
 INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Facturacion a proveedor')
 GO
--- 12) Listado Estadístico
+-- 10) Listado Estadístico
 INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Listado Estadistico')
 GO
 
@@ -569,6 +563,7 @@ GO
 
 -- Funciones Administrador
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,1)
+INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,2)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,3)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,4)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,5)
@@ -577,22 +572,31 @@ INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,7)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,8)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,9)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,10)
-INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,11)
-INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,12) --No sabemos quien tiene esa función
 GO
 
 -- Funciones Cliente
-INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,2)
-INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,5)
+INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,1)
+INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,3)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,6)
-INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,9)
+INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,7)
+INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,10)
 GO
 
 -- Funciones Proveedor
-INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (3,2)
-INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (3,6)
+INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (3,1)
+INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (3,3)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (3,8)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (3,10)
+GO
+
+-- Creacion del admnistrador general
+
+INSERT INTO LIL_MIX.usuario (usuario_nombre,usuario_password) 
+VALUES ('admin','w23e')
+GO
+
+INSERT INTO LIL_MIX.rolxusuario(rol_id,usuario_id) 
+VALUES (1,(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre ='admin'))
 GO
 
 --                        Formas de pago
