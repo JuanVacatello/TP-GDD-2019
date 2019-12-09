@@ -1003,7 +1003,7 @@ GO
 -- 5) CREAR USUARIO TIPO CLIENTE
 
 CREATE PROCEDURE LIL_MIX.altaUsuarioCliente
-@usuario_nombre VARCHAR(255), @usuario_password VARCHAR(255), @rol_nombre VARCHAR(30), -- Datos de usuario
+@usuario_nombre VARCHAR(255), @usuario_password VARCHAR(255), -- Datos de usuario
 @nombre VARCHAR(255), @apellido VARCHAR(255), @dni INT, @mail VARCHAR(255), @telefono INT, @fechanacimiento DATETIME,
 @codigopostal SMALLINT, @direccion_calle VARCHAR(255), @direccion_piso TINYINT, @direccion_dpto CHAR(1), @ciudad VARCHAR(255) -- Datos de cliente
 AS
@@ -1021,17 +1021,13 @@ BEGIN
 
 			THROW 50008, 'Nombre de usuario ya existe, intente con uno distinto.', 1
 
-		IF @rol_nombre NOT IN (SELECT rol_nombre FROM LIL_MIX.rol)
-			THROW 50009, 'El rol no existe, intente nuevamente.', 1
-
 		-- El password deberá almacenarse encriptado de forma irreversible bajo el algoritmo de encriptación SHA256.
 
 		INSERT INTO LIL_MIX.usuario (usuario_nombre, usuario_password, usuario_intentos)
 		VALUES (@usuario_nombre, HASHBYTES('SHA2_256', @usuario_password), 0)
 
 		INSERT INTO LIL_MIX.rolxusuario(rol_id, usuario_id)
-		VALUES ((SELECT rol_id FROM LIL_MIX.rol WHERE rol_nombre = @rol_nombre),
-			(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre))
+		VALUES (2, (SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre))
 
 		-- DATOS DE CLIENTE:
 
@@ -1068,7 +1064,7 @@ GO
 -- 6) CREAR USUARIO TIPO PROVEEDOR
 
 CREATE PROCEDURE LIL_MIX.altaUsuarioProveedor
-@usuario_nombre VARCHAR(255), @usuario_password VARCHAR(255), @rol_nombre VARCHAR(30), -- Datos de usuario
+@usuario_nombre VARCHAR(255), @usuario_password VARCHAR(255), -- Datos de usuario
 @nombre_de_usuario VARCHAR(255), @razon_social VARCHAR(255), @mail VARCHAR(255), @telefono INT, @cuit VARCHAR(13), @rubro VARCHAR(255),
 @nombre_contacto VARCHAR(255), @codigo_postal SMALLINT, @calle VARCHAR(255), @piso TINYINT, @dpto CHAR(1), @ciudad VARCHAR(255) -- Datos de proveedor
 AS
@@ -1086,17 +1082,13 @@ BEGIN
 
 			THROW 50011, 'Nombre de usuario ya existe, intente con uno distinto.', 1
 
-		IF @rol_nombre NOT IN (SELECT rol_nombre FROM LIL_MIX.rol)
-			THROW 50012, 'El rol no existe, intente nuevamente.', 1
-
 		-- El password deberá almacenarse encriptado de forma irreversible bajo el algoritmo de encriptación SHA256.
 
 		INSERT INTO LIL_MIX.usuario (usuario_nombre, usuario_password, usuario_intentos)
 		VALUES (@usuario_nombre, HASHBYTES('SHA2_256', @usuario_password), 0)
 
 		INSERT INTO LIL_MIX.rolxusuario(rol_id, usuario_id)
-		VALUES ((SELECT rol_id FROM LIL_MIX.rol WHERE rol_nombre = @rol_nombre),
-			(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre))
+		VALUES (3, (SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre))
 
 		-- DATOS DE PROVEEDOR:
 
