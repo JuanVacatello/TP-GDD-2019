@@ -319,6 +319,10 @@ IF OBJECT_ID('LIL_MIX.seleccionarListado') IS NOT NULL
 	DROP PROCEDURE LIL_MIX.seleccionarListado
 GO
 
+IF OBJECT_ID('LIL_MIX.proveedores') IS NOT NULL
+	DROP PROCEDURE LIL_MIX.proveedores
+GO
+
 -----DROPS TRIGGERS
 
 IF OBJECT_ID('LIL_MIX.noRepetirFuncionalidadesEnUnRol') IS NOT NULL
@@ -2055,11 +2059,19 @@ GO
 
 ------------------------------------- FACTURACION PROVEEDOR -------------------------------------------------
 
--- 19)
-
 -- Esta funcionalidad permite a un administrativo facturar a un proveedor todas las ofertas compradas por los clientes.
 -- Para ello ingresará el período de facturación por intervalos de fecha, se deberá seleccionar el proveedor
 -- y a continuación se listaran todos las ofertas que fueron adquiridas por los clientes.
+
+-- 19) 
+
+CREATE PROCEDURE LIL_MIX.proveedores
+AS
+BEGIN
+	SELECT * FROM LIL_MIX.proveedor
+END
+
+-- 20)
 
 CREATE PROCEDURE LIL_MIX.todasLasOfertasAdquiridas
 @fecha_inicio DATETIME , @fecha_fin DATETIME , @nombre_usuario_proveedor VARCHAR(255)
@@ -2073,7 +2085,7 @@ BEGIN
 END
 GO
 
--- 20)
+-- 21)
 
 CREATE PROCEDURE LIL_MIX.facturacionProveedor
 @fecha_inicio DATETIME , @fecha_fin DATETIME , @proveedor_cuit VARCHAR(13)
@@ -2120,7 +2132,7 @@ GO
 -- Dichas consultas son a nivel semestral, para lo cual la pantalla debe permitirnos selección el semestral a consultar.
 -- Además de ingresar el año a consultar, el sistema nos debe permitir seleccionar que tipo de listado se quiere visualizar.
 
---21) Seleccionar semestre
+--22) Seleccionar semestre
 
 CREATE PROCEDURE LIL_MIX.seleccionarSemestre
 AS
@@ -2128,7 +2140,7 @@ BEGIN
 	SELECT * FROM LIL_MIX.semestre
 END
 
---22) Seleccionar listado
+--23) Seleccionar listado
 
 CREATE PROCEDURE LIL_MIX.seleccionarListado
 AS
@@ -2136,7 +2148,7 @@ BEGIN
 	SELECT * FROM LIL_MIX.listadoEstadistico
 END
 
---23)
+--24)
 
 CREATE PROCEDURE LIL_MIX.listadoEstadistico
 @anio INT, @semestre INT   -- 1 o 2
