@@ -935,8 +935,8 @@ CREATE PROCEDURE LIL_MIX.login
 @usuario VARCHAR(255), @password_ingresada VARCHAR(255)
 AS
 BEGIN
-	DECLARE @password_del_usuario varchar(255),
-			@password_encriptada nvarchar(255),
+	DECLARE @password_del_usuario VARCHAR(255),
+			@password_encriptada VARCHAR(255),
 			@intentos tinyint,
 			@usuario_habilitado bit
 
