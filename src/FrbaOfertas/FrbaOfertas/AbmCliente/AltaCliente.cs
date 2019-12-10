@@ -12,9 +12,9 @@ using System.Windows.Forms;
 
 namespace FrbaOfertas.AbmCliente
 {
-    public partial class AltaCliente : Form
+    public partial class RegistroCliente : Form
     {
-        public AltaCliente()
+        public RegistroCliente()
         {
             InitializeComponent();
         }

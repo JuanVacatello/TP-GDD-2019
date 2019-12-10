@@ -44,7 +44,7 @@ namespace FrbaOfertas.AbmCliente
 
         private void btnAltaCliente_Click(object sender, EventArgs e)
         {
-            AltaCliente alta = new AltaCliente();
+            RegistroCliente alta = new RegistroCliente();
             alta.ShowDialog();
             if (alta.DialogResult == DialogResult.Yes){}
            // this.Close();

@@ -32,3 +32,36 @@ C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\Fr
 C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Login.loginAdm.resources
 C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Login.loginProv.resources
 C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Login.LoginSegun.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\bin\Debug\FrbaOfertas.exe.config
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.exe
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.pdb
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\bin\Debug\FrbaOfertas.exe
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\bin\Debug\FrbaOfertas.pdb
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.csprojResolveAssemblyReference.cache
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.ABMDeCliente.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.AltaCliente.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.BajaCliente.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.FiltradoModificacionCliente.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.ModificarCliente.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmProveedor.ABMDeProveedor.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmProveedor.AltaProveedor.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmProveedor.BajaProveedor.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmProveedor.FiltradoModificacionProveedor.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmProveedor.ModificarProveedor.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.ABM_de_Rol.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.AltaRol.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.BajaRol.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.ModificarRol.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.Seleccionar.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CragaCredito.Form1.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.OfertasVigentes.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.CrearOferta.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Facturar.ElegirFechayProveedor.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Facturar.Facturar.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.ListadoEstadistico.ListadoEstadistico.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Login.loginAdm.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.login.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Login.loginProv.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Login.LoginSegun.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Properties.Resources.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.csproj.GenerateResource.Cache

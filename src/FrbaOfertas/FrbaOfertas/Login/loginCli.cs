@@ -39,5 +39,13 @@ namespace FrbaOfertas
             MessageBox.Show("Login exitoso");
             cn.Close();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            AbmCliente.RegistroCliente cli = new AbmCliente.RegistroCliente();
+            cli.ShowDialog();
+            if (cli.DialogResult == DialogResult.Yes)
+            { }
+        }
     }
 }

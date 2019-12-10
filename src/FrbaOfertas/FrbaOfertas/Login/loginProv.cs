@@ -39,5 +39,13 @@ namespace FrbaOfertas.Login
             MessageBox.Show("Login exitoso");
             cn.Close();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Login.AltaProveedor prov = new AbmProveedor.AltaProveedor();
+            prov.ShowDialog();
+            if (prov.DialogResult == DialogResult.Yes)
+            { }
+        }
     }
 }

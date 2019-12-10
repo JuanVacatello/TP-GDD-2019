@@ -54,8 +54,9 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(104, 23);
             this.button2.TabIndex = 14;
-            this.button2.Text = "Como usuario";
+            this.button2.Text = "Como proveedor";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
