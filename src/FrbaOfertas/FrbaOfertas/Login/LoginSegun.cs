@@ -20,25 +20,24 @@ namespace FrbaOfertas.Login
         private void button1_Click(object sender, EventArgs e)
         {
             loginAdm adm = new loginAdm();
-            adm.ShowDialog();
-            if (adm.DialogResult == DialogResult.Yes)
-            { }
+            this.Hide(); 
+            adm.Show();
+              
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             login cli = new login();
-            cli.ShowDialog();
-            if (cli.DialogResult == DialogResult.Yes)
-            { }
+            this.Hide();
+            cli.Show();
+            
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             loginProv prov = new loginProv();
-            prov.ShowDialog();
-            if (prov.DialogResult == DialogResult.Yes)
-            { }
+            this.Hide();
+            prov.Show();
         }
     }
 }

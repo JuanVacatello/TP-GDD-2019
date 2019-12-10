@@ -112,8 +112,9 @@
             this.button2.TabIndex = 8;
             this.button2.Text = "Atrás";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // Facturar
+            // ElegirFechayProveedor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -127,7 +128,7 @@
             this.Controls.Add(this.monthCalendar1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "Facturar";
+            this.Name = "ElegirFechayProveedor";
             this.Text = "Facturacion";
             this.ResumeLayout(false);
             this.PerformLayout();

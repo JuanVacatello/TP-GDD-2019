@@ -20,23 +20,29 @@ namespace FrbaOfertas.AbmProveedor
         private void button1_Click(object sender, EventArgs e)
         {
             AltaProveedor alta = new AltaProveedor();
-            alta.ShowDialog();
-            if (alta.DialogResult == DialogResult.Yes) { }
+            alta.Show();
+            this.Hide();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             BajaProveedor baja = new BajaProveedor();
-            baja.ShowDialog();
-            if (baja.DialogResult == DialogResult.Yes)
-            { }
+            baja.Show();
+            this.Hide();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             FiltradoModificacionProveedor modi = new FiltradoModificacionProveedor();
-            modi.ShowDialog();
-            if (modi.DialogResult == DialogResult.Yes) { }
+            modi.Show();
+            this.Hide();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            FuncionalidadesRol.FuncionalidadesAdmin adm = new FuncionalidadesRol.FuncionalidadesAdmin();
+            adm.Show();
+            this.Hide();
         }
     }
 }

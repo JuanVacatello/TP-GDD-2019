@@ -45,28 +45,29 @@ namespace FrbaOfertas.AbmCliente
         private void btnAltaCliente_Click(object sender, EventArgs e)
         {
             RegistroCliente alta = new RegistroCliente();
-            alta.ShowDialog();
-            if (alta.DialogResult == DialogResult.Yes){}
-           // this.Close();
+            this.Hide();
+            alta.Show();
         }
 
         private void btnBajaCliente_Click(object sender, EventArgs e)
         {
-           // this.Close();
             BajaCliente baja = new BajaCliente();
-            baja.ShowDialog();
-            if (baja.DialogResult == DialogResult.Yes)
-            { }
+            this.Hide();
+            baja.Show();
         }
 
         private void btnModificarCliente_Click(object sender, EventArgs e)
         {
-           // this.Close();
             FiltradoModificacionCliente modi = new FiltradoModificacionCliente();
-            modi.ShowDialog();
-            if (modi.DialogResult == DialogResult.Yes)
-            {
-            }
+            this.Hide();
+            modi.Show();
+        }
+
+        private void button1_Click_3(object sender, EventArgs e)
+        {
+            FuncionalidadesRol.FuncionalidadesAdmin funcadm = new FuncionalidadesRol.FuncionalidadesAdmin();
+            this.Hide();
+            funcadm.Show();
         }
     }
 }

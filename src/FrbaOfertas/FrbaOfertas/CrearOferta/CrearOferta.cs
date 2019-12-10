@@ -16,5 +16,13 @@ namespace FrbaOfertas.CrearOferta
         {
             InitializeComponent();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            FuncionalidadesRol.FuncionalidadesAdmin cre = new FuncionalidadesRol.FuncionalidadesAdmin();
+            this.Hide();
+            cre.Show();
+
+        }
     }
 }

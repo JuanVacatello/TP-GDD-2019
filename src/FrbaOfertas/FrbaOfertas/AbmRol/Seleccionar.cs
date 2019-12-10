@@ -24,7 +24,9 @@ namespace FrbaOfertas.AbmRol
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            ABM_de_Rol abmrol = new ABM_de_Rol();
+            this.Hide();
+            abmrol.Show();
         }
     }
 }

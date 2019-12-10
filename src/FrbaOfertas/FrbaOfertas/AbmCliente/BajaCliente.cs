@@ -19,12 +19,9 @@ namespace FrbaOfertas.AbmCliente
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.Close();
             ABMDeCliente abm = new ABMDeCliente();
-            abm.ShowDialog();
-            if (abm.DialogResult == DialogResult.Yes)
-            {
-            }
+            this.Hide();
+            abm.Show();
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)

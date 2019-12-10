@@ -26,5 +26,12 @@ namespace FrbaOfertas.AbmRol
         {
 
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Seleccionar selec = new Seleccionar();
+            this.Hide();
+            selec.Show();
+        }
     }
 }

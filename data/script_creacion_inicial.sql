@@ -812,7 +812,7 @@ GO
 CREATE PROCEDURE LIL_MIX.listadoRol
 AS
 BEGIN
-	SELECT rol_nombre FROM LIL_MIX.rol
+	SELECT rol_nombre FROM LIL_MIX.rol WHERE rol_habilitado = 1
 END
 GO
 

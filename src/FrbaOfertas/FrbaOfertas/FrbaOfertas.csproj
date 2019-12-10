@@ -135,17 +135,24 @@
     <Compile Include="AbmRol\Seleccionar.Designer.cs">
       <DependentUpon>Seleccionar.cs</DependentUpon>
     </Compile>
+    <Compile Include="CargaDeCredito\CargaCredito.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CargaDeCredito\CargaCredito.Designer.cs">
+      <DependentUpon>CargaCredito.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CargaDeCredito\CargaCreditoCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CargaDeCredito\CargaCreditoCliente.Designer.cs">
+      <DependentUpon>CargaCreditoCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Class1.cs" />
     <Compile Include="ComprarOferta\OfertasVigentes.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ComprarOferta\OfertasVigentes.Designer.cs">
       <DependentUpon>OfertasVigentes.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CargaCredito\CargaCredito.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CargaCredito\CargaCredito.Designer.cs">
-      <DependentUpon>CargaCredito.cs</DependentUpon>
     </Compile>
     <Compile Include="CrearOferta\CrearOferta.cs">
       <SubType>Form</SubType>
@@ -170,6 +177,29 @@
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\FuncionalidadesAdmin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\FuncionalidadesAdmin.Designer.cs">
+      <DependentUpon>FuncionalidadesAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\FuncionalidadesCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\FuncionalidadesCliente.Designer.cs">
+      <DependentUpon>FuncionalidadesCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\FuncionalidadesProveedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\FuncionalidadesProveedor.Designer.cs">
+      <DependentUpon>FuncionalidadesProveedor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GD2C2019DataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GD2C2019DataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="Interface1.cs" />
     <Compile Include="ListadoEstadistico\ListadoEstadistico.cs">
@@ -201,6 +231,18 @@
     </Compile>
     <Compile Include="Login\LoginSegun.Designer.cs">
       <DependentUpon>LoginSegun.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\RegistrarCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\RegistrarCliente.Designer.cs">
+      <DependentUpon>RegistrarCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\RegistrarProveedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\RegistrarProveedor.Designer.cs">
+      <DependentUpon>RegistrarProveedor.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -249,8 +291,11 @@
     <EmbeddedResource Include="AbmRol\Seleccionar.resx">
       <DependentUpon>Seleccionar.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CargaCredito\CargaCredito.resx">
+    <EmbeddedResource Include="CargaDeCredito\CargaCredito.resx">
       <DependentUpon>CargaCredito.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CargaDeCredito\CargaCreditoCliente.resx">
+      <DependentUpon>CargaCreditoCliente.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ComprarOferta\OfertasVigentes.resx">
       <DependentUpon>OfertasVigentes.cs</DependentUpon>
@@ -263,6 +308,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Facturar\Facturar.resx">
       <DependentUpon>Facturar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FuncionalidadesRol\FuncionalidadesAdmin.resx">
+      <DependentUpon>FuncionalidadesAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FuncionalidadesRol\FuncionalidadesCliente.resx">
+      <DependentUpon>FuncionalidadesCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FuncionalidadesRol\FuncionalidadesProveedor.resx">
+      <DependentUpon>FuncionalidadesProveedor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ListadoEstadistico\ListadoEstadistico.resx">
       <DependentUpon>ListadoEstadistico.cs</DependentUpon>
@@ -279,6 +333,12 @@
     <EmbeddedResource Include="Login\LoginSegun.resx">
       <DependentUpon>LoginSegun.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Login\RegistrarCliente.resx">
+      <DependentUpon>RegistrarCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\RegistrarProveedor.resx">
+      <DependentUpon>RegistrarProveedor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -288,6 +348,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="GD2C2019DataSet.xsc">
+      <DependentUpon>GD2C2019DataSet.xsd</DependentUpon>
+    </None>
+    <None Include="GD2C2019DataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>GD2C2019DataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="GD2C2019DataSet.xss">
+      <DependentUpon>GD2C2019DataSet.xsd</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

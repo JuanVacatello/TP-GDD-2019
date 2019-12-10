@@ -16,5 +16,12 @@ namespace FrbaOfertas.Facturar
         {
             InitializeComponent();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            FuncionalidadesRol.FuncionalidadesAdmin fun = new FuncionalidadesRol.FuncionalidadesAdmin();
+            this.Hide();
+            fun.Show();
+        }
     }
 }

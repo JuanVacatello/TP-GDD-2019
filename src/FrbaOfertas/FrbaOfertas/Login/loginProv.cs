@@ -22,9 +22,8 @@ namespace FrbaOfertas.Login
         private void button3_Click(object sender, EventArgs e)
         {
             LoginSegun log = new LoginSegun();
-            log.ShowDialog();
-            if (log.DialogResult == DialogResult.Yes)
-            { }
+            this.Hide();
+            log.Show();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -37,15 +36,19 @@ namespace FrbaOfertas.Login
             cn.Open();
             query.ExecuteNonQuery();
             MessageBox.Show("Login exitoso");
+
+            FuncionalidadesRol.FuncionalidadesProveedor funpro = new FuncionalidadesRol.FuncionalidadesProveedor();
+            this.Hide();
+            funpro.Show();
+
             cn.Close();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //Login.AltaProveedor prov = new AbmProveedor.AltaProveedor();
-         //   prov.ShowDialog();
-          //  if (prov.DialogResult == DialogResult.Yes)
-            { }
+            Login.RegistrarProveedor prov = new Login.RegistrarProveedor();
+            this.Hide();
+            prov.Show();
         }
     }
 }

@@ -22,10 +22,9 @@ namespace FrbaOfertas.AbmCliente
         private void btnAtras_Click(object sender, EventArgs e)
         {
             ABMDeCliente abm = new ABMDeCliente();
-            abm.ShowDialog();
-            if (abm.DialogResult == DialogResult.Yes)
-            {
-            }
+            this.Hide();
+            abm.Show();
+           
         }
 
         /* private void CargarFiltro()

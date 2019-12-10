@@ -8,23 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaOfertas.CragaCredito
+namespace FrbaOfertas.FuncionalidadesRol
 {
-    public partial class Form1 : Form
+    public partial class FuncionalidadesProveedor : Form
     {
-        public Form1()
+        public FuncionalidadesProveedor()
         {
             InitializeComponent();
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void button4_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
+            this.Close();
         }
     }
 }

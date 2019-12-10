@@ -28,21 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button4 = new System.Windows.Forms.Button();
+            this.btnAtras = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnModificarRol = new System.Windows.Forms.Button();
+            this.btnBajaRol = new System.Windows.Forms.Button();
+            this.btnAltaRol = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // button4
+            // btnAtras
             // 
-            this.button4.Location = new System.Drawing.Point(202, 165);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 3;
-            this.button4.Text = "Atrás";
-            this.button4.UseVisualStyleBackColor = true;
+            this.btnAtras.Location = new System.Drawing.Point(202, 165);
+            this.btnAtras.Name = "btnAtras";
+            this.btnAtras.Size = new System.Drawing.Size(75, 23);
+            this.btnAtras.TabIndex = 3;
+            this.btnAtras.Text = "Atrás";
+            this.btnAtras.UseVisualStyleBackColor = true;
+            this.btnAtras.Click += new System.EventHandler(this.btnAtras_Click);
             // 
             // label1
             // 
@@ -53,44 +54,47 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "¿Qué desea hacer?";
             // 
-            // button3
+            // btnModificarRol
             // 
-            this.button3.Location = new System.Drawing.Point(353, 75);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(124, 61);
-            this.button3.TabIndex = 10;
-            this.button3.Text = "Modificar Rol";
-            this.button3.UseVisualStyleBackColor = true;
+            this.btnModificarRol.Location = new System.Drawing.Point(353, 75);
+            this.btnModificarRol.Name = "btnModificarRol";
+            this.btnModificarRol.Size = new System.Drawing.Size(124, 61);
+            this.btnModificarRol.TabIndex = 10;
+            this.btnModificarRol.Text = "Modificar Rol";
+            this.btnModificarRol.UseVisualStyleBackColor = true;
+            this.btnModificarRol.Click += new System.EventHandler(this.button3_Click);
             // 
-            // button2
+            // btnBajaRol
             // 
-            this.button2.Location = new System.Drawing.Point(184, 75);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(124, 61);
-            this.button2.TabIndex = 9;
-            this.button2.Text = "Baja Rol";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnBajaRol.Location = new System.Drawing.Point(184, 75);
+            this.btnBajaRol.Name = "btnBajaRol";
+            this.btnBajaRol.Size = new System.Drawing.Size(124, 61);
+            this.btnBajaRol.TabIndex = 9;
+            this.btnBajaRol.Text = "Baja Rol";
+            this.btnBajaRol.UseVisualStyleBackColor = true;
+            this.btnBajaRol.Click += new System.EventHandler(this.btnBajaRol_Click);
             // 
-            // button1
+            // btnAltaRol
             // 
-            this.button1.Location = new System.Drawing.Point(17, 75);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(124, 61);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Alta Rol";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnAltaRol.Location = new System.Drawing.Point(17, 75);
+            this.btnAltaRol.Name = "btnAltaRol";
+            this.btnAltaRol.Size = new System.Drawing.Size(124, 61);
+            this.btnAltaRol.TabIndex = 8;
+            this.btnAltaRol.Text = "Alta Rol";
+            this.btnAltaRol.UseVisualStyleBackColor = true;
+            this.btnAltaRol.Click += new System.EventHandler(this.button1_Click);
             // 
             // ABM_de_Rol
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ClientSize = new System.Drawing.Size(494, 211);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnModificarRol);
+            this.Controls.Add(this.btnBajaRol);
+            this.Controls.Add(this.btnAltaRol);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.button4);
+            this.Controls.Add(this.btnAtras);
             this.Name = "ABM_de_Rol";
             this.Text = "ABM_de_Rol";
             this.ResumeLayout(false);
@@ -100,10 +104,10 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button btnAtras;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnModificarRol;
+        private System.Windows.Forms.Button btnBajaRol;
+        private System.Windows.Forms.Button btnAltaRol;
     }
 }

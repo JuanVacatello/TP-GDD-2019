@@ -156,8 +156,9 @@
             this.button2.TabIndex = 13;
             this.button2.Text = "Atrás";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // Form1
+            // CrearOferta
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -176,7 +177,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
-            this.Name = "Form1";
+            this.Name = "CrearOferta";
             this.Text = "ConfeccionOferta";
             this.ResumeLayout(false);
             this.PerformLayout();
