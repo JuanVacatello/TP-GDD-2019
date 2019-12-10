@@ -596,8 +596,9 @@ GO
 -- Creacion del admnistrador general
 
 INSERT INTO LIL_MIX.usuario (usuario_nombre,usuario_password)
-VALUES ('admin','w23e')
+VALUES ('admin',HASHBYTES('SHA2_256', 'w23e'))
 GO
+
 
 INSERT INTO LIL_MIX.rolxusuario(rol_id,usuario_id)
 VALUES (1,(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre ='admin'))

@@ -39,7 +39,6 @@ C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\bin\D
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\bin\Debug\FrbaOfertas.pdb
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.csprojResolveAssemblyReference.cache
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.ABMDeCliente.resources
-C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.AltaCliente.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.BajaCliente.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.FiltradoModificacionCliente.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.ModificarCliente.resources
@@ -66,4 +65,3 @@ C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\D
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Properties.Resources.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.csproj.GenerateResource.Cache
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.RegistroCliente.resources
-
