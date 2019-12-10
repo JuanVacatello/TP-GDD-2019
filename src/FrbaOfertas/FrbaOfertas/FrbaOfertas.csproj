@@ -178,11 +178,29 @@
     <Compile Include="ListadoEstadistico\ListadoEstadistico.Designer.cs">
       <DependentUpon>ListadoEstadistico.cs</DependentUpon>
     </Compile>
-    <Compile Include="login.cs">
+    <Compile Include="Login\loginAdm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="login.Designer.cs">
-      <DependentUpon>login.cs</DependentUpon>
+    <Compile Include="Login\loginAdm.Designer.cs">
+      <DependentUpon>loginAdm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\loginCli.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\loginCli.Designer.cs">
+      <DependentUpon>loginCli.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\loginProv.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\loginProv.Designer.cs">
+      <DependentUpon>loginProv.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login\LoginSegun.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login\LoginSegun.Designer.cs">
+      <DependentUpon>LoginSegun.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -249,8 +267,17 @@
     <EmbeddedResource Include="ListadoEstadistico\ListadoEstadistico.resx">
       <DependentUpon>ListadoEstadistico.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="login.resx">
-      <DependentUpon>login.cs</DependentUpon>
+    <EmbeddedResource Include="Login\loginAdm.resx">
+      <DependentUpon>loginAdm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\loginCli.resx">
+      <DependentUpon>loginCli.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\loginProv.resx">
+      <DependentUpon>loginProv.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login\LoginSegun.resx">
+      <DependentUpon>LoginSegun.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -21,5 +21,12 @@ namespace FrbaOfertas.AbmProveedor
         {
 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ABMDeProveedor abm = new ABMDeProveedor();
+            abm.ShowDialog();
+            if (abm.DialogResult == DialogResult.Yes) { }
+        }
     }
 }
