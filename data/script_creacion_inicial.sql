@@ -1065,7 +1065,7 @@ GO
 
 CREATE PROCEDURE LIL_MIX.altaUsuarioProveedor
 @usuario_nombre VARCHAR(255), @usuario_password VARCHAR(255), -- Datos de usuario
-@nombre_de_usuario VARCHAR(255), @razon_social VARCHAR(255), @mail VARCHAR(255), @telefono INT, @cuit VARCHAR(13), @rubro VARCHAR(255),
+@razon_social VARCHAR(255), @mail VARCHAR(255), @telefono INT, @cuit VARCHAR(13), @rubro VARCHAR(255),
 @nombre_contacto VARCHAR(255), @codigo_postal SMALLINT, @calle VARCHAR(255), @piso TINYINT, @dpto CHAR(1), @ciudad VARCHAR(255) -- Datos de proveedor
 AS
 BEGIN
