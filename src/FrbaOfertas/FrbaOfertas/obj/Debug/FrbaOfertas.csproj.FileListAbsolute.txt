@@ -12,7 +12,6 @@ C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\Fr
 C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.BajaCliente.resources
 C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.FiltradoModificacionCliente.resources
 C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.ModificarCliente.resources
-C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmProveedor.Form1.resources
 C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmProveedor.AltaProveedor.resources
 C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmProveedor.BajaProveedor.resources
 C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmProveedor.FiltradoModificacionProveedor.resources
@@ -29,3 +28,7 @@ C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\Fr
 C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.login.resources
 C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.AltaCliente.resources
 C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmCliente.ABMDeCliente.resources
+C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmProveedor.ABMDeProveedor.resources
+C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Login.loginAdm.resources
+C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Login.loginProv.resources
+C:\Users\Leonardo\Desktop\TP GDD\Aplicacion\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Login.LoginSegun.resources

@@ -16,11 +16,14 @@ namespace FrbaOfertas
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AbmCliente.ABMDeCliente());
+           Application.Run(new Login.LoginSegun());
+        //   Application.Run(new AbmCliente.ABMDeCliente());
+           // Application.Run(new AbmProveedor.ABMDeProveedor());
             //Application.Run(new AbmCliente.AltaCliente());
            // Application.Run(new AbmCliente.BajaCliente());
            // Application.Run(new AbmCliente.FiltradoModificacionCliente());
            // Application.Run(new AbmCliente.ModificarCliente());
+
         }
     }
 }

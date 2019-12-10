@@ -28,62 +28,80 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.dataGridFiltradoClientes = new System.Windows.Forms.DataGridView();
+            this.NombreCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NombreUsuario = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Seleccionar = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.txtDni = new System.Windows.Forms.TextBox();
+            this.txtMail = new System.Windows.Forms.TextBox();
+            this.txtApellido = new System.Windows.Forms.TextBox();
+            this.txtNombre = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.btnAtras = new System.Windows.Forms.Button();
-            this.NombreCliente = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NombreUsuario = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Seleccionar = new System.Windows.Forms.DataGridViewButtonColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridFiltradoClientes)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // dataGridFiltradoClientes
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridFiltradoClientes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridFiltradoClientes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.NombreCliente,
             this.NombreUsuario,
             this.Seleccionar});
-            this.dataGridView1.Location = new System.Drawing.Point(65, 107);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(544, 150);
-            this.dataGridView1.TabIndex = 27;
+            this.dataGridFiltradoClientes.Location = new System.Drawing.Point(65, 107);
+            this.dataGridFiltradoClientes.Name = "dataGridFiltradoClientes";
+            this.dataGridFiltradoClientes.Size = new System.Drawing.Size(544, 150);
+            this.dataGridFiltradoClientes.TabIndex = 27;
             // 
-            // textBox4
+            // NombreCliente
             // 
-            this.textBox4.Location = new System.Drawing.Point(461, 71);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 20);
-            this.textBox4.TabIndex = 26;
+            this.NombreCliente.HeaderText = "Nombre del cliente";
+            this.NombreCliente.Name = "NombreCliente";
+            this.NombreCliente.Width = 200;
             // 
-            // textBox3
+            // NombreUsuario
             // 
-            this.textBox3.Location = new System.Drawing.Point(337, 71);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 25;
+            this.NombreUsuario.HeaderText = "Nombre de usuario del cliente";
+            this.NombreUsuario.Name = "NombreUsuario";
+            this.NombreUsuario.Width = 200;
             // 
-            // textBox2
+            // Seleccionar
             // 
-            this.textBox2.Location = new System.Drawing.Point(205, 71);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 24;
+            this.Seleccionar.HeaderText = "Seleccionar";
+            this.Seleccionar.Name = "Seleccionar";
+            this.Seleccionar.Text = "Sí";
             // 
-            // textBox1
+            // txtDni
             // 
-            this.textBox1.Location = new System.Drawing.Point(75, 71);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 23;
+            this.txtDni.Location = new System.Drawing.Point(461, 71);
+            this.txtDni.Name = "txtDni";
+            this.txtDni.Size = new System.Drawing.Size(100, 20);
+            this.txtDni.TabIndex = 26;
+            // 
+            // txtMail
+            // 
+            this.txtMail.Location = new System.Drawing.Point(337, 71);
+            this.txtMail.Name = "txtMail";
+            this.txtMail.Size = new System.Drawing.Size(100, 20);
+            this.txtMail.TabIndex = 25;
+            // 
+            // txtApellido
+            // 
+            this.txtApellido.Location = new System.Drawing.Point(205, 71);
+            this.txtApellido.Name = "txtApellido";
+            this.txtApellido.Size = new System.Drawing.Size(100, 20);
+            this.txtApellido.TabIndex = 24;
+            // 
+            // txtNombre
+            // 
+            this.txtNombre.Location = new System.Drawing.Point(75, 71);
+            this.txtNombre.Name = "txtNombre";
+            this.txtNombre.Size = new System.Drawing.Size(100, 20);
+            this.txtNombre.TabIndex = 23;
             // 
             // label5
             // 
@@ -140,34 +158,16 @@
             this.btnAtras.UseVisualStyleBackColor = true;
             this.btnAtras.Click += new System.EventHandler(this.btnAtras_Click);
             // 
-            // NombreCliente
-            // 
-            this.NombreCliente.HeaderText = "Nombre del cliente";
-            this.NombreCliente.Name = "NombreCliente";
-            this.NombreCliente.Width = 200;
-            // 
-            // NombreUsuario
-            // 
-            this.NombreUsuario.HeaderText = "Nombre de usuario del cliente";
-            this.NombreUsuario.Name = "NombreUsuario";
-            this.NombreUsuario.Width = 200;
-            // 
-            // Seleccionar
-            // 
-            this.Seleccionar.HeaderText = "Seleccionar";
-            this.Seleccionar.Name = "Seleccionar";
-            this.Seleccionar.Text = "Sí";
-            // 
             // FiltradoModificacionCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(674, 304);
-            this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.dataGridFiltradoClientes);
+            this.Controls.Add(this.txtDni);
+            this.Controls.Add(this.txtMail);
+            this.Controls.Add(this.txtApellido);
+            this.Controls.Add(this.txtNombre);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -176,7 +176,8 @@
             this.Controls.Add(this.btnAtras);
             this.Name = "FiltradoModificacionCliente";
             this.Text = "FiltradoModificacionCliente";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            //this.Load += new System.EventHandler(this.FiltradoModificacionCliente_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridFiltradoClientes)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -184,11 +185,11 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.DataGridView dataGridFiltradoClientes;
+        private System.Windows.Forms.TextBox txtDni;
+        private System.Windows.Forms.TextBox txtMail;
+        private System.Windows.Forms.TextBox txtApellido;
+        private System.Windows.Forms.TextBox txtNombre;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
