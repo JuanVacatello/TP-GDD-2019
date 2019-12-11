@@ -412,15 +412,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-    <None Include="Resources\Leo.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\lenovo-computer-images-156070.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\627485.jpg" />
-=======
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
@@ -436,7 +427,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
->>>>>>> 71a875f7d153f3c29a5b16b89b14feb8ad2818ea
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
