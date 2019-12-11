@@ -27,6 +27,50 @@ namespace FrbaOfertas.AbmCliente
            
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            DataTable dt = new DataTable();
+            dt.Clear();
+            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
+            string query = "select * from LIL_MIX.cliente";
+
+            if (txtNombre.Text.ToString() != "")
+            {
+                query += " where cliente_nombre LIKE '%'" + this.txtNombre.Text + "'%'";
+            }
+
+            if (txtApellido.Text.ToString() != "")
+            {
+                query += " and cliente_apellido LIKE '%'" + this.txtApellido.Text + "'%'";
+            }
+
+            if (txtDni.Text.ToString() != "")
+            {
+                query += " and cliente_dni = " + this.txtDni.Text;
+            }
+
+            if (txtMail.Text.ToString() != "")
+            {
+                query += " and cliente_mail LIKE '%'" + this.txtMail.Text + "'%'";
+            }
+            
+            
+            SqlCommand cmd = new SqlCommand(query, cn);
+            SqlDataAdapter da = new SqlDataAdapter();
+            da.SelectCommand = cmd;
+            cn.Open();
+            da.Fill(dt);
+            dataGridView1.DataSource = dt;
+            dataGridView1.ReadOnly = true;
+            cn.Close();
+            
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
         /* private void CargarFiltro()
          {
 

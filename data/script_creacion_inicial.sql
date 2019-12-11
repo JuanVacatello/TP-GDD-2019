@@ -2149,6 +2149,8 @@ GO
 
 --24)
 
+--Error de conversión al convertir el valor varchar '01-01-' al tipo de datos int.
+
 CREATE PROCEDURE LIL_MIX.crearListadoEstadistico
 @anio INT, @semestre INT,   -- 1 o 2
 @listado INT
@@ -2164,7 +2166,7 @@ BEGIN
 		(100-AVG((o.oferta_precio_oferta * 100) / o.oferta_precio_lista)) as 'Porcentaje de Descuento'
 	FROM LIL_MIX.proveedor p JOIN LIL_MIX.oferta o ON (o.oferta_proveedor_id = p.proveedor_id), LIL_MIX.semestre s
 	WHERE s.semestre_id = @semestre AND
-		o.oferta_fecha_publicacion BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103)
+		o.oferta_fecha_publicacion BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+ CONVERT(VARCHAR,@anio), 103) AND CONVERT(DATETIME, s.semestre_fecha_fin+'-'+CONVERT(VARCHAR,@anio), 103)
 	GROUP BY p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs, s.semestre_id, p.proveedor_id
 	ORDER BY [Porcentaje de Descuento] DESC, p.proveedor_id ASC	-- El listado se debe ordenar en forma descendente por monto.
 
