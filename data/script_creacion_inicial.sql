@@ -1230,22 +1230,37 @@ CREATE PROCEDURE LIL_MIX.listadoClientes
 @nombre VARCHAR(255), @apellido VARCHAR(255), @dni INT, @email VARCHAR(255)
 AS
 BEGIN
-	SELECT c.cliente_dni as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
-	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
-	WHERE c.cliente_dni = @dni
+	-- Probamos con ifs todas las combinaciones posibles
 
-	SELECT c.cliente_nombre as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
-	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
-	WHERE c.cliente_nombre LIKE '%'+@nombre+'%'
+	IF (@dni != NULL)
+		SELECT * FROM LIL_MIX.cliente WHERE cliente_dni = @dni --Hay un solo cliente con ese DNI
 
-	SELECT c.cliente_apellido as 'Apellido del cliente', u.usuario_nombre as 'Nombre de usuario'
-	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
-	WHERE c.cliente_apellido LIKE '%'+@apellido+'%'
+	IF (@dni = NULL AND @nombre != NULL AND @apellido != NULL AND @email != NULL)
+		SELECT * FROM LIL_MIX.cliente WHERE cliente_nombre LIKE '%'+@nombre+'%' AND 
+							cliente_apellido LIKE '%'+@apellido+'%' AND cliente_mail LIKE '%'+@email+'%'
 
-	SELECT c.cliente_mail as 'Apellido del cliente', u.usuario_nombre as 'Nombre de usuario'
-	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
-	WHERE c.cliente_mail LIKE '%'+@email+'%'
+	IF (@dni = NULL AND @nombre = NULL AND @apellido != NULL AND @email != NULL)
+		SELECT * FROM LIL_MIX.cliente WHERE cliente_apellido LIKE '%'+@apellido+'%' AND cliente_mail LIKE '%'+@email+'%'
 
+	IF (@dni = NULL AND @nombre != NULL AND @apellido = NULL AND @email != NULL)
+		SELECT * FROM LIL_MIX.cliente WHERE cliente_nombre LIKE '%'+@nombre+'%' AND cliente_mail LIKE '%'+@email+'%'
+
+	IF (@dni = NULL AND @nombre != NULL AND @apellido != NULL AND @email = NULL)
+		SELECT * FROM LIL_MIX.cliente WHERE cliente_nombre LIKE '%'+@nombre+'%' AND cliente_apellido LIKE '%'+@apellido+'%'
+
+	IF (@dni = NULL AND @nombre = NULL AND @apellido = NULL AND @email != NULL)
+		SELECT * FROM LIL_MIX.cliente WHERE cliente_mail LIKE '%'+@email+'%'
+
+	IF (@dni = NULL AND @nombre = NULL AND @apellido != NULL AND @email = NULL)
+		SELECT * FROM LIL_MIX.cliente WHERE cliente_apellido LIKE '%'+@apellido+'%'
+
+	IF (@dni = NULL AND @nombre != NULL AND @apellido = NULL AND @email = NULL)
+		SELECT * FROM LIL_MIX.cliente WHERE cliente_nombre LIKE '%'+@nombre+'%'
+
+	-- Si no ingresa nada, mostramos todos los clientes, sin filtros
+
+	IF (@dni = NULL AND @nombre = NULL AND @apellido = NULL AND @email = NULL)
+		SELECT * FROM LIL_MIX.cliente
 END
 GO
 
@@ -1502,18 +1517,24 @@ CREATE PROCEDURE LIL_MIX.listadoProveedores
 @razonsocial VARCHAR(255), @cuit VARCHAR(13), @mail VARCHAR(255)
 AS
 BEGIN
-	SELECT p.proveedor_rs as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
-	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (u.usuario_id = p.proveedor_usuario_id)
-	WHERE p.proveedor_rs LIKE '%'+@razonsocial+'%'
+	-- Probamos con ifs todas las combinaciones posibles
 
-	SELECT p.proveedor_mail as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
-	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (u.usuario_id = p.proveedor_usuario_id)
-	WHERE p.proveedor_mail LIKE '%'+@mail+'%'
+	IF (@cuit != NULL)
+		SELECT * FROM LIL_MIX.proveedor WHERE proveedor_cuit = @cuit -- Hay un único proveedor con dicho cuit
 
-	SELECT p.proveedor_cuit as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
-	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (u.usuario_id = p.proveedor_usuario_id)
-	WHERE p.proveedor_cuit = @cuit
+	IF (@cuit = NULL AND @razonsocial != NULL AND @mail != NULL)
+		SELECT * FROM LIL_MIX.proveedor WHERE proveedor_rs LIKE '%'+@razonsocial+'%' AND proveedor_mail LIKE '%'+@mail+'%'
 
+	IF (@cuit = NULL AND @razonsocial = NULL AND @mail != NULL)
+		SELECT * FROM LIL_MIX.proveedor WHERE proveedor_mail LIKE '%'+@mail+'%'
+
+	IF (@cuit = NULL AND @razonsocial != NULL AND @mail = NULL)
+		SELECT * FROM LIL_MIX.proveedor WHERE proveedor_rs LIKE '%'+@razonsocial+'%'
+
+	-- Si no ingresa nada, mostramos todos los clientes, sin filtros
+
+	IF (@cuit = NULL AND @razonsocial = NULL AND @mail = NULL)
+		SELECT * FROM LIL_MIX.proveedor	
 END
 GO
 
