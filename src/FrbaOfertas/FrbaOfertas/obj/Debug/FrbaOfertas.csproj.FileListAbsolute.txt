@@ -105,3 +105,7 @@ C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\D
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CargaDeCredito.CargaCreditoCliente.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.ConfeccionOfertaProve.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.CambiarContraCli.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.AgregarRolAUsuario.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.CambiarContraAdmin.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.CambiarContraProv.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.DarDeBajaUsuario.resources

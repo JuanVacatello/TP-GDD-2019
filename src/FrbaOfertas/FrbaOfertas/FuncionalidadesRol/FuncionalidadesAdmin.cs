@@ -85,5 +85,12 @@ namespace FrbaOfertas.FuncionalidadesRol
             this.Hide();
             us.Show();
         }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            AgregarRolAUsuario ag = new AgregarRolAUsuario();
+            this.Hide();
+            ag.Show();
+        }
     }
 }

@@ -812,7 +812,7 @@ GO
 CREATE PROCEDURE LIL_MIX.listadoRol
 AS
 BEGIN
-	SELECT rol_nombre FROM LIL_MIX.rol WHERE rol_habilitado = 1
+	SELECT rol_nombre FROM LIL_MIX.rol
 END
 GO
 
@@ -824,13 +824,19 @@ CREATE PROCEDURE LIL_MIX.modificarRolNombre
 @rol_nombre VARCHAR(30), @rol_nombre_nuevo VARCHAR(30)
 AS
 BEGIN
-
+BEGIN TRY
+	BEGIN TRAN
 	IF @rol_nombre_nuevo IN (SELECT rol_nombre FROM LIL_MIX.rol)
 		THROW 50035, 'Ya existe rol con ese nombre', 1
 
 	UPDATE LIL_MIX.rol
 	SET rol_nombre = @rol_nombre_nuevo
 	WHERE rol_nombre = @rol_nombre
+	COMMIT
+END TRY
+BEGIN CATCH
+ROLLBACK
+END CATCH
 END
 GO
 
@@ -843,22 +849,10 @@ CREATE PROCEDURE LIL_MIX.modificarRolAgregarFuncionalidad
 @rol_nombre VARCHAR(30), @funcionalidad_descripcion VARCHAR(30)
 AS
 BEGIN
-	BEGIN TRY
-		BEGIN TRAN
-			IF @funcionalidad_descripcion NOT IN (SELECT funcionalidad_descripcion FROM LIL_MIX.funcionalidad)
-				THROW 50006, 'No existe funcionalidad.', 1
-
-			INSERT INTO LIL_MIX.funcionalidadxrol (rol_id, funcionalidad_id)
-			VALUES ((SELECT rol_id FROM LIL_MIX.rol WHERE rol_nombre = @rol_nombre),
+		INSERT INTO LIL_MIX.funcionalidadxrol (rol_id, funcionalidad_id)
+		VALUES ((SELECT rol_id FROM LIL_MIX.rol WHERE rol_nombre = @rol_nombre),
 				(SELECT funcionalidad_id FROM LIL_MIX.funcionalidad
-			WHERE funcionalidad_descripcion = @funcionalidad_descripcion))
-
-		COMMIT
-	END TRY
-
-	BEGIN CATCH
-		ROLLBACK
-	END CATCH
+		WHERE funcionalidad_descripcion = @funcionalidad_descripcion))
 END
 GO
 
@@ -1784,7 +1778,7 @@ BEGIN
 		-- será obligatorio que se registren los datos necesarios para poder identificar la tarjeta utilizada.
 
 		IF @tipodepago != 1 -- No es 'Efectivo'
-
+		BEGIN
 			-- Chequeo si los datos de la tarjeta ingresada están en la tabla TARJETA pero algún dato no concuerda
 
 			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente = @cliente AND tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento != @tarjeta_fecha_vencimiento)
@@ -1802,14 +1796,23 @@ BEGIN
 			-- Si en la tabla TARJETA no está registrada dicha tarjeta para dicho cliente, la registro
 
 			IF NOT EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento AND tarjeta_id_cliente = @cliente)
+			BEGIN	
 				INSERT INTO LIL_MIX.tarjeta (tarjeta_numero, tarjeta_tipo, tarjeta_fecha_vencimiento, tarjeta_id_cliente)
 				VALUES (@tarjeta_numero, @tarjeta_tipo, @tarjeta_fecha_vencimiento, @cliente)
-
-		-- Al momento de efectuarse la carga de dinero, el sistema tomará la fecha de día.
-		-- La misma será tomada del archivo de configuración de la aplicación.
+			END
 
 		INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_monto, carga_id_cliente, carga_tipo_de_pago, carga_tarjeta_numero)
 		VALUES (@fechadecarga, @monto , @cliente, @tipodepago, @tarjeta_numero)
+				
+		END
+		-- Al momento de efectuarse la carga de dinero, el sistema tomará la fecha de día.
+		-- La misma será tomada del archivo de configuración de la aplicación.
+				
+		ELSE
+		BEGIN
+			INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_monto, carga_id_cliente, carga_tipo_de_pago)
+			VALUES (@fechadecarga, @monto , @cliente, @tipodepago)
+		END
 
 		COMMIT TRANSACTION
 	END TRY
