@@ -84,8 +84,6 @@ C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfer
 C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.BajaRol.resources
 C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.ModificarRol.resources
 C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.Seleccionar.resources
-C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CragaCredito.Form1.resources
-C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.OfertasVigentes.resources
 C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.CrearOferta.resources
 C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Facturar.ElegirFechayProveedor.resources
 C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Facturar.Facturar.resources
@@ -104,6 +102,15 @@ C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\D
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CargaDeCredito.CargaCredito.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CargaDeCredito.CargaCreditoCliente.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.ConfeccionOfertaProve.resources
+C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CargaDeCredito.CargaCredito.resources
+C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CargaDeCredito.CargaCreditoCliente.resources
+C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.ConfeccionOfertaProve.resources
+C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.FuncionalidadesAdmin.resources
+C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.FuncionalidadesCliente.resources
+C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.FuncionalidadesProveedor.resources
+C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Login.RegistrarCliente.resources
+C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Login.RegistrarProveedor.resources
+C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.OfertasVigentes.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.CambiarContraCli.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.AgregarRolAUsuario.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.CambiarContraAdmin.resources
