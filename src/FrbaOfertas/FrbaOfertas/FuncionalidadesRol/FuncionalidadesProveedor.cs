@@ -21,5 +21,14 @@ namespace FrbaOfertas.FuncionalidadesRol
         {
             this.Close();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            CrearOferta.ConfeccionOfertaProve cre = new CrearOferta.ConfeccionOfertaProve();
+            this.Hide();
+            cre.Show();
+        }
+
+        
     }
 }

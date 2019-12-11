@@ -12,22 +12,21 @@ using System.Windows.Forms;
 
 namespace FrbaOfertas.CrearOferta
 {
-    public partial class CrearOferta : Form
+    public partial class ConfeccionOfertaProve : Form
     {
-        public CrearOferta()
+        public ConfeccionOfertaProve()
         {
             InitializeComponent();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            FuncionalidadesRol.FuncionalidadesAdmin cre = new FuncionalidadesRol.FuncionalidadesAdmin();
+            FuncionalidadesRol.FuncionalidadesProveedor cre = new FuncionalidadesRol.FuncionalidadesProveedor();
             this.Hide();
             cre.Show();
-
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void ConfeccionOfertaProve_Load(object sender, EventArgs e)
         {
             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.crearOferta", cn);
@@ -45,18 +44,10 @@ namespace FrbaOfertas.CrearOferta
             cn.Open();
             query.ExecuteNonQuery();
             MessageBox.Show("Oferta cargada");
-            FuncionalidadesRol.FuncionalidadesAdmin cre = new FuncionalidadesRol.FuncionalidadesAdmin();
+            FuncionalidadesRol.FuncionalidadesProveedor cre = new FuncionalidadesRol.FuncionalidadesProveedor();
             this.Hide();
             cre.Show();
             cn.Close();
         }
-
-        private void button2_Click_1(object sender, EventArgs e)
-        {
-            FuncionalidadesRol.FuncionalidadesAdmin cre = new FuncionalidadesRol.FuncionalidadesAdmin();
-            this.Hide();
-            cre.Show();
-        }
-        }
     }
-
+}

@@ -147,12 +147,19 @@
     <Compile Include="CargaDeCredito\CargaCreditoCliente.Designer.cs">
       <DependentUpon>CargaCreditoCliente.cs</DependentUpon>
     </Compile>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ComprarOferta\DatagridView.cs" />
+    <Compile Include="Conexion.cs" />
     <Compile Include="ComprarOferta\OfertasVigentes.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ComprarOferta\OfertasVigentes.Designer.cs">
       <DependentUpon>OfertasVigentes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrearOferta\ConfeccionOfertaProve.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CrearOferta\ConfeccionOfertaProve.Designer.cs">
+      <DependentUpon>ConfeccionOfertaProve.cs</DependentUpon>
     </Compile>
     <Compile Include="CrearOferta\CrearOferta.cs">
       <SubType>Form</SubType>
@@ -172,12 +179,6 @@
     <Compile Include="Facturar\Facturar.Designer.cs">
       <DependentUpon>Facturar.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="FuncionalidadesRol\FuncionalidadesAdmin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -196,12 +197,6 @@
     <Compile Include="FuncionalidadesRol\FuncionalidadesProveedor.Designer.cs">
       <DependentUpon>FuncionalidadesProveedor.cs</DependentUpon>
     </Compile>
-    <Compile Include="GD2C2019DataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GD2C2019DataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Interface1.cs" />
     <Compile Include="ListadoEstadistico\ListadoEstadistico.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -300,6 +295,9 @@
     <EmbeddedResource Include="ComprarOferta\OfertasVigentes.resx">
       <DependentUpon>OfertasVigentes.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CrearOferta\ConfeccionOfertaProve.resx">
+      <DependentUpon>ConfeccionOfertaProve.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CrearOferta\CrearOferta.resx">
       <DependentUpon>CrearOferta.cs</DependentUpon>
     </EmbeddedResource>
@@ -348,17 +346,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="GD2C2019DataSet.xsc">
-      <DependentUpon>GD2C2019DataSet.xsd</DependentUpon>
-    </None>
-    <None Include="GD2C2019DataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>GD2C2019DataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="GD2C2019DataSet.xss">
-      <DependentUpon>GD2C2019DataSet.xsd</DependentUpon>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

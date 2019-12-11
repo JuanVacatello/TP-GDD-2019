@@ -39,5 +39,10 @@ namespace FrbaOfertas.Login
             this.Hide();
             prov.Show();
         }
+
+        private void LoginSegun_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

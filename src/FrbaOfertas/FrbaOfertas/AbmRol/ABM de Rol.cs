@@ -26,7 +26,7 @@ namespace FrbaOfertas.AbmRol
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Seleccionar modi = new Seleccionar();
+            ModificarRol modi = new ModificarRol();
             this.Hide();
             modi.Show();
         }

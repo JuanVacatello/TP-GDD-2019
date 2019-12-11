@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -17,6 +19,7 @@ namespace FrbaOfertas.ComprarOferta
             InitializeComponent();
         }
 
+     
         private void button2_Click(object sender, EventArgs e)
         {
             FuncionalidadesRol.FuncionalidadesAdmin of = new FuncionalidadesRol.FuncionalidadesAdmin();
@@ -24,17 +27,30 @@ namespace FrbaOfertas.ComprarOferta
             of.Show();
         }
 
-        private void fillToolStripButton_Click(object sender, EventArgs e)
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            try
-            {
-                this.ofertasVigentesHastaDiaActualTableAdapter.Fill(this.gD2C2019DataSet.ofertasVigentesHastaDiaActual, new System.Nullable<System.DateTime>(((System.DateTime)(System.Convert.ChangeType(diaactualToolStripTextBox.Text, typeof(System.DateTime))))));
-            }
-            catch (System.Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.Message);
-            }
+            
+        }
+
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //using (SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString))
+            //{
+
+            //    cn.Open();
+            //    string fecha = ConfigurationManager.AppSettings["current_date"];
+            //    SqlCommand query = new SqlCommand("LIL_MIX.modificaRolNombre", cn);
+            //    query.Parameters.Add(new SqlParameter("@diaactual", Convert.ToDateTime(fecha)));
+            //    SqlDataAdapter da = new SqlDataAdapter(query, cn);
+                
+            //}
 
         }
+
+     
+
+        
     }
 }

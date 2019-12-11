@@ -84,6 +84,7 @@
             this.btnRegistrar.TabIndex = 89;
             this.btnRegistrar.Text = "Registrar usuario-proveedor";
             this.btnRegistrar.UseVisualStyleBackColor = true;
+            this.btnRegistrar.Click += new System.EventHandler(this.btnRegistrar_Click);
             // 
             // btnAtras
             // 
@@ -93,6 +94,7 @@
             this.btnAtras.TabIndex = 88;
             this.btnAtras.Text = "Atrás";
             this.btnAtras.UseVisualStyleBackColor = true;
+            this.btnAtras.Click += new System.EventHandler(this.btnAtras_Click);
             // 
             // label13
             // 

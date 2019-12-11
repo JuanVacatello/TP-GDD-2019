@@ -84,6 +84,7 @@
             this.Controls.Add(this.button1);
             this.Name = "LoginSegun";
             this.Text = "LoginSegun";
+            this.Load += new System.EventHandler(this.LoginSegun_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

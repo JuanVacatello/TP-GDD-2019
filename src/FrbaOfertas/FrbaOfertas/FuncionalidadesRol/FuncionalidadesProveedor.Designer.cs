@@ -44,15 +44,7 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(203, 45);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(162, 58);
-            this.button3.TabIndex = 8;
-            this.button3.Text = "VISUALIZAR LISTADO ESTADÍSTICO";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
+            
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(12, 45);
@@ -61,6 +53,7 @@
             this.button1.TabIndex = 6;
             this.button1.Text = "CONFECCIONAR Y PUBLICAR OFRTA";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label1
             // 
