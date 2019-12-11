@@ -29,6 +29,13 @@ namespace FrbaOfertas.FuncionalidadesRol
             cre.Show();
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ListadoEstadistico.ListadoEstadistico list = new ListadoEstadistico.ListadoEstadistico();
+            this.Hide();
+            list.Show();
+        }
+
         
     }
 }

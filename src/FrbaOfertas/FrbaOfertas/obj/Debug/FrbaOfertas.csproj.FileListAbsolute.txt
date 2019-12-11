@@ -51,7 +51,6 @@ C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\D
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.AltaRol.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.BajaRol.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.ModificarRol.resources
-C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.AbmRol.Seleccionar.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.OfertasVigentes.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.CrearOferta.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Facturar.ElegirFechayProveedor.resources
@@ -112,3 +111,4 @@ C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfer
 C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Login.RegistrarCliente.resources
 C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Login.RegistrarProveedor.resources
 C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.OfertasVigentes.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.CambiarContraCli.resources

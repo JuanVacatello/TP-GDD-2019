@@ -50,6 +50,9 @@ namespace FrbaOfertas.AbmRol
 
             cn.Open();
             query.ExecuteNonQuery();
+            ABM_de_Rol abmrol = new ABM_de_Rol();
+            this.Hide();
+            abmrol.Show();
             cn.Close();
             
         }

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtFechaSistema = new System.Windows.Forms.TextBox();
+            this.txtAnio = new System.Windows.Forms.TextBox();
             this.btnSeleccionar = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
@@ -40,12 +40,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
-            // txtFechaSistema
+            // txtAnio
             // 
-            this.txtFechaSistema.Location = new System.Drawing.Point(336, 32);
-            this.txtFechaSistema.Name = "txtFechaSistema";
-            this.txtFechaSistema.Size = new System.Drawing.Size(94, 20);
-            this.txtFechaSistema.TabIndex = 18;
+            this.txtAnio.Location = new System.Drawing.Point(336, 32);
+            this.txtAnio.Name = "txtAnio";
+            this.txtAnio.Size = new System.Drawing.Size(94, 20);
+            this.txtAnio.TabIndex = 18;
             // 
             // btnSeleccionar
             // 
@@ -55,6 +55,7 @@
             this.btnSeleccionar.TabIndex = 17;
             this.btnSeleccionar.Text = "Visualizar Informe";
             this.btnSeleccionar.UseVisualStyleBackColor = true;
+            this.btnSeleccionar.Click += new System.EventHandler(this.btnSeleccionar_Click);
             // 
             // dataGridView1
             // 
@@ -74,6 +75,7 @@
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(96, 21);
             this.comboBox2.TabIndex = 15;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // comboBox1
             // 
@@ -82,6 +84,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(286, 21);
             this.comboBox1.TabIndex = 14;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -125,7 +128,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(674, 441);
-            this.Controls.Add(this.txtFechaSistema);
+            this.Controls.Add(this.txtAnio);
             this.Controls.Add(this.btnSeleccionar);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.comboBox2);
@@ -144,7 +147,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtFechaSistema;
+        private System.Windows.Forms.TextBox txtAnio;
         private System.Windows.Forms.Button btnSeleccionar;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.ComboBox comboBox2;
