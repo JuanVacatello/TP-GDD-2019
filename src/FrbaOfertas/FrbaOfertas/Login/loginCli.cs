@@ -26,7 +26,7 @@ namespace FrbaOfertas
             log.Show();
 
         }
-
+        
         private void button1_Click(object sender, EventArgs e)
         {
             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);

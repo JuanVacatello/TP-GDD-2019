@@ -17,10 +17,33 @@ namespace FrbaOfertas.AbmRol
         public ModificarRol()
         {
             InitializeComponent();
+            cargarFuncionalidades();
             cargarDatos();
+            cargarMasDatos();
         }
 
-        public void cargarDatos()
+        public void cargarMasDatos()
+        {
+
+            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
+            cn.Open();
+            SqlCommand query = new SqlCommand("LIL_MIX.listadoFuncionalidades", cn);
+            query.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter da = new SqlDataAdapter(query);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            cn.Close();
+
+            DataRow fila = dt.NewRow();
+            fila["funcionalidad_descripcion"] = "Seleccione una funcionalidad";
+            dt.Rows.InsertAt(fila, 0);
+
+            comboBox2.ValueMember = "funcionalidad_descripcion";
+            comboBox2.DisplayMember = "funcionalidad_descripcion";
+            comboBox2.DataSource = dt;
+        }
+
+        public void cargarFuncionalidades()
         {
             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             cn.Open();
@@ -32,25 +55,56 @@ namespace FrbaOfertas.AbmRol
             cn.Close();
 
             DataRow fila = dt.NewRow();
-            fila["funcionalidad_descripcion"] = "seleccione una funcionalidad";
+            fila["funcionalidad_descripcion"] = "Seleccione una funcionalidad";
             dt.Rows.InsertAt(fila, 0);
 
-            //button4.ValueMember = "funcionalidad_descripcion";
-            //button4.DisplayMember = "funcionalidad_descripcion";
-            //button4.DataSource = dt;
+            comboBox1.ValueMember = "funcionalidad_descripcion";
+            comboBox1.DisplayMember = "funcionalidad_descripcion";
+            comboBox1.DataSource = dt;
 
+        }
+
+        public void cargarDatos()
+        {
+            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
+            cn.Open();
+            SqlCommand query = new SqlCommand("LIL_MIX.listadoRol", cn);
+            query.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter da = new SqlDataAdapter(query);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            cn.Close();
+
+            DataRow fila = dt.NewRow();
+            fila["rol_nombre"] = "Seleccione un rol";
+            dt.Rows.InsertAt(fila, 0);
+
+            comboBox3.ValueMember = "rol_nombre";
+            comboBox3.DisplayMember = "rol_nombre";
+            comboBox3.DataSource = dt;
+
+        }
+
+        private void habilitarRol(string rol_nombre)
+        {
+            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
+            SqlCommand query = new SqlCommand("LIL_MIX.habilitarRol", cn);
+            query.CommandType = CommandType.StoredProcedure;
+            query.Parameters.Add(new SqlParameter("@rol_nombre", rol_nombre));
+
+            cn.Open();
+            query.ExecuteNonQuery();
+            MessageBox.Show("Rol habilitado");
+            cn.Close(); 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
-            SqlCommand query = new SqlCommand("LIL_MIX.habilitarRol", cn);
-            query.CommandType = CommandType.StoredProcedure;
-           // query.Parameters.Add(new SqlParameter("@rol_nombre", ---);
-
-            cn.Open();
-            query.ExecuteNonQuery();
-            cn.Close();
+            if (comboBox3.SelectedValue.ToString() != null)
+            {
+                string rol_nombre = comboBox3.SelectedValue.ToString();
+                habilitarRol(rol_nombre);
+            }
         }
 
         private void ModificarRol_Load(object sender, EventArgs e)
@@ -60,48 +114,128 @@ namespace FrbaOfertas.AbmRol
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Seleccionar selec = new Seleccionar();
+            ABM_de_Rol abm = new ABM_de_Rol();
             this.Hide();
-            selec.Show();
+            abm.Show();
         }
 
-
-        public void button5_Click(object sender, EventArgs e)
-        {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
-            SqlCommand query = new SqlCommand("LIL_MIX.modificaRolNombre", cn);
-            query.CommandType = CommandType.StoredProcedure;
-            //query.Parameters.Add(new SqlParameter("@rol_nombre", ---);
-            query.Parameters.Add(new SqlParameter("@rol-nombre_nuevo", this.txtNombreNuevo.Text));
-
-            cn.Open();
-            query.ExecuteNonQuery();
-            cn.Close();
-            }
-
-        public void agregarFuncionalidad(string funcionalidad_descripcion)
+        public void agregarFuncionalidad(string rol_nombre, string funcionalidad_descripcion)
         {
             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarRolAgregarFuncionalidad", cn);
             query.CommandType = CommandType.StoredProcedure;
-            //query.Parameters.Add(new SqlParameter("@rol_nombre", this.txtNombre.Text));
+            query.Parameters.Add(new SqlParameter("@rol_nombre", rol_nombre));
             query.Parameters.Add(new SqlParameter("@funcionalidad_descripcion", funcionalidad_descripcion));
 
             cn.Open();
             query.ExecuteNonQuery();
+            MessageBox.Show("Funcionalidad agregada");
             cn.Close();
-
         }
 
-       /* private void button4_Click(object sender, EventArgs e)
+        public void eliminarFuncionalidad(string rol_nombre, string funcionalidad_descripcion)
         {
-            if (button4.SelectedValue.ToString() != null)
-            {
-                string funcionalidad_descripcion = button4.SelectedValue.ToString();
+            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
+            SqlCommand query = new SqlCommand("LIL_MIX.modificarRolEliminarFuncionalidad", cn);
+            query.CommandType = CommandType.StoredProcedure;
+            query.Parameters.Add(new SqlParameter("@rol_nombre", rol_nombre));
+            query.Parameters.Add(new SqlParameter("@funcionalidad_descripcion", funcionalidad_descripcion));
 
-                agregarFuncionalidad(funcionalidad_descripcion);
+            cn.Open();
+            query.ExecuteNonQuery();
+            MessageBox.Show("Funcionalidad eliminada");
+            cn.Close();
+        }
+
+        public void modificarNombre(string rol_nombre)
+        {
+            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
+            SqlCommand query = new SqlCommand("LIL_MIX.modificarRolNombre", cn);
+            query.CommandType = CommandType.StoredProcedure;
+            query.Parameters.Add(new SqlParameter("@rol_nombre", rol_nombre));
+            query.Parameters.Add(new SqlParameter("@rol_nombre_nuevo", this.txtNombreNuevo.Text));
+
+            cn.Open();
+            query.ExecuteNonQuery();
+            cn.Close();
+          }
+
+
+        public void button5_Click(object sender, EventArgs e)
+        {
+            //BOTON MODIFICAR NOMBRE
+
+            if (comboBox3.SelectedValue.ToString() != null)
+            {
+                string rol_nombre = comboBox3.SelectedValue.ToString();
+                modificarNombre(rol_nombre);
             }
-            MessageBox.Show("Funcionalidad agregada");
-        }*/
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+                        
+        }
+
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+            //NO SE SI TAMBIEN SE PASAN ACA ESTOS DATOS
+
+            if (comboBox3.SelectedValue.ToString() != null)
+            {
+                string rol_nombre = comboBox3.SelectedValue.ToString();
+                modificarNombre(rol_nombre);
+            }
+        }
+
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            // BOTON AGREGAR FUNCIONALIDAD
+
+            if (comboBox1.SelectedValue.ToString() != null)
+            {
+                if (comboBox3.SelectedValue.ToString() != null)
+                {
+                    string funcionalidad_descricion = comboBox1.SelectedValue.ToString();
+                    string rol_nombre = comboBox3.SelectedValue.ToString();
+                    agregarFuncionalidad(rol_nombre, funcionalidad_descricion);
+                }
+            }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // COMBOBOX DE FUNCIONALIDADES
+            // NO SE SI TENGO QUE PONER ALGO
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            // BOTON DE ELIMINAR FUNCIONALIDAD
+
+            if (comboBox2.SelectedValue.ToString() != null)
+            {
+                if (comboBox3.SelectedValue.ToString() != null)
+                {
+                    string funcionalidad_descricion = comboBox1.SelectedValue.ToString();
+                    string rol_nombre = comboBox3.SelectedValue.ToString();
+                    eliminarFuncionalidad(rol_nombre, funcionalidad_descricion);
+                }
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Los cambios fueron efectuados con exito");
+            ABM_de_Rol abm = new ABM_de_Rol();
+            this.Hide();
+            abm.Show();
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

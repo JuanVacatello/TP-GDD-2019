@@ -78,5 +78,12 @@ namespace FrbaOfertas.FuncionalidadesRol
             this.Hide();
             cre.Show();
         }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            DarDeBajaUsuario us = new DarDeBajaUsuario();
+            this.Hide();
+            us.Show();
+        }
     }
 }

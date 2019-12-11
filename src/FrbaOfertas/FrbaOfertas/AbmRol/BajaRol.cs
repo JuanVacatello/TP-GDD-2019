@@ -66,7 +66,6 @@ namespace FrbaOfertas.AbmRol
             if (comboBox1.SelectedValue.ToString() != null)
             {
                 string rol_nombre = comboBox1.SelectedValue.ToString();
-
                 eliminarRol(rol_nombre);
             }
         }

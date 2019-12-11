@@ -50,7 +50,7 @@ namespace FrbaOfertas.CargaDeCredito
             query.Parameters.Add(new SqlParameter("@tarjeta_numero", this.txtTarjetaNumero.Text));
             query.Parameters.Add(new SqlParameter("@tarjeta_fecha_vencimiento", this.dateTimePicker1.Value));
             //string fecha = ConfigurationManager.AppSettings["current_date"];
-            query.Parameters.Add(new SqlParameter("@fechadecarga", 2019 - 12 - 14));// Convert.ToDateTime(fecha)));
+            query.Parameters.Add(new SqlParameter("@fechadecarga", 2019-12-14));// Convert.ToDateTime(fecha)));
             query.Parameters.Add(new SqlParameter("@tarjeta_tipo", this.txtTipoTarj.Text));
             query.Parameters.Add(new SqlParameter("@usuario_nombre", this.txtUser.Text));
 
@@ -71,16 +71,14 @@ namespace FrbaOfertas.CargaDeCredito
         {
             //BOTON CARGAR
 
-            if ((comboBox1.SelectedValue.ToString() != null)) //&& (comboBox2.SelectedValue.ToString() != null))
+            if ((comboBox1.SelectedValue.ToString() != null)) 
             {
                 string tipo_de_pago_descripcion = comboBox1.SelectedValue.ToString();
-             //   string tipo_de_tarjeta = comboBox2.SelectedValue.ToString();
-
-                cargarCredito(tipo_de_pago_descripcion); //, tipo_de_tarjeta);
+                cargarCredito(tipo_de_pago_descripcion); 
 
             }
             MessageBox.Show("Credito Cargado");
-            FuncionalidadesRol.FuncionalidadesAdmin abmrol = new FuncionalidadesRol.FuncionalidadesAdmin();
+            FuncionalidadesRol.FuncionalidadesCliente abmrol = new FuncionalidadesRol.FuncionalidadesCliente();
             this.Hide();
             abmrol.Show();
         

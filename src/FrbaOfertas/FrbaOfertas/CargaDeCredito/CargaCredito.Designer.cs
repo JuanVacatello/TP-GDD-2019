@@ -154,9 +154,9 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(9, 9);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(209, 13);
+            this.label7.Size = new System.Drawing.Size(289, 13);
             this.label7.TabIndex = 33;
-            this.label7.Text = "Repita su nombre de usuario por seguridad";
+            this.label7.Text = "Ingrese el nombre de usuario a quien quiere cargarle crédito";
             // 
             // txtUser
             // 
@@ -176,7 +176,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 369);
+            this.ClientSize = new System.Drawing.Size(306, 369);
             this.Controls.Add(this.txtTipo);
             this.Controls.Add(this.txtUser);
             this.Controls.Add(this.label7);

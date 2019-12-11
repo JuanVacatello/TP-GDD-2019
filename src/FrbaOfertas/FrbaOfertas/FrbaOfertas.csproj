@@ -129,12 +129,6 @@
     <Compile Include="AbmRol\ModificarRol.Designer.cs">
       <DependentUpon>ModificarRol.cs</DependentUpon>
     </Compile>
-    <Compile Include="AbmRol\Seleccionar.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AbmRol\Seleccionar.Designer.cs">
-      <DependentUpon>Seleccionar.cs</DependentUpon>
-    </Compile>
     <Compile Include="CargaDeCredito\CargaCredito.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -178,6 +172,30 @@
     </Compile>
     <Compile Include="Facturar\Facturar.Designer.cs">
       <DependentUpon>Facturar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\CambiarContraAdmin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\CambiarContraAdmin.Designer.cs">
+      <DependentUpon>CambiarContraAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\CambiarContraCli.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\CambiarContraCli.Designer.cs">
+      <DependentUpon>CambiarContraCli.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\CambiarContraProv.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\CambiarContraProv.Designer.cs">
+      <DependentUpon>CambiarContraProv.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\DarDeBajaUsuario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\DarDeBajaUsuario.Designer.cs">
+      <DependentUpon>DarDeBajaUsuario.cs</DependentUpon>
     </Compile>
     <Compile Include="FuncionalidadesRol\FuncionalidadesAdmin.cs">
       <SubType>Form</SubType>
@@ -283,9 +301,6 @@
     <EmbeddedResource Include="AbmRol\ModificarRol.resx">
       <DependentUpon>ModificarRol.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AbmRol\Seleccionar.resx">
-      <DependentUpon>Seleccionar.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="CargaDeCredito\CargaCredito.resx">
       <DependentUpon>CargaCredito.cs</DependentUpon>
     </EmbeddedResource>
@@ -306,6 +321,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Facturar\Facturar.resx">
       <DependentUpon>Facturar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FuncionalidadesRol\CambiarContraAdmin.resx">
+      <DependentUpon>CambiarContraAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FuncionalidadesRol\CambiarContraCli.resx">
+      <DependentUpon>CambiarContraCli.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FuncionalidadesRol\CambiarContraProv.resx">
+      <DependentUpon>CambiarContraProv.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FuncionalidadesRol\DarDeBajaUsuario.resx">
+      <DependentUpon>DarDeBajaUsuario.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FuncionalidadesRol\FuncionalidadesAdmin.resx">
       <DependentUpon>FuncionalidadesAdmin.cs</DependentUpon>
