@@ -19,6 +19,24 @@ CLOSE cursor_tablas
 DEALLOCATE cursor_tablas
 GO
 
+-----DROPS INDICES
+/*
+DROP INDEX LIL_MIX.usuario.IDX_USUARIO
+DROP INDEX LIL_MIX.direccion.IDX_DIRECCION
+DROP INDEX LIL_MIX.proveedor.IDX_PROVEEDOR
+DROP INDEX LIL_MIX.oferta.IDX_OFERTA
+DROP INDEX LIL_MIX.cliente.IDX_CLIENTE
+DROP INDEX LIL_MIX.compra.IDX_COMPRA
+DROP INDEX LIL_MIX.factura.IDX_FACTURA
+DROP INDEX LIL_MIX.cupon.IDX_CUPON
+DROP INDEX LIL_MIX.rol.IDX_ROL
+DROP INDEX LIL_MIX.funcionalidad.IDX_FUNCIONALIDAD
+DROP INDEX LIL_MIX.tarjeta.IDX_TARJETA
+DROP INDEX LIL_MIX.tipoDepago.IDX_TIPO_DE_PAGO
+DROP INDEX LIL_MIX.cargaDeCredito.IDX_CARGA_DE_CREDITO
+DROP INDEX LIL_MIX.semestre.IDX_SEMESTRE
+GO */
+
 ------DROPS TABLAS
 
 IF OBJECT_ID('LIL_MIX.usuario') IS NOT NULL
@@ -337,24 +355,6 @@ IF OBJECT_ID('LIL_MIX.cargarCreditoAlCliente') IS NOT NULL
   DROP TRIGGER LIL_MIX.cargarCreditoAlCliente
 GO
 
------DROPS INDICES
-/*
-DROP INDEX LIL_MIX.usuario.IDX_USUARIO
-DROP INDEX LIL_MIX.direccion.IDX_DIRECCION
-DROP INDEX LIL_MIX.proveedor.IDX_PROVEEDOR
-DROP INDEX LIL_MIX.oferta.IDX_OFERTA
-DROP INDEX LIL_MIX.cliente.IDX_CLIENTE
-DROP INDEX LIL_MIX.compra.IDX_COMPRA
-DROP INDEX LIL_MIX.factura.IDX_FACTURA
-DROP INDEX LIL_MIX.cupon.IDX_CUPON
-DROP INDEX LIL_MIX.rol.IDX_ROL
-DROP INDEX LIL_MIX.funcionalidad.IDX_FUNCIONALIDAD
-DROP INDEX LIL_MIX.tarjeta.IDX_TARJETA
-DROP INDEX LIL_MIX.tipoDepago.IDX_TIPO_DE_PAGO
-DROP INDEX LIL_MIX.cargaDeCredito.IDX_CARGA_DE_CREDITO
-DROP INDEX LIL_MIX.semestre.IDX_SEMESTRE
-GO */
-
 -----DROP ESQUEMA
 
 IF EXISTS (SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'LIL_MIX')
@@ -433,7 +433,7 @@ CREATE TABLE LIL_MIX.compra ( compra_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 			                  compra_fecha DATETIME NOT NULL )
 GO
 
-CREATE TABLE LIL_MIX.factura ( factura_id INT NOT NULL PRIMARY KEY,
+CREATE TABLE LIL_MIX.factura ( factura_id BIGINT NOT NULL PRIMARY KEY,
 			       factura_proveedor_id INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.proveedor(proveedor_id),
 			       factura_fecha_inicio DATETIME NOT NULL,
 			       factura_fecha_fin DATETIME NOT NULL,
@@ -670,7 +670,7 @@ GO
 INSERT INTO LIL_MIX.cliente (cliente_nombre , cliente_apellido , cliente_direccion_id, cliente_mail,
 			cliente_telefono , cliente_fecha_nacimiento , cliente_dni , cliente_credito , cliente_usuario_id)
 SELECT Cli_Nombre , Cli_Apellido , (SELECT direccion_id FROM LIL_MIX.direccion WHERE direccion_calle = Cli_Direccion AND direccion_ciudad = Cli_Ciudad),
-	   Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , Cli_Dni , SUM(COALESCE(Carga_Credito,0)),
+	   Cli_Mail , Cli_Telefono , Cli_Fecha_Nac , Cli_Dni , COALESCE(SUM(Carga_Credito + 200),200),
 	   (SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = Cli_Nombre+'_'+Cli_Apellido)
 FROM gd_esquema.Maestra
 WHERE Cli_Dni IS NOT NULL
@@ -1230,22 +1230,37 @@ CREATE PROCEDURE LIL_MIX.listadoClientes
 @nombre VARCHAR(255), @apellido VARCHAR(255), @dni INT, @email VARCHAR(255)
 AS
 BEGIN
-	SELECT c.cliente_dni as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
-	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
-	WHERE c.cliente_dni = @dni
+	-- Probamos con ifs todas las combinaciones posibles
 
-	SELECT c.cliente_nombre as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
-	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
-	WHERE c.cliente_nombre LIKE '%'+@nombre+'%'
+	IF (@dni != NULL)
+		SELECT * FROM LIL_MIX.cliente WHERE cliente_dni = @dni --Hay un solo cliente con ese DNI
 
-	SELECT c.cliente_apellido as 'Apellido del cliente', u.usuario_nombre as 'Nombre de usuario'
-	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
-	WHERE c.cliente_apellido LIKE '%'+@apellido+'%'
+	IF (@dni = NULL AND @nombre != NULL AND @apellido != NULL AND @email != NULL)
+		SELECT * FROM LIL_MIX.cliente WHERE cliente_nombre LIKE @nombre AND 
+							cliente_apellido LIKE @apellido AND cliente_mail LIKE @email
 
-	SELECT c.cliente_mail as 'Apellido del cliente', u.usuario_nombre as 'Nombre de usuario'
-	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
-	WHERE c.cliente_mail LIKE '%'+@email+'%'
+	IF (@dni = NULL AND @nombre = NULL AND @apellido != NULL AND @email != NULL)
+		SELECT * FROM LIL_MIX.cliente WHERE cliente_apellido LIKE @apellido AND cliente_mail LIKE @email
 
+	IF (@dni = NULL AND @nombre != NULL AND @apellido = NULL AND @email != NULL)
+		SELECT * FROM LIL_MIX.cliente WHERE cliente_nombre LIKE @nombre AND cliente_mail LIKE @email
+
+	IF (@dni = NULL AND @nombre != NULL AND @apellido != NULL AND @email = NULL)
+		SELECT * FROM LIL_MIX.cliente WHERE cliente_nombre LIKE @nombre AND cliente_apellido LIKE @apellido
+
+	IF (@dni = NULL AND @nombre = NULL AND @apellido = NULL AND @email != NULL)
+		SELECT * FROM LIL_MIX.cliente WHERE cliente_mail LIKE @email
+
+	IF (@dni = NULL AND @nombre = NULL AND @apellido != NULL AND @email = NULL)
+		SELECT * FROM LIL_MIX.cliente WHERE cliente_apellido LIKE @apellido
+
+	IF (@dni = NULL AND @nombre != NULL AND @apellido = NULL AND @email = NULL)
+		SELECT * FROM LIL_MIX.cliente WHERE cliente_nombre LIKE @nombre
+
+	-- Si no ingresa nada, mostramos todos los clientes, sin filtros
+
+	IF (@dni = NULL AND @nombre = NULL AND @apellido = NULL AND @email = NULL)
+		SELECT * FROM LIL_MIX.cliente
 END
 GO
 
@@ -1502,18 +1517,24 @@ CREATE PROCEDURE LIL_MIX.listadoProveedores
 @razonsocial VARCHAR(255), @cuit VARCHAR(13), @mail VARCHAR(255)
 AS
 BEGIN
-	SELECT p.proveedor_rs as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
-	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (u.usuario_id = p.proveedor_usuario_id)
-	WHERE p.proveedor_rs LIKE '%'+@razonsocial+'%'
+	-- Probamos con ifs todas las combinaciones posibles
 
-	SELECT p.proveedor_mail as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
-	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (u.usuario_id = p.proveedor_usuario_id)
-	WHERE p.proveedor_mail LIKE '%'+@mail+'%'
+	IF (@cuit != NULL)
+		SELECT * FROM LIL_MIX.proveedor WHERE proveedor_cuit = @cuit -- Hay un único proveedor con dicho cuit
 
-	SELECT p.proveedor_cuit as 'Nombre del cliente', u.usuario_nombre as 'Nombre de usuario'
-	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (u.usuario_id = p.proveedor_usuario_id)
-	WHERE p.proveedor_cuit = @cuit
+	IF (@cuit = NULL AND @razonsocial != NULL AND @mail != NULL)
+		SELECT * FROM LIL_MIX.proveedor WHERE proveedor_rs LIKE '%'+@razonsocial+'%' AND proveedor_mail LIKE '%'+@mail+'%'
 
+	IF (@cuit = NULL AND @razonsocial = NULL AND @mail != NULL)
+		SELECT * FROM LIL_MIX.proveedor WHERE proveedor_mail LIKE '%'+@mail+'%'
+
+	IF (@cuit = NULL AND @razonsocial != NULL AND @mail = NULL)
+		SELECT * FROM LIL_MIX.proveedor WHERE proveedor_rs LIKE '%'+@razonsocial+'%'
+
+	-- Si no ingresa nada, mostramos todos los clientes, sin filtros
+
+	IF (@cuit = NULL AND @razonsocial = NULL AND @mail = NULL)
+		SELECT * FROM LIL_MIX.proveedor	
 END
 GO
 
@@ -1803,6 +1824,10 @@ BEGIN
 
 		INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_monto, carga_id_cliente, carga_tipo_de_pago, carga_tarjeta_numero)
 		VALUES (@fechadecarga, @monto , @cliente, @tipodepago, @tarjeta_numero)
+
+		UPDATE LIL_MIX.cliente
+		SET cliente_credito = cliente_credito + @monto
+		WHERE cliente_id = @cliente
 				
 		END
 		-- Al momento de efectuarse la carga de dinero, el sistema tomará la fecha de día.
@@ -1812,6 +1837,10 @@ BEGIN
 		BEGIN
 			INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_monto, carga_id_cliente, carga_tipo_de_pago)
 			VALUES (@fechadecarga, @monto , @cliente, @tipodepago)
+
+			UPDATE LIL_MIX.cliente
+			SET cliente_credito = cliente_credito + @monto
+			WHERE cliente_id = @cliente
 		END
 
 		COMMIT TRANSACTION
@@ -1831,28 +1860,28 @@ GO
 
 --Este caso de uso es utilizado por los proveedores para armar y publicar las ofertas que formarán parte de la plataforma.
 
+
 CREATE PROCEDURE LIL_MIX.crearOferta
 @usuario_nombre VARCHAR(255),
-@fechaactualdelsistema DATETIME,
-@oferta_decripcion VARCHAR(255), @oferta_fecha_vencimiento DATETIME, @oferta_precio_oferta INT, @oferta_precio_lista INT,
-@oferta_stock INT, @oferta_restriccion_compra TINYINT
+@fechaactualdelsistema DATETIME, @oferta_descripcion VARCHAR(255), @oferta_fecha_vencimiento DATETIME,
+@oferta_precio_oferta INT, @oferta_precio_lista INT, @oferta_stock INT, @oferta_restriccion_compra TINYINT
 AS
 BEGIN
-	BEGIN TRY
-		BEGIN TRANSACTION
-
 		DECLARE @proveedorid INT,
-			@proveedorhabilitado BIT
+			    @proveedorhabilitado BIT
 
 		SELECT @proveedorid = p.proveedor_id, @proveedorhabilitado = p.proveedor_habilitado
-		FROM LIL_MIX.proveedor p JOIN LIL_MIX.usuario u ON (u.usuario_id = p.proveedor_id)
+		FROM LIL_MIX.proveedor p JOIN LIL_MIX.usuario u ON (u.usuario_id = p.proveedor_usuario_id)
 		WHERE u.usuario_nombre = @usuario_nombre
 
+	BEGIN TRY
+		BEGIN TRANSACTION
 		-- Un proveedor inhabilitado no podrá armar ofertas.
 
 		IF @proveedorhabilitado = 0
-			THROW 50023, 'Proveedor inhabilitado. No puede armar ofertas.', 1
-
+			--THROW 50023, 'Proveedor inhabilitado. No puede armar ofertas.', 1
+			RAISERROR('Proveedor inhabilitado. No puede armar ofertas.', 16, 1)
+			
 		-- El proveedor podrá ir cargando ofertas con diferentes fechas,
 		-- esta fecha debe ser mayor o igual a la fecha actual del sistema
 
@@ -1868,7 +1897,7 @@ BEGIN
 		INSERT INTO LIL_MIX.oferta (oferta_codigo, oferta_precio_oferta, oferta_precio_lista, oferta_fecha_publicacion,
 			oferta_fecha_vencimiento, oferta_decripcion, oferta_stock, oferta_proveedor_id, oferta_restriccion_compra)
 		VALUES ((SELECT CONVERT(varchar(255), NEWID())), @oferta_precio_oferta, @oferta_precio_lista, @fechaactualdelsistema,
-				@oferta_fecha_vencimiento, @oferta_decripcion, @oferta_stock, @proveedorid, @oferta_restriccion_compra)
+				@oferta_fecha_vencimiento, @oferta_descripcion, @oferta_stock, @proveedorid, @oferta_restriccion_compra)
 
 		COMMIT TRANSACTION
 
@@ -1876,6 +1905,18 @@ BEGIN
 
 	BEGIN CATCH
 
+DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+		
 		ROLLBACK TRANSACTION
 
 	END CATCH
@@ -1895,10 +1936,7 @@ CREATE PROCEDURE LIL_MIX.ofertasVigentesHastaDiaActual
 @diaactual DATETIME
 AS
 BEGIN
-	SELECT oferta_codigo as 'Codigo de oferta', oferta_decripcion as 'Descripcion', oferta_precio_lista as 'Precio de lista',
-	oferta_precio_oferta as 'Precio de oferta', oferta_stock as 'Stock disponible',
-	oferta_restriccion_compra as 'Cantidad máxima que puede comprar cada cliente'
-	FROM LIL_MIX.oferta
+	SELECT * FROM LIL_MIX.oferta
 	WHERE oferta_fecha_vencimiento < @diaactual
 END
 GO
@@ -1906,8 +1944,8 @@ GO
 -- 17)
 
 CREATE PROCEDURE LIL_MIX.comprarOferta
-@nombre_usuario INT, @oferta_codigo VARCHAR(255), @cantidad TINYINT,
-@diadecompra DATETIME
+@nombre_usuario VARCHAR(255), @oferta_codigo VARCHAR(255), @cantidad TINYINT,
+@diadecompra DATETIME, @clientedestino VARCHAR(255)
 AS
 BEGIN
 	BEGIN TRY
@@ -1967,16 +2005,46 @@ BEGIN
 		SET oferta_stock = oferta_stock - @cantidad
 		WHERE oferta_codigo = @oferta_codigo
 
+		UPDATE LIL_MIX.cliente
+		SET cliente_credito = cliente_credito - (@cantidad * @preciooferta)
+		WHERE cliente_id = @clienteid
+
 		-- Generación automática del cupón
 
-		INSERT INTO LIL_MIX.cupon (cupon_fecha_vencimiento, cupon_compra_id, cupon_cliente_id)
-		VALUES (DATEADD(day, 30, @diadecompra), @compraid, @clienteid)
+		DECLARE	@clidestid INT
+			
+		SELECT @clidestid = c.cliente_id FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id)
+		WHERE u.usuario_nombre = @clientedestino
+		
+		IF(@clientedestino != NULL)
+		BEGIN
+			INSERT INTO LIL_MIX.cupon (cupon_fecha_vencimiento, cupon_compra_id, cupon_cliente_id)
+			VALUES (DATEADD(day, 30, @diadecompra), @compraid, @clidestid)
+		END
+		ELSE
+		BEGIN
+			INSERT INTO LIL_MIX.cupon (cupon_fecha_vencimiento, cupon_compra_id, cupon_cliente_id)
+			VALUES (DATEADD(day, 30, @diadecompra), @compraid, @clienteid)
+		END
 
 		COMMIT TRANSACTION
 
 	END TRY
 
 	BEGIN CATCH
+
+	
+DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
 
 		ROLLBACK TRANSACTION
 
@@ -2071,14 +2139,15 @@ GO
 -- 20)
 
 CREATE PROCEDURE LIL_MIX.todasLasOfertasAdquiridas
-@fecha_inicio DATETIME , @fecha_fin DATETIME , @nombre_usuario_proveedor VARCHAR(255)
+@fecha_inicio DATETIME , @fecha_fin DATETIME , @proveedor_cuit VARCHAR(255)
 AS
 BEGIN
-	SELECT o.oferta_codigo as 'Codigo de oferta', p.proveedor_cuit as 'Cuit del proveedor'
+	SELECT o.oferta_codigo as 'Codigo de oferta', o.oferta_decripcion as 'Oferta', 
+			p.proveedor_cuit as 'Cuit del proveedor', u.usuario_nombre as 'Usuario del proveedor'
 	FROM LIL_MIX.proveedor p JOIN LIL_MIX.oferta o ON (p.proveedor_id = o.oferta_proveedor_id)
 							 JOIN LIL_MIX.compra c ON (c.compra_oferta_numero = o.oferta_id)
 							 JOIN LIL_MIX.usuario u ON (p.proveedor_usuario_id = u.usuario_id)
-	WHERE u.usuario_nombre = @nombre_usuario_proveedor AND (c.compra_fecha BETWEEN @fecha_inicio AND @fecha_fin)
+	WHERE p.proveedor_cuit = @proveedor_cuit AND (c.compra_fecha BETWEEN @fecha_inicio AND @fecha_fin)
 END
 GO
 
@@ -2088,35 +2157,35 @@ CREATE PROCEDURE LIL_MIX.facturacionProveedor
 @fecha_inicio DATETIME , @fecha_fin DATETIME , @proveedor_cuit VARCHAR(13)
 AS
 BEGIN
-	BEGIN TRY
-		BEGIN TRAN
+	--BEGIN TRY
+		--BEGIN TRAN
 
 		DECLARE @proveedor_id INT,
 			@factura_importe INT
 
-		IF NOT EXISTS (SELECT * FROM LIL_MIX.proveedor WHERE proveedor_cuit = @proveedor_cuit)
-			THROW 50034, 'El proveedor al que se quiere facturar no existe.' , 1
+		--IF NOT EXISTS (SELECT * FROM LIL_MIX.proveedor WHERE proveedor_cuit = @proveedor_cuit)
+			--THROW 50034, 'El proveedor al que se quiere facturar no existe.' , 1
 
 		-- Se informará el importe de la factura y el número correspondiente de la misma.
 
 		SELECT @proveedor_id = p.proveedor_id , @factura_importe = SUM(c.compra_cantidad * o.oferta_precio_oferta)
 		FROM LIL_MIX.oferta o JOIN LIL_MIX.compra c ON (o.oferta_id = c.compra_oferta_numero)
-				  JOIN LIL_MIX.proveedor p ON (o.oferta_proveedor_id = p.proveedor_id)
+							  JOIN LIL_MIX.proveedor p ON (o.oferta_proveedor_id = p.proveedor_id)
 		WHERE p.proveedor_cuit = @proveedor_cuit AND (c.compra_fecha BETWEEN @fecha_inicio AND @fecha_fin)
 		GROUP BY p.proveedor_id
 
-		INSERT INTO LIL_MIX.factura (factura_proveedor_id , factura_fecha_inicio , factura_fecha_fin , factura_importe)
-		VALUES (@proveedor_id, @fecha_inicio , @fecha_fin , @factura_importe)
+		INSERT INTO LIL_MIX.factura (factura_proveedor_id , factura_fecha_inicio , factura_fecha_fin , factura_importe, factura_id)
+		VALUES (@proveedor_id, @fecha_inicio , @fecha_fin , @factura_importe, (SELECT ROUND(((100000000000- 153612) * RAND() + 153612), 0)))
 
-		COMMIT
+		--COMMIT
 
-	END TRY
+	--END TRY
 
-	BEGIN CATCH
+	--BEGIN CATCH
 
-		ROLLBACK
+	--	ROLLBACK
 
-	END CATCH
+	--END CATCH
 END
 GO
 
@@ -2179,10 +2248,10 @@ BEGIN
 				SUM(f.factura_importe) as 'Total Facturado'
 	FROM LIL_MIX.proveedor p JOIN LIL_MIX.factura f ON (f.factura_proveedor_id = p.proveedor_id), LIL_MIX.semestre s
 	WHERE s.semestre_id = @semestre AND
-		(f.factura_fecha_inicio BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND
-					CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103))
-		AND (f.factura_fecha_fin BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+@anio, 103) AND
-		CONVERT(DATETIME, s.semestre_fecha_fin+'-'+@anio, 103))
+		(f.factura_fecha_inicio BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+CONVERT(VARCHAR,@anio), 103) AND
+					CONVERT(DATETIME, s.semestre_fecha_fin+'-'+CONVERT(VARCHAR,@anio), 103))
+		AND (f.factura_fecha_fin BETWEEN CONVERT(DATETIME, s.semestre_fecha_inicio+'-'+CONVERT(VARCHAR,@anio), 103) AND
+		CONVERT(DATETIME, s.semestre_fecha_fin+'-'+CONVERT(VARCHAR,@anio), 103))
 	GROUP BY p.proveedor_id, p.proveedor_nombre_contacto, p.proveedor_mail, p.proveedor_cuit, p.proveedor_rubro, p.proveedor_rs, s.semestre_id
 	ORDER BY [Total Facturado] DESC	-- El listado se debe ordenar en forma descendente por monto.
 
@@ -2259,7 +2328,7 @@ GO
 ----------------------------------------- CARGA DE CRÉDITO ----------------------------------------------
 
 -- 3)
-
+/*
 CREATE TRIGGER LIL_MIX.cargarCreditoAlCliente ON LIL_MIX.cargaDeCredito
 AFTER INSERT AS
 BEGIN
@@ -2273,6 +2342,6 @@ BEGIN
 	WHERE cliente_id = @cliente_id
 
 END
-GO
+GO*/
 
 --------------------------------------
