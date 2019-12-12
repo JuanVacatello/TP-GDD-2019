@@ -56,10 +56,13 @@ namespace FrbaOfertas.AbmProveedor
 
             cn.Open();
             query.ExecuteNonQuery();
+
             MessageBox.Show("Proveedor registrado");
+
             ABMDeProveedor abm = new ABMDeProveedor();
             this.Hide();
             abm.Show();
+
             cn.Close();
         }
 

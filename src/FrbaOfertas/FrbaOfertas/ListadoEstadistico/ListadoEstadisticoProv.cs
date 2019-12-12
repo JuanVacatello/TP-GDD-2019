@@ -12,9 +12,9 @@ using System.Windows.Forms;
 
 namespace FrbaOfertas.ListadoEstadistico
 {
-    public partial class ListadoEstadistico : Form
+    public partial class ListadoEstadisticoProv : Form
     {
-        public ListadoEstadistico()
+        public ListadoEstadisticoProv()
         {
             InitializeComponent();
             cargarDatosListado();
@@ -33,7 +33,7 @@ namespace FrbaOfertas.ListadoEstadistico
             cn.Close();
 
             DataRow fila = dt.NewRow();
-          
+
             comboBox1.ValueMember = "listado_id";
             comboBox1.DisplayMember = "listado_id";
             comboBox1.DataSource = dt;
@@ -52,7 +52,7 @@ namespace FrbaOfertas.ListadoEstadistico
             cn.Close();
 
             DataRow fila = dt.NewRow();
-            
+
             comboBox2.ValueMember = "semestre_id";
             comboBox2.DisplayMember = "semestre_id";
             comboBox2.DataSource = dt;
@@ -79,18 +79,6 @@ namespace FrbaOfertas.ListadoEstadistico
 
         }
 
-        private void btnVolver_Click(object sender, EventArgs e)
-        {
-            FuncionalidadesRol.FuncionalidadesAdmin cre = new FuncionalidadesRol.FuncionalidadesAdmin();
-            this.Hide();
-            cre.Show();
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnSeleccionar_Click(object sender, EventArgs e)
         {
             if (comboBox1.SelectedValue.ToString() != null)
@@ -104,23 +92,11 @@ namespace FrbaOfertas.ListadoEstadistico
             }
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void btnVolver_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void txtAnio_TextChanged(object sender, EventArgs e)
-        {
-
+            FuncionalidadesRol.FuncionalidadesProveedor cre = new FuncionalidadesRol.FuncionalidadesProveedor();
+            this.Hide();
+            cre.Show();
         }
     }
 }

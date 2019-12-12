@@ -19,7 +19,9 @@ namespace FrbaOfertas.FuncionalidadesRol
 
         private void button4_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Login.LoginSegun log = new Login.LoginSegun();
+            this.Hide();
+            log.Show();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -91,6 +93,13 @@ namespace FrbaOfertas.FuncionalidadesRol
             AgregarRolAUsuario ag = new AgregarRolAUsuario();
             this.Hide();
             ag.Show();
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            FuncionalidadesRol.CambiarContraAdmin cam = new FuncionalidadesRol.CambiarContraAdmin();
+            this.Hide();
+            cam.Show();
         }
     }
 }

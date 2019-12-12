@@ -34,7 +34,7 @@ namespace FrbaOfertas.Login
             query.Parameters.Add(new SqlParameter("@usuario", this.txtUsuario.Text));
             query.Parameters.Add(new SqlParameter("@password_ingresada", this.txtPass.Text));
             cn.Open();
-            query.ExecuteNonQuery();
+                query.ExecuteNonQuery();
             MessageBox.Show("Login exitoso");
 
             FuncionalidadesRol.FuncionalidadesProveedor funpro = new FuncionalidadesRol.FuncionalidadesProveedor();

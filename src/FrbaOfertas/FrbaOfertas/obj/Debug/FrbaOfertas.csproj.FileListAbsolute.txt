@@ -54,7 +54,6 @@ C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\D
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.OfertasVigentes.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.CrearOferta.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Facturar.ElegirFechayProveedor.resources
-C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Facturar.Facturar.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.ListadoEstadistico.ListadoEstadistico.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Login.loginAdm.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.login.resources
@@ -116,3 +115,7 @@ C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\D
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.CambiarContraAdmin.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.CambiarContraProv.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.DarDeBajaUsuario.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.ComprarOferta.ComprarCliente.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.ListadoEstadistico.ListadoEstadisticoCli.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.ListadoEstadistico.ListadoEstadisticoProv.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Facturar.Factura.resources

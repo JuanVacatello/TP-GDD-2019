@@ -14,6 +14,8 @@ namespace FrbaOfertas.CargaDeCredito
 {
     public partial class CargaCreditoCliente : Form
     {
+        DateTime dte = new DateTime(2023, 3, 9, 16, 5, 7, 123); //reemplazar por fecha sistema
+
         public CargaCreditoCliente()
         {
             InitializeComponent();
@@ -49,13 +51,20 @@ namespace FrbaOfertas.CargaDeCredito
             query.Parameters.Add(new SqlParameter("@monto", this.txtMonto.Text));
             query.Parameters.Add(new SqlParameter("@tarjeta_numero", this.txtTarjetaNumero.Text));
             query.Parameters.Add(new SqlParameter("@tarjeta_fecha_vencimiento", this.dateTimePicker1.Value));
-            string fecha = ConfigurationManager.AppSettings["current_date"];
-            query.Parameters.Add(new SqlParameter("@fechadecarga", Convert.ToDateTime(fecha)));
+          //  string fecha = ConfigurationManager.AppSettings["current_date"];
+            query.Parameters.Add(new SqlParameter("@fechadecarga", dte)); // aca tambien
             query.Parameters.Add(new SqlParameter("@tarjeta_tipo", this.txtTipoTarj.Text));
             query.Parameters.Add(new SqlParameter("@usuario_nombre", this.txtUser.Text));
 
             cn.Open();
             query.ExecuteNonQuery();
+
+            MessageBox.Show("Credito Cargado");
+
+            FuncionalidadesRol.FuncionalidadesCliente abmrol = new FuncionalidadesRol.FuncionalidadesCliente();
+            this.Hide();
+            abmrol.Show();
+
             cn.Close();
 
         }
@@ -77,11 +86,7 @@ namespace FrbaOfertas.CargaDeCredito
                 cargarCredito(tipo_de_pago_descripcion); 
 
             }
-            MessageBox.Show("Credito Cargado");
-            FuncionalidadesRol.FuncionalidadesCliente abmrol = new FuncionalidadesRol.FuncionalidadesCliente();
-            this.Hide();
-            abmrol.Show();
-        
+            
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -90,6 +95,11 @@ namespace FrbaOfertas.CargaDeCredito
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CargaCreditoCliente_Load(object sender, EventArgs e)
         {
 
         }

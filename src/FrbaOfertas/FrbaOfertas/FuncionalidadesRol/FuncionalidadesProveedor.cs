@@ -19,21 +19,30 @@ namespace FrbaOfertas.FuncionalidadesRol
 
         private void button4_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Login.LoginSegun log = new Login.LoginSegun();
+            this.Hide();
+            log.Show();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            CrearOferta.ConfeccionOfertaProve cre = new CrearOferta.ConfeccionOfertaProve();
+            CrearOferta.ConfeccionOfertaProve cf = new CrearOferta.ConfeccionOfertaProve();
             this.Hide();
-            cre.Show();
+            cf.Show();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            ListadoEstadistico.ListadoEstadistico list = new ListadoEstadistico.ListadoEstadistico();
+            ListadoEstadistico.ListadoEstadisticoProv lis = new ListadoEstadistico.ListadoEstadisticoProv();
             this.Hide();
-            list.Show();
+            lis.Show();
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            CambiarContraProv cam = new CambiarContraProv();
+            this.Hide();
+            cam.Show();
         }
 
         

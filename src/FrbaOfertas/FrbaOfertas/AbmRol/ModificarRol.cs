@@ -94,7 +94,9 @@ namespace FrbaOfertas.AbmRol
 
             cn.Open();
             query.ExecuteNonQuery();
+
             MessageBox.Show("Rol habilitado");
+
             cn.Close(); 
         }
 
@@ -129,7 +131,9 @@ namespace FrbaOfertas.AbmRol
 
             cn.Open();
             query.ExecuteNonQuery();
+
             MessageBox.Show("Funcionalidad agregada");
+
             cn.Close();
         }
 
@@ -143,7 +147,9 @@ namespace FrbaOfertas.AbmRol
 
             cn.Open();
             query.ExecuteNonQuery();
+
             MessageBox.Show("Funcionalidad eliminada");
+
             cn.Close();
         }
 
@@ -179,23 +185,15 @@ namespace FrbaOfertas.AbmRol
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
-            //NO SE SI TAMBIEN SE PASAN ACA ESTOS DATOS
-
-            if (comboBox3.SelectedValue.ToString() != null)
-            {
-                string rol_nombre = comboBox3.SelectedValue.ToString();
-                modificarNombre(rol_nombre);
-            }
         }
 
         private void button4_Click_1(object sender, EventArgs e)
         {
             // BOTON AGREGAR FUNCIONALIDAD
 
-            if (comboBox1.SelectedValue.ToString() != null)
+            if (comboBox3.SelectedValue.ToString() != null)
             {
-                if (comboBox3.SelectedValue.ToString() != null)
+                if (comboBox1.SelectedValue.ToString() != null)
                 {
                     string funcionalidad_descricion = comboBox1.SelectedValue.ToString();
                     string rol_nombre = comboBox3.SelectedValue.ToString();
@@ -214,9 +212,9 @@ namespace FrbaOfertas.AbmRol
         {
             // BOTON DE ELIMINAR FUNCIONALIDAD
 
-            if (comboBox2.SelectedValue.ToString() != null)
+            if (comboBox3.SelectedValue.ToString() != null)
             {
-                if (comboBox3.SelectedValue.ToString() != null)
+                if (comboBox2.SelectedValue.ToString() != null)
                 {
                     string funcionalidad_descricion = comboBox1.SelectedValue.ToString();
                     string rol_nombre = comboBox3.SelectedValue.ToString();

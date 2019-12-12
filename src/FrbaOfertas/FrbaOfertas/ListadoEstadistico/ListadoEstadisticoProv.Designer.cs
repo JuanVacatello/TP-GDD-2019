@@ -1,6 +1,6 @@
 ﻿namespace FrbaOfertas.ListadoEstadistico
 {
-    partial class ListadoEstadistico
+    partial class ListadoEstadisticoProv
     {
         /// <summary>
         /// Required designer variable.
@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.button1 = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.txtAnio = new System.Windows.Forms.TextBox();
             this.btnSeleccionar = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -37,26 +40,49 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnVolver = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(465, 393);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(69, 36);
+            this.button1.TabIndex = 45;
+            this.button1.Text = "Limpiar";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 35);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(187, 13);
+            this.label5.TabIndex = 44;
+            this.label5.Text = "2. Proveedores con mayor facturación";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 9);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(362, 13);
+            this.label4.TabIndex = 43;
+            this.label4.Text = "1. Proveedores con mayor porcentaje de descuento ofrecido en sus ofertas";
+            // 
             // txtAnio
             // 
-            this.txtAnio.Location = new System.Drawing.Point(345, 77);
+            this.txtAnio.Location = new System.Drawing.Point(327, 77);
             this.txtAnio.Name = "txtAnio";
             this.txtAnio.Size = new System.Drawing.Size(94, 20);
-            this.txtAnio.TabIndex = 18;
-            this.txtAnio.TextChanged += new System.EventHandler(this.txtAnio_TextChanged);
+            this.txtAnio.TabIndex = 42;
             // 
             // btnSeleccionar
             // 
-            this.btnSeleccionar.Location = new System.Drawing.Point(564, 74);
+            this.btnSeleccionar.Location = new System.Drawing.Point(546, 74);
             this.btnSeleccionar.Name = "btnSeleccionar";
             this.btnSeleccionar.Size = new System.Drawing.Size(96, 23);
-            this.btnSeleccionar.TabIndex = 17;
+            this.btnSeleccionar.TabIndex = 41;
             this.btnSeleccionar.Text = "Visualizar Informe";
             this.btnSeleccionar.UseVisualStyleBackColor = true;
             this.btnSeleccionar.Click += new System.EventHandler(this.btnSeleccionar_Click);
@@ -66,101 +92,70 @@
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(33, 113);
+            this.dataGridView1.Location = new System.Drawing.Point(15, 113);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.Size = new System.Drawing.Size(609, 253);
-            this.dataGridView1.TabIndex = 16;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.dataGridView1.TabIndex = 40;
             // 
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(456, 76);
+            this.comboBox2.Location = new System.Drawing.Point(438, 76);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(96, 21);
-            this.comboBox2.TabIndex = 15;
-            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            this.comboBox2.TabIndex = 39;
             // 
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(33, 77);
+            this.comboBox1.Location = new System.Drawing.Point(15, 77);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(286, 21);
-            this.comboBox1.TabIndex = 14;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.TabIndex = 38;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(453, 61);
+            this.label3.Location = new System.Drawing.Point(435, 61);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(105, 13);
-            this.label3.TabIndex = 13;
+            this.label3.TabIndex = 37;
             this.label3.Text = "Seleccione semestre";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(342, 61);
+            this.label2.Location = new System.Drawing.Point(324, 61);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 13);
-            this.label2.TabIndex = 12;
+            this.label2.TabIndex = 36;
             this.label2.Text = "Ingrese el año.";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(30, 61);
+            this.label1.Location = new System.Drawing.Point(12, 61);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(109, 13);
-            this.label1.TabIndex = 11;
+            this.label1.TabIndex = 35;
             this.label1.Text = "Seleccione el Informe";
             // 
             // btnVolver
             // 
-            this.btnVolver.Location = new System.Drawing.Point(573, 393);
+            this.btnVolver.Location = new System.Drawing.Point(555, 393);
             this.btnVolver.Name = "btnVolver";
             this.btnVolver.Size = new System.Drawing.Size(69, 36);
-            this.btnVolver.TabIndex = 10;
+            this.btnVolver.TabIndex = 34;
             this.btnVolver.Text = "Atras";
             this.btnVolver.UseVisualStyleBackColor = true;
             this.btnVolver.Click += new System.EventHandler(this.btnVolver_Click);
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(30, 9);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(362, 13);
-            this.label4.TabIndex = 19;
-            this.label4.Text = "1. Proveedores con mayor porcentaje de descuento ofrecido en sus ofertas";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(30, 35);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(187, 13);
-            this.label5.TabIndex = 20;
-            this.label5.Text = "2. Proveedores con mayor facturación";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(483, 393);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(69, 36);
-            this.button1.TabIndex = 21;
-            this.button1.Text = "Limpiar";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // ListadoEstadistico
+            // ListadoEstadisticoProv
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(674, 441);
+            this.ClientSize = new System.Drawing.Size(665, 436);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -173,8 +168,8 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnVolver);
-            this.Name = "ListadoEstadistico";
-            this.Text = "Form1";
+            this.Name = "ListadoEstadisticoProv";
+            this.Text = "ListadoEstadisticoProv";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -183,6 +178,9 @@
 
         #endregion
 
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtAnio;
         private System.Windows.Forms.Button btnSeleccionar;
         private System.Windows.Forms.DataGridView dataGridView1;
@@ -192,8 +190,5 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnVolver;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button button1;
     }
 }

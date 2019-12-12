@@ -19,7 +19,9 @@ namespace FrbaOfertas.FuncionalidadesRol
 
         private void button4_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Login.LoginSegun log = new Login.LoginSegun();
+            this.Hide();
+            log.Show();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -31,14 +33,16 @@ namespace FrbaOfertas.FuncionalidadesRol
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            ComprarOferta.ComprarCliente com = new ComprarOferta.ComprarCliente();
+            this.Hide();
+            com.Show();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            ListadoEstadistico.ListadoEstadistico list = new ListadoEstadistico.ListadoEstadistico();
+            ListadoEstadistico.ListadoEstadisticoCli lis = new ListadoEstadistico.ListadoEstadisticoCli();
             this.Hide();
-            list.Show();
+            lis.Show();
         }
 
         private void button10_Click(object sender, EventArgs e)

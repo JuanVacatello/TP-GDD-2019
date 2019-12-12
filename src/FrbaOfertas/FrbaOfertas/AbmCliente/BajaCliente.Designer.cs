@@ -38,11 +38,9 @@
             this.txtApellidoFiltro = new System.Windows.Forms.TextBox();
             this.txtMailFiltro = new System.Windows.Forms.TextBox();
             this.txtDniFiltro = new System.Windows.Forms.TextBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.Proveedor_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Eliminar = new System.Windows.Forms.DataGridViewButtonColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.dgvBajaCliente = new System.Windows.Forms.DataGridView();
+            this.button2 = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBajaCliente)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -56,7 +54,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(482, 274);
+            this.button1.Location = new System.Drawing.Point(584, 274);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 4;
@@ -128,43 +126,31 @@
             this.txtDniFiltro.Size = new System.Drawing.Size(100, 20);
             this.txtDniFiltro.TabIndex = 14;
             // 
-            // dataGridView1
+            // dgvBajaCliente
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Proveedor_id,
-            this.Nombre,
-            this.Eliminar});
-            this.dataGridView1.Location = new System.Drawing.Point(23, 118);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(534, 150);
-            this.dataGridView1.TabIndex = 15;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.dgvBajaCliente.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvBajaCliente.Location = new System.Drawing.Point(28, 103);
+            this.dgvBajaCliente.Name = "dgvBajaCliente";
+            this.dgvBajaCliente.Size = new System.Drawing.Size(631, 150);
+            this.dgvBajaCliente.TabIndex = 15;
             // 
-            // Proveedor_id
+            // button2
             // 
-            this.Proveedor_id.HeaderText = "Nombre del cliente";
-            this.Proveedor_id.Name = "Proveedor_id";
-            this.Proveedor_id.Width = 200;
-            // 
-            // Nombre
-            // 
-            this.Nombre.HeaderText = "Nombre de usuario del cliente";
-            this.Nombre.Name = "Nombre";
-            this.Nombre.Width = 200;
-            // 
-            // Eliminar
-            // 
-            this.Eliminar.HeaderText = "Eliminar";
-            this.Eliminar.Name = "Eliminar";
-            this.Eliminar.Text = "Sí";
+            this.button2.Location = new System.Drawing.Point(541, 74);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(118, 23);
+            this.button2.TabIndex = 16;
+            this.button2.Text = "Filtrar";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // BajaCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(598, 309);
-            this.Controls.Add(this.dataGridView1);
+            this.ClientSize = new System.Drawing.Size(682, 309);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.dgvBajaCliente);
             this.Controls.Add(this.txtDniFiltro);
             this.Controls.Add(this.txtMailFiltro);
             this.Controls.Add(this.txtApellidoFiltro);
@@ -177,7 +163,7 @@
             this.Controls.Add(this.button1);
             this.Name = "BajaCliente";
             this.Text = "Baja Cliente";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBajaCliente)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -195,10 +181,8 @@
         private System.Windows.Forms.TextBox txtApellidoFiltro;
         private System.Windows.Forms.TextBox txtMailFiltro;
         private System.Windows.Forms.TextBox txtDniFiltro;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Proveedor_id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Nombre;
-        private System.Windows.Forms.DataGridViewButtonColumn Eliminar;
+        private System.Windows.Forms.DataGridView dgvBajaCliente;
+        private System.Windows.Forms.Button button2;
 
     }
 }

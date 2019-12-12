@@ -169,7 +169,7 @@
             // 
             this.txtTipo.Location = new System.Drawing.Point(13, 193);
             this.txtTipo.Name = "txtTipo";
-            this.txtTipo.Size = new System.Drawing.Size(100, 20);
+            this.txtTipo.Size = new System.Drawing.Size(120, 20);
             this.txtTipo.TabIndex = 35;
             // 
             // CargaCredito

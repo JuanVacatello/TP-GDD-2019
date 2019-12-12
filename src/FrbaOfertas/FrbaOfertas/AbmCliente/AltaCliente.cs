@@ -45,7 +45,13 @@ namespace FrbaOfertas.AbmCliente
 
             cn.Open();
             query.ExecuteNonQuery();
+
             MessageBox.Show("Cliente registrado");
+
+            ABMDeCliente abm = new ABMDeCliente();
+            this.Hide();
+            abm.Show();
+
             cn.Close();
          }
 

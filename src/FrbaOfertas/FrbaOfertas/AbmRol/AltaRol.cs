@@ -50,9 +50,11 @@ namespace FrbaOfertas.AbmRol
 
             cn.Open();
             query.ExecuteNonQuery();
+
             ABM_de_Rol abmrol = new ABM_de_Rol();
             this.Hide();
             abmrol.Show();
+
             cn.Close();
             
         }
@@ -73,10 +75,8 @@ namespace FrbaOfertas.AbmRol
             if (cmbFuncionalidad.SelectedValue.ToString() != null)
             {
                 string funcionalidad_descripcion = cmbFuncionalidad.SelectedValue.ToString();
-
                 registrarRol(funcionalidad_descripcion);
             }
-            MessageBox.Show("Nuevo rol agregado");
             
         }
 
@@ -99,11 +99,7 @@ namespace FrbaOfertas.AbmRol
 
         private void cmbFuncionalidad_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(cmbFuncionalidad.SelectedValue.ToString() != null){
-                string funcionalidad_descripcion = cmbFuncionalidad.SelectedValue.ToString();
-
-                registrarRol(funcionalidad_descripcion);
-            }
         }
+        
     }
 }
