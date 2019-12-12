@@ -152,6 +152,7 @@
             this.button10.TabIndex = 16;
             this.button10.Text = "CAMBIAR CONTRASEÑA";
             this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
             // button11
             // 
@@ -189,6 +190,7 @@
             this.button12.TabIndex = 20;
             this.button12.Text = "AGREGAR ROL A UN USUARIO";
             this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
             // 
             // FuncionalidadesAdmin
             // 

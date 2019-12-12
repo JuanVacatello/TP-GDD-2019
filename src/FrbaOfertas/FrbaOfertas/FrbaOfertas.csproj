@@ -156,6 +156,12 @@
     <Compile Include="CargaDeCredito\CargaCreditoCliente.Designer.cs">
       <DependentUpon>CargaCreditoCliente.cs</DependentUpon>
     </Compile>
+    <Compile Include="ComprarOferta\ComprarCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComprarOferta\ComprarCliente.Designer.cs">
+      <DependentUpon>ComprarCliente.cs</DependentUpon>
+    </Compile>
     <Compile Include="ComprarOferta\OfertasVigentes.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -180,11 +186,17 @@
     <Compile Include="Facturar\ElegirFechayProveedor.Designer.cs">
       <DependentUpon>ElegirFechayProveedor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Facturar\Facturar.cs">
+    <Compile Include="Facturar\Factura.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Facturar\Facturar.Designer.cs">
-      <DependentUpon>Facturar.cs</DependentUpon>
+    <Compile Include="Facturar\Factura.Designer.cs">
+      <DependentUpon>Factura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\AgregarRolAUsuario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\AgregarRolAUsuario.Designer.cs">
+      <DependentUpon>AgregarRolAUsuario.cs</DependentUpon>
     </Compile>
     <Compile Include="FuncionalidadesRol\CambiarContraAdmin.cs">
       <SubType>Form</SubType>
@@ -233,6 +245,18 @@
     </Compile>
     <Compile Include="ListadoEstadistico\ListadoEstadistico.Designer.cs">
       <DependentUpon>ListadoEstadistico.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ListadoEstadistico\ListadoEstadisticoCli.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListadoEstadistico\ListadoEstadisticoCli.Designer.cs">
+      <DependentUpon>ListadoEstadisticoCli.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ListadoEstadistico\ListadoEstadisticoProv.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListadoEstadistico\ListadoEstadisticoProv.Designer.cs">
+      <DependentUpon>ListadoEstadisticoProv.cs</DependentUpon>
     </Compile>
     <Compile Include="Login\loginAdm.cs">
       <SubType>Form</SubType>
@@ -320,6 +344,9 @@
     <EmbeddedResource Include="CargaDeCredito\CargaCreditoCliente.resx">
       <DependentUpon>CargaCreditoCliente.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ComprarOferta\ComprarCliente.resx">
+      <DependentUpon>ComprarCliente.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ComprarOferta\OfertasVigentes.resx">
       <DependentUpon>OfertasVigentes.cs</DependentUpon>
     </EmbeddedResource>
@@ -332,8 +359,11 @@
     <EmbeddedResource Include="Facturar\ElegirFechayProveedor.resx">
       <DependentUpon>ElegirFechayProveedor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Facturar\Facturar.resx">
-      <DependentUpon>Facturar.cs</DependentUpon>
+    <EmbeddedResource Include="Facturar\Factura.resx">
+      <DependentUpon>Factura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FuncionalidadesRol\AgregarRolAUsuario.resx">
+      <DependentUpon>AgregarRolAUsuario.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FuncionalidadesRol\CambiarContraAdmin.resx">
       <DependentUpon>CambiarContraAdmin.cs</DependentUpon>
@@ -358,6 +388,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ListadoEstadistico\ListadoEstadistico.resx">
       <DependentUpon>ListadoEstadistico.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ListadoEstadistico\ListadoEstadisticoCli.resx">
+      <DependentUpon>ListadoEstadisticoCli.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ListadoEstadistico\ListadoEstadisticoProv.resx">
+      <DependentUpon>ListadoEstadisticoProv.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\loginAdm.resx">
       <DependentUpon>loginAdm.cs</DependentUpon>
@@ -385,6 +421,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

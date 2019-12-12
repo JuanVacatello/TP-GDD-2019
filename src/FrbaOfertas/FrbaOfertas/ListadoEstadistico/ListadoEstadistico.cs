@@ -33,11 +33,9 @@ namespace FrbaOfertas.ListadoEstadistico
             cn.Close();
 
             DataRow fila = dt.NewRow();
-            fila["listado_descripcion"] = "Seleccione un listado";
-            dt.Rows.InsertAt(fila, 0);
-
-            comboBox1.ValueMember = "listado_descripcion";
-            comboBox1.DisplayMember = "listado_descripcion";
+          
+            comboBox1.ValueMember = "listado_id";
+            comboBox1.DisplayMember = "listado_id";
             comboBox1.DataSource = dt;
 
         }
@@ -54,27 +52,31 @@ namespace FrbaOfertas.ListadoEstadistico
             cn.Close();
 
             DataRow fila = dt.NewRow();
-            fila["semestre_id"] = "Seleccione un semestre";
-            dt.Rows.InsertAt(fila, 0);
-
+            
             comboBox2.ValueMember = "semestre_id";
             comboBox2.DisplayMember = "semestre_id";
             comboBox2.DataSource = dt;
 
         }
 
-        private void confeccionarListado(string listado_descripcion, string semestre_id)
+        private void confeccionarListado(string listado_id, string semestre_id)
         {
+            DataTable dt = new DataTable();
+            dt.Clear();
             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.crearListadoEstadistico", cn);
             query.CommandType = CommandType.StoredProcedure;
-            query.Parameters.Add(new SqlParameter("@semestre", Convert.ToInt32(semestre_id)));
-            query.Parameters.Add(new SqlParameter("@listado", listado_descripcion));
-            query.Parameters.Add(new SqlParameter("@anio", Convert.ToInt32(this.txtAnio.Text)));
+            query.Parameters.Add(new SqlParameter("@semestre", Convert.ToInt64(semestre_id)));
+            query.Parameters.Add(new SqlParameter("@listado", Convert.ToInt64(listado_id)));
+            query.Parameters.Add(new SqlParameter("@anio", Convert.ToInt64(this.txtAnio.Text)));
 
+            SqlDataAdapter da = new SqlDataAdapter(query);
             cn.Open();
-            query.ExecuteNonQuery();
+            da.Fill(dt);
+            dataGridView1.DataSource = dt;
+            dataGridView1.ReadOnly = true;
             cn.Close();
+
         }
 
         private void btnVolver_Click(object sender, EventArgs e)
@@ -95,14 +97,28 @@ namespace FrbaOfertas.ListadoEstadistico
             {
                 if (comboBox2.SelectedValue.ToString() != null)
                 {
-                    string listado_descripcion = comboBox1.SelectedValue.ToString();
+                    string listado_id = comboBox1.SelectedValue.ToString();
                     string semestre_id = comboBox2.SelectedValue.ToString();
-                    confeccionarListado(listado_descripcion, semestre_id);
+                    confeccionarListado(listado_id, semestre_id);
                 }
             }
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void txtAnio_TextChanged(object sender, EventArgs e)
         {
 
         }

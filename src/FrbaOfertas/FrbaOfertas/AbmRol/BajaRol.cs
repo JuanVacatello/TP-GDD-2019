@@ -50,6 +50,13 @@ namespace FrbaOfertas.AbmRol
             
             cn.Open();
             query.ExecuteNonQuery();
+
+            MessageBox.Show("Rol eliminado");
+
+            ABM_de_Rol abmrol = new ABM_de_Rol();
+            this.Hide();
+            abmrol.Show();
+
             cn.Close();
 
         }
@@ -82,13 +89,8 @@ namespace FrbaOfertas.AbmRol
             if (comboBox1.SelectedValue.ToString() != null)
             {
                 string rol_nombre = comboBox1.SelectedValue.ToString();
-
                 eliminarRol(rol_nombre);
             }
-            MessageBox.Show("Rol eliminado");
-            ABM_de_Rol abmrol = new ABM_de_Rol();
-            this.Hide();
-            abmrol.Show();
         }
     }
 }

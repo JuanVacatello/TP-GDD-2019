@@ -14,6 +14,8 @@ namespace FrbaOfertas.CrearOferta
 {
     public partial class CrearOferta : Form
     {
+        DateTime dte = new DateTime(2023, 3, 9, 16, 5, 7, 123); //reemplazar por fecha sistema
+
         public CrearOferta()
         {
             InitializeComponent();
@@ -39,15 +41,18 @@ namespace FrbaOfertas.CrearOferta
             query.Parameters.Add(new SqlParameter("@oferta_precio_lista", this.txtPrecioLista.Text));
             query.Parameters.Add(new SqlParameter("@oferta_stock", this.txtStock.Text));
             query.Parameters.Add(new SqlParameter("@oferta_restriccion_compra", this.txtMaximo.Text));
-            string fecha = ConfigurationManager.AppSettings["current_date"];
-            query.Parameters.Add(new SqlParameter("@fechaactualdelsistema", Convert.ToDateTime(fecha)));
+          //  string fecha = ConfigurationManager.AppSettings["current_date"];
+            query.Parameters.Add(new SqlParameter("@fechaactualdelsistema", dte)); //aca tambien
            
             cn.Open();
             query.ExecuteNonQuery();
+
             MessageBox.Show("Oferta cargada");
+
             FuncionalidadesRol.FuncionalidadesAdmin cre = new FuncionalidadesRol.FuncionalidadesAdmin();
             this.Hide();
             cre.Show();
+
             cn.Close();
         }
 

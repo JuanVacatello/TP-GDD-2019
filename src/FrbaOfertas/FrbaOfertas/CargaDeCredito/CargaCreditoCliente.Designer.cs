@@ -194,6 +194,7 @@
             this.Controls.Add(this.label1);
             this.Name = "CargaCreditoCliente";
             this.Text = "CargaCreditoCliente";
+            this.Load += new System.EventHandler(this.CargaCreditoCliente_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

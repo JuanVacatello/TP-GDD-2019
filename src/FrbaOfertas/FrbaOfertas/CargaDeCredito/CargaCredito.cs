@@ -14,6 +14,9 @@ namespace FrbaOfertas.CargaDeCredito
 {
     public partial class CargaCredito : Form
     {
+
+        DateTime dte = new DateTime(2023, 3, 9, 16, 5, 7, 123); //reemplazar por fecha sistema (global)
+
         public CargaCredito()
         {
             InitializeComponent();
@@ -49,8 +52,8 @@ namespace FrbaOfertas.CargaDeCredito
             query.Parameters.Add(new SqlParameter("@monto", Convert.ToInt32(this.txtMonto.Text)));
             query.Parameters.Add(new SqlParameter("@tarjeta_numero",this.txtTarjetaNumero.Text));
             query.Parameters.Add(new SqlParameter("@tarjeta_fecha_vencimiento", this.dateTimePicker1.Value));
-            //string fecha = ConfigurationManager.AppSettings["current_date"];
-            query.Parameters.Add(new SqlParameter("@fechadecarga", 2019-12-14));// Convert.ToDateTime(fecha)));
+        //    string fecha = ConfigurationManager.AppSettings["current_date"];
+            query.Parameters.Add(new SqlParameter("@fechadecarga", Convert.ToDateTime(dte))); // aca tambien
             query.Parameters.Add(new SqlParameter("@tarjeta_tipo", this.txtTipo.Text));
             query.Parameters.Add(new SqlParameter("@usuario_nombre", this.txtUser.Text));
 

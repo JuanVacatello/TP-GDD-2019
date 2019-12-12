@@ -34,7 +34,7 @@ namespace FrbaOfertas.AbmCliente
             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarClienteNombre", cn);
             query.CommandType = CommandType.StoredProcedure;
-           // query.Parameters.Add(new SqlParameter("@usuario_nombre", ---));
+            //query.Parameters.Add(new SqlParameter("@usuario_nombre", ---));
             query.Parameters.Add(new SqlParameter("@nombre_nuevo", this.txtNuevoNombre.Text));
 
             cn.Open();

@@ -43,6 +43,7 @@ namespace FrbaOfertas.FuncionalidadesRol
             FuncionalidadesCliente abmrol = new FuncionalidadesCliente();
             this.Hide();
             abmrol.Show();
+
             cn.Close();
         }
     }

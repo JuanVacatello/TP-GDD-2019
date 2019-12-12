@@ -47,7 +47,13 @@ namespace FrbaOfertas.Login
 
             cn.Open();
             query.ExecuteNonQuery();
+
             MessageBox.Show("Cliente registrado");
+
+            login log = new login();
+            this.Hide();
+            log.Show();
+
             cn.Close();
         }
     }

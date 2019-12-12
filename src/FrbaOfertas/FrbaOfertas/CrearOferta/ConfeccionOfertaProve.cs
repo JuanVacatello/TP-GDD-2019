@@ -14,6 +14,8 @@ namespace FrbaOfertas.CrearOferta
 {
     public partial class ConfeccionOfertaProve : Form
     {
+        DateTime dte = new DateTime(2023, 3, 9, 16, 5, 7, 123); //reemplazar por fecha sistema
+
         public ConfeccionOfertaProve()
         {
             InitializeComponent();
@@ -28,6 +30,11 @@ namespace FrbaOfertas.CrearOferta
 
         private void ConfeccionOfertaProve_Load(object sender, EventArgs e)
         {
+            
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.crearOferta", cn);
             query.CommandType = CommandType.StoredProcedure;
@@ -38,15 +45,18 @@ namespace FrbaOfertas.CrearOferta
             query.Parameters.Add(new SqlParameter("@oferta_precio_lista", this.txtPrecioLista.Text));
             query.Parameters.Add(new SqlParameter("@oferta_stock", this.txtStock.Text));
             query.Parameters.Add(new SqlParameter("@oferta_restriccion_compra", this.txtMaximo.Text));
-            string fecha = ConfigurationManager.AppSettings["current_date"];
-            query.Parameters.Add(new SqlParameter("@fechaactualdelsistema", Convert.ToDateTime(fecha)));
-           
+            //string fecha = ConfigurationManager.AppSettings["current_date"];
+            query.Parameters.Add(new SqlParameter("@fechaactualdelsistema", Convert.ToDateTime(dte))); // ACA TAMBIEN
+
             cn.Open();
             query.ExecuteNonQuery();
+
             MessageBox.Show("Oferta cargada");
+
             FuncionalidadesRol.FuncionalidadesProveedor cre = new FuncionalidadesRol.FuncionalidadesProveedor();
             this.Hide();
             cre.Show();
+
             cn.Close();
         }
     }
