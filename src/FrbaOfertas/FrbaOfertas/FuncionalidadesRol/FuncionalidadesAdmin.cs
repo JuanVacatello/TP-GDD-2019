@@ -101,5 +101,12 @@ namespace FrbaOfertas.FuncionalidadesRol
             this.Hide();
             cam.Show();
         }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            CambiarContraAUsuarios cam = new CambiarContraAUsuarios();
+            this.Hide();
+            cam.Show();
+        }
     }
 }

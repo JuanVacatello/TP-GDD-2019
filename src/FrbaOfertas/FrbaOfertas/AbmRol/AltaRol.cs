@@ -32,8 +32,9 @@ namespace FrbaOfertas.AbmRol
             cn.Close();
 
             DataRow fila = dt.NewRow();
-            fila["funcionalidad_descripcion"] = "seleccione una funcionalidad";
-            dt.Rows.InsertAt(fila, 0);
+            // LO SACAMOS PARA EVITAR Q NO SE PUEDA ELEGIR FUNCIONALIDAD
+            //fila["funcionalidad_descripcion"] = "seleccione una funcionalidad";
+            //dt.Rows.InsertAt(fila, 0);
 
             cmbFuncionalidad.ValueMember = "funcionalidad_descripcion";
             cmbFuncionalidad.DisplayMember = "funcionalidad_descripcion";
@@ -67,17 +68,35 @@ namespace FrbaOfertas.AbmRol
 
         }
 
+        private void altaRol()
+        {
+            try
+            {
+                if (cmbFuncionalidad.SelectedValue.ToString() != null)
+                {
+                    string funcionalidad_descripcion = cmbFuncionalidad.SelectedValue.ToString();
+                    registrarRol(funcionalidad_descripcion);
+                }
+            }
+            catch (Exception Em)
+            {
+                MessageBox.Show(Em.Message.ToString());
+            }
+        }
+
         
         private void button2_Click(object sender, EventArgs e)
         {
-            if (txtNombre.TextLength != 0 & cmbFuncionalidad.SelectedValue.ToString() != null)
-            {
-                string funcionalidad_descripcion = cmbFuncionalidad.SelectedValue.ToString();
-                registrarRol(funcionalidad_descripcion);
-            }
+           
+            if (txtNombre.TextLength == 0)
+                MessageBox.Show("Ingrese un nombre de rol");
             else
-                MessageBox.Show("Ingrese un nombre de rol o funcionalidad");
-            
+            {
+                this.altaRol();
+
+            }
+
+
         }
 
         private void button1_Click(object sender, EventArgs e)

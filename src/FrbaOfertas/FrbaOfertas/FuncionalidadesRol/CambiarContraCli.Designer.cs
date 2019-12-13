@@ -100,7 +100,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtContraActual);
             this.Name = "CambiarContraCli";
-            this.Text = "CambiarContraCli";
+            this.Text = "Cambiar contraseña";
             this.ResumeLayout(false);
             this.PerformLayout();
 

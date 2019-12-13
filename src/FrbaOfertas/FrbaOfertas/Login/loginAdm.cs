@@ -28,8 +28,10 @@ namespace FrbaOfertas.Login
             log.Show();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
+        void login() {
+
+            try {
+
             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.login", cn);
             query.CommandType = CommandType.StoredProcedure;
@@ -46,6 +48,26 @@ namespace FrbaOfertas.Login
             nombre_usuario = this.txtUsuario.Text;
 
             cn.Close();
-        }
+
+            }
+            catch (Exception Em)
+            {
+                MessageBox.Show(Em.Message.ToString());
+            }
+          }
+        
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (txtUsuario.TextLength == 0)
+                MessageBox.Show("Ingrese un nombre de usuario");
+            else if (txtPass.TextLength == 0)
+                MessageBox.Show("Ingrese una contraseña");
+            else
+            {
+                this.login();
+
+            }
     }
+  }
 }

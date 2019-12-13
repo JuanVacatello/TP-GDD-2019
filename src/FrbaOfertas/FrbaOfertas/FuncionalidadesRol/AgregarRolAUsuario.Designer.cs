@@ -72,9 +72,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(58, 114);
+            this.button1.Location = new System.Drawing.Point(15, 113);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(148, 23);
             this.button1.TabIndex = 4;
             this.button1.Text = "Atrás";
             this.button1.UseVisualStyleBackColor = true;
@@ -82,9 +82,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(177, 114);
+            this.button2.Location = new System.Drawing.Point(169, 113);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(134, 23);
             this.button2.TabIndex = 5;
             this.button2.Text = "Agregar rol";
             this.button2.UseVisualStyleBackColor = true;
@@ -94,7 +94,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(324, 148);
+            this.ClientSize = new System.Drawing.Size(314, 148);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.comboBox1);
@@ -102,7 +102,7 @@
             this.Controls.Add(this.txtUsuario);
             this.Controls.Add(this.label1);
             this.Name = "AgregarRolAUsuario";
-            this.Text = "AgregarRolAUsuario";
+            this.Text = "Agregar rol a un usuario";
             this.ResumeLayout(false);
             this.PerformLayout();
 

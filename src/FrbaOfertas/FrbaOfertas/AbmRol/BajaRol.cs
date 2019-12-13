@@ -24,12 +24,14 @@ namespace FrbaOfertas.AbmRol
         {
             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             cn.Open();
-            SqlCommand query = new SqlCommand("LIL_MIX.listadoRol", cn);
+            SqlCommand query = new SqlCommand("LIL_MIX.listadoRolHabilitados", cn);
             query.CommandType = CommandType.StoredProcedure;
             SqlDataAdapter da = new SqlDataAdapter(query);
             DataTable dt = new DataTable();
             da.Fill(dt);
             cn.Close();
+
+
 
             DataRow fila = dt.NewRow();
             fila["rol_nombre"] = "Seleccione un rol";

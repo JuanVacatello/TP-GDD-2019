@@ -26,25 +26,45 @@ namespace FrbaOfertas.FuncionalidadesRol
             fun.Show();
         }
 
+        private void cambiarContra()
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
+                SqlCommand query = new SqlCommand("LIL_MIX.modificarContrasenia", cn);
+                query.CommandType = CommandType.StoredProcedure;
+                query.Parameters.Add(new SqlParameter("@usuario_nombre", Login.loginAdm.nombre_usuario));
+                query.Parameters.Add(new SqlParameter("@anteriorcontra", this.txtContraActual.Text));
+                query.Parameters.Add(new SqlParameter("@nuevacontra", this.txtContraNueva.Text));
+
+                cn.Open();
+                query.ExecuteNonQuery();
+
+                MessageBox.Show("Contraseña actualizada con exito");
+
+                FuncionalidadesAdmin fun = new FuncionalidadesAdmin();
+                this.Hide();
+                fun.Show();
+
+                cn.Close();
+            }
+            catch (Exception Em)
+            {
+                MessageBox.Show(Em.Message.ToString());
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
-            SqlCommand query = new SqlCommand("LIL_MIX.modificarContrasenia", cn);
-            query.CommandType = CommandType.StoredProcedure;
-            query.Parameters.Add(new SqlParameter("@usuario_nombre", Login.loginAdm.nombre_usuario));
-            query.Parameters.Add(new SqlParameter("@anteriorcontra", this.txtContraActual.Text));
-            query.Parameters.Add(new SqlParameter("@nuevacontra", this.txtContraNueva.Text));
+            if (txtContraActual.TextLength == 0)
+                MessageBox.Show("Ingrese su contraseña actual");
+            if (txtContraNueva.TextLength == 0)
+                MessageBox.Show("Ingrese su nueva contraseña");
+            else
+            {
+                this.cambiarContra();
 
-            cn.Open();
-            query.ExecuteNonQuery();
-
-            MessageBox.Show("Contraseña actualizada con exito");
-
-            FuncionalidadesAdmin fun = new FuncionalidadesAdmin();
-            this.Hide();
-            fun.Show();
-
-            cn.Close();
+            }
         }
     }
 }

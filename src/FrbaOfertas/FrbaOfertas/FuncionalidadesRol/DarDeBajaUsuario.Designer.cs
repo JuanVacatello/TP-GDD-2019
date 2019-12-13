@@ -52,7 +52,7 @@
             // 
             // Atras
             // 
-            this.Atras.Location = new System.Drawing.Point(53, 51);
+            this.Atras.Location = new System.Drawing.Point(127, 51);
             this.Atras.Name = "Atras";
             this.Atras.Size = new System.Drawing.Size(75, 23);
             this.Atras.TabIndex = 2;
@@ -62,7 +62,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(168, 51);
+            this.button2.Location = new System.Drawing.Point(208, 51);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 3;

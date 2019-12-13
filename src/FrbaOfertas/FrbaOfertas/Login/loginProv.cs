@@ -21,6 +21,36 @@ namespace FrbaOfertas.Login
             InitializeComponent();
         }
 
+        void loginProveedor()
+        {
+
+            try
+            {
+
+                SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
+                SqlCommand query = new SqlCommand("LIL_MIX.login", cn);
+                query.CommandType = CommandType.StoredProcedure;
+                query.Parameters.Add(new SqlParameter("@usuario", this.txtUsuario.Text));
+                query.Parameters.Add(new SqlParameter("@password_ingresada", this.txtPass.Text));
+                cn.Open();
+                query.ExecuteNonQuery();
+                MessageBox.Show("Login exitoso");
+
+                FuncionalidadesRol.FuncionalidadesProveedor fun = new FuncionalidadesRol.FuncionalidadesProveedor();
+                this.Hide();
+                fun.Show();
+
+                nombre_usuario = this.txtUsuario.Text;
+
+                cn.Close();
+
+            }
+            catch (Exception Em)
+            {
+                MessageBox.Show(Em.Message.ToString());
+            }
+        }
+
         private void button3_Click(object sender, EventArgs e)
         {
             LoginSegun log = new LoginSegun();
@@ -30,22 +60,15 @@ namespace FrbaOfertas.Login
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
-            SqlCommand query = new SqlCommand("LIL_MIX.login", cn);
-            query.CommandType = CommandType.StoredProcedure;
-            query.Parameters.Add(new SqlParameter("@usuario", this.txtUsuario.Text));
-            query.Parameters.Add(new SqlParameter("@password_ingresada", this.txtPass.Text));
-            cn.Open();
-                query.ExecuteNonQuery();
-            MessageBox.Show("Login exitoso");
+            if (txtUsuario.TextLength == 0)
+                MessageBox.Show("Ingrese un nombre de usuario");
+            else if (txtPass.TextLength == 0)
+                MessageBox.Show("Ingrese una contraseña");
+            else
+            {
+                this.loginProveedor();
 
-            FuncionalidadesRol.FuncionalidadesProveedor funpro = new FuncionalidadesRol.FuncionalidadesProveedor();
-            this.Hide();
-            funpro.Show();
-
-            nombre_usuario = this.txtUsuario.Text;
-
-            cn.Close();
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)

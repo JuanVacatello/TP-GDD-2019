@@ -107,7 +107,7 @@ namespace FrbaOfertas.Login
             txtPiso.Clear();
             txtDpto.Clear();
             txtCP.Clear();
-            //dateTimePicker1.DateTime.Today();
+            dateTimePicker1.Value = DateTime.Now;
 
         }
 

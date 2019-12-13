@@ -53,14 +53,14 @@ namespace FrbaOfertas.CargaDeCredito
             query.Parameters.Add(new SqlParameter("@tarjeta_numero",this.txtTarjetaNumero.Text));
             query.Parameters.Add(new SqlParameter("@tarjeta_fecha_vencimiento", this.dateTimePicker1.Value));
         //    string fecha = ConfigurationManager.AppSettings["current_date"];
-            query.Parameters.Add(new SqlParameter("@fechadecarga", Convert.ToDateTime(dte))); // aca tambien
-            query.Parameters.Add(new SqlParameter("@tarjeta_tipo", this.txtTipo.Text));
+            query.Parameters.Add(new SqlParameter("@fechadecarga", dte)); // aca tambien
+            query.Parameters.Add(new SqlParameter("@tarjeta_tipo", this.textBox1.Text));
             query.Parameters.Add(new SqlParameter("@usuario_nombre", this.txtUser.Text));
 
             cn.Open();
             query.ExecuteNonQuery(); 
             
-            
+            MessageBox.Show("Credito Cargado");
 
             FuncionalidadesRol.FuncionalidadesAdmin abmrol = new FuncionalidadesRol.FuncionalidadesAdmin();
             this.Hide();
@@ -81,6 +81,24 @@ namespace FrbaOfertas.CargaDeCredito
         {
         }
 
+        private void carga()
+        {
+            try
+            {
+                if(comboBox1.SelectedValue.ToString() != null)
+                {
+                    string tipo_de_pago_descripcion = comboBox1.SelectedValue.ToString();
+                    cargarCredito(tipo_de_pago_descripcion);
+                }
+              }
+            catch (Exception Em)
+            {
+                MessageBox.Show(Em.Message.ToString());
+            }
+
+        }
+        
+
         private void button2_Click(object sender, EventArgs e)
         {
             //BOTON CARGAR
@@ -90,11 +108,10 @@ namespace FrbaOfertas.CargaDeCredito
                 MessageBox.Show("Ingrese el tipo de pago");
             if (txtMonto.TextLength == 0)
                 MessageBox.Show("Ingrese el monto que desea cargar");
-            
+            else
             {
-                string tipo_de_pago_descripcion = comboBox1.SelectedValue.ToString();
-                cargarCredito(tipo_de_pago_descripcion);
-                MessageBox.Show("Credito Cargado");
+                carga();
+
             }
 
           }

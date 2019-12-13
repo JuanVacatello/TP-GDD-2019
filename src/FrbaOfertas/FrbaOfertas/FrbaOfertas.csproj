@@ -168,6 +168,12 @@
     <Compile Include="ComprarOferta\ComprarAdmin.Designer.cs">
       <DependentUpon>ComprarAdmin.cs</DependentUpon>
     </Compile>
+    <Compile Include="ComprarOferta\NumeroDeCompra.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComprarOferta\NumeroDeCompra.Designer.cs">
+      <DependentUpon>NumeroDeCompra.cs</DependentUpon>
+    </Compile>
     <Compile Include="CrearOferta\ConfeccionOfertaProve.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -215,6 +221,12 @@
     </Compile>
     <Compile Include="FuncionalidadesRol\CambiarContraProv.Designer.cs">
       <DependentUpon>CambiarContraProv.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\CambiarContraAUsuarios.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\CambiarContraAUsuarios.Designer.cs">
+      <DependentUpon>CambiarContraAUsuarios.cs</DependentUpon>
     </Compile>
     <Compile Include="FuncionalidadesRol\DarDeBajaUsuario.cs">
       <SubType>Form</SubType>
@@ -350,6 +362,9 @@
     <EmbeddedResource Include="ComprarOferta\ComprarAdmin.resx">
       <DependentUpon>ComprarAdmin.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ComprarOferta\NumeroDeCompra.resx">
+      <DependentUpon>NumeroDeCompra.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CrearOferta\ConfeccionOfertaProve.resx">
       <DependentUpon>ConfeccionOfertaProve.cs</DependentUpon>
     </EmbeddedResource>
@@ -373,6 +388,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FuncionalidadesRol\CambiarContraProv.resx">
       <DependentUpon>CambiarContraProv.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FuncionalidadesRol\CambiarContraAUsuarios.resx">
+      <DependentUpon>CambiarContraAUsuarios.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FuncionalidadesRol\DarDeBajaUsuario.resx">
       <DependentUpon>DarDeBajaUsuario.cs</DependentUpon>

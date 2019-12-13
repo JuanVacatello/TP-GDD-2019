@@ -12,18 +12,18 @@ using System.Windows.Forms;
 
 namespace FrbaOfertas.FuncionalidadesRol
 {
-    public partial class CambiarContraCli : Form
+    public partial class CambiarContraAUsuarios : Form
     {
-        public CambiarContraCli()
+        public CambiarContraAUsuarios()
         {
             InitializeComponent();
         }
 
         private void Atrás_Click(object sender, EventArgs e)
         {
-            FuncionalidadesCliente func = new FuncionalidadesCliente();
+            FuncionalidadesAdmin fun = new FuncionalidadesAdmin();
             this.Hide();
-            func.Show();
+            fun.Show();
         }
 
         private void cambiarContra()
@@ -33,7 +33,7 @@ namespace FrbaOfertas.FuncionalidadesRol
                 SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
                 SqlCommand query = new SqlCommand("LIL_MIX.modificarContrasenia", cn);
                 query.CommandType = CommandType.StoredProcedure;
-                query.Parameters.Add(new SqlParameter("@usuario_nombre", login.nombre_usuario));
+                query.Parameters.Add(new SqlParameter("@usuario_nombre", this.textBox1.Text));
                 query.Parameters.Add(new SqlParameter("@anteriorcontra", this.txtContraActual.Text));
                 query.Parameters.Add(new SqlParameter("@nuevacontra", this.txtContraNueva.Text));
 
@@ -42,9 +42,9 @@ namespace FrbaOfertas.FuncionalidadesRol
 
                 MessageBox.Show("Contraseña actualizada con exito");
 
-                FuncionalidadesCliente abmrol = new FuncionalidadesCliente();
+                FuncionalidadesAdmin fun = new FuncionalidadesAdmin();
                 this.Hide();
-                abmrol.Show();
+                fun.Show();
 
                 cn.Close();
             }

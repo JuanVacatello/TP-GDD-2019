@@ -14,8 +14,8 @@ namespace FrbaOfertas.ComprarOferta
 {
     public partial class ComprarAdmin : Form
     {
-        //DateTime dte = new DateTime(2023, 3, 9, 16, 5, 7, 123); //reemplazar por fecha sistema
-        string fecha = ConfigurationManager.AppSettings["current_date"];
+        DateTime dte = new DateTime(2023, 3, 9, 16, 5, 7, 123); //reemplazar por fecha sistema
+       // string fecha = ConfigurationManager.AppSettings["current_date"];
         //query.Parameters.Add(new SqlParameter("@diaactual", Convert.ToDateTime(fecha)))
         public ComprarAdmin()
         {
@@ -30,7 +30,7 @@ namespace FrbaOfertas.ComprarOferta
             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.ofertasVigentesHastaDiaActual", cn);
             query.CommandType = CommandType.StoredProcedure;
-            query.Parameters.Add(new SqlParameter("@diaactual", Convert.ToDateTime(fecha))); //aca tambien
+            query.Parameters.Add(new SqlParameter("@diaactual", dte)); //aca tambien
 
             SqlDataAdapter da = new SqlDataAdapter(query);
             cn.Open();
@@ -53,7 +53,7 @@ namespace FrbaOfertas.ComprarOferta
             query.Parameters.Add(new SqlParameter("@nombre_usuario", this.txtUsuario.Text));
             query.Parameters.Add(new SqlParameter("@oferta_codigo", this.txtOferta.Text));
             query.Parameters.Add(new SqlParameter("@cantidad", this.txtCantidad.Text));
-            query.Parameters.Add(new SqlParameter("@diaactual", Convert.ToDateTime(fecha))); // aca tambien
+            query.Parameters.Add(new SqlParameter("@diadecompra", dte)); // aca tambien
             query.Parameters.Add(new SqlParameter("@clientedestino", this.txtTransferir.Text));
 
             cn.Open();

@@ -186,7 +186,7 @@
             this.Controls.Add(this.label6);
             this.Controls.Add(this.btnAtras);
             this.Name = "FiltradoModificacionCliente";
-            this.Text = "FiltradoModificacionCliente";
+            this.Text = "Filtrado de modificacion";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

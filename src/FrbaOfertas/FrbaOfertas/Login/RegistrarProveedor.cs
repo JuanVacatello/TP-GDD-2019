@@ -69,7 +69,7 @@ namespace FrbaOfertas.Login
             txtPiso.Clear();
             txtDepto.Clear();
             txtCodigoPostal.Clear();
-            //dateTimePicker1.Today();
+    
         }
 
         private void button1_Click(object sender, EventArgs e)

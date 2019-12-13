@@ -15,7 +15,10 @@ namespace FrbaOfertas.ComprarOferta
     public partial class ComprarCliente : Form
 
     {
-        public static int compra;
+
+        public static string codigo;
+        public static string cantidad;
+
         DateTime dte = new DateTime(2023, 3, 9, 16, 5, 7, 123); //reemplazar por fecha sistema
 
         public ComprarCliente()
@@ -58,30 +61,15 @@ namespace FrbaOfertas.ComprarOferta
             query.Parameters.Add(new SqlParameter("@diadecompra", dte)); // aca tambien
             query.Parameters.Add(new SqlParameter("@clientedestino", this.txtTransferir.Text));
 
-            ////
-
-            DataTable dt = new DataTable();
-            dt.Clear();
-            SqlCommand select = new SqlCommand("LIL_MIX.mostrarCompra", cn);
-            select.CommandType = CommandType.StoredProcedure;
-            select.Parameters.Add(new SqlParameter("@usuario_nombre", login.nombre_usuario));
-            select.Parameters.Add(new SqlParameter("@ofertacodigo", this.txtOferta.Text));
-            select.Parameters.Add(new SqlParameter("@cantidad", this.txtCantidad.Text));
-            SqlDataAdapter da = new SqlDataAdapter(select);
-
             cn.Open();
 
             query.ExecuteNonQuery();
             
             MessageBox.Show("Compra efectuada.");
 
-            da.Fill(dt);
-            compranumeroDGV.DataSource = dt;
-            compranumeroDGV.ReadOnly = true;
-
-            FuncionalidadesRol.FuncionalidadesCliente fun = new FuncionalidadesRol.FuncionalidadesCliente();
+            NumeroDeCompra num = new NumeroDeCompra();       
             this.Hide();
-            fun.Show();
+            num.Show();
             
             cn.Close();
 
@@ -122,12 +110,17 @@ namespace FrbaOfertas.ComprarOferta
 
         private void txtOferta_TextChanged(object sender, EventArgs e)
         {
-
+            codigo = this.txtOferta.Text;
         }
 
         private void compranumeroDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void txtCantidad_TextChanged(object sender, EventArgs e)
+        {
+            cantidad = this.txtCantidad.Text;
         }
     }
 }

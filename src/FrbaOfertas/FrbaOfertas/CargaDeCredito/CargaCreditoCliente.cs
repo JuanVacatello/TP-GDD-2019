@@ -53,7 +53,7 @@ namespace FrbaOfertas.CargaDeCredito
             query.Parameters.Add(new SqlParameter("@tarjeta_fecha_vencimiento", this.dateTimePicker1.Value));
           //  string fecha = ConfigurationManager.AppSettings["current_date"];
             query.Parameters.Add(new SqlParameter("@fechadecarga", dte)); // aca tambien
-            query.Parameters.Add(new SqlParameter("@tarjeta_tipo", this.txtTipoTarj.Text));
+            query.Parameters.Add(new SqlParameter("@tarjeta_tipo", comboBox2.SelectedValue.ToString()));
             query.Parameters.Add(new SqlParameter("@usuario_nombre", login.nombre_usuario));
 
             cn.Open();
@@ -76,16 +76,40 @@ namespace FrbaOfertas.CargaDeCredito
             fun.Show();
         }
 
+        private void carga()
+        {
+            try
+            {
+                if ((comboBox1.SelectedValue.ToString() != null))
+                {
+                    string tipo_de_pago_descripcion = comboBox1.SelectedValue.ToString();
+                    cargarCredito(tipo_de_pago_descripcion);
+
+                }
+            }
+            catch (Exception Em)
+            {
+                MessageBox.Show(Em.Message.ToString());
+            }
+
+        }
+        
+
         private void button2_Click(object sender, EventArgs e)
         {
             //BOTON CARGAR
-
-            if ((comboBox1.SelectedValue.ToString() != null)) 
+       
+            if (comboBox1.SelectedValue.ToString() == null)
+                MessageBox.Show("Ingrese el tipo de pago");
+            if (txtMonto.TextLength == 0)
+                MessageBox.Show("Ingrese el monto que desea cargar");
+            else
             {
-                string tipo_de_pago_descripcion = comboBox1.SelectedValue.ToString();
-                cargarCredito(tipo_de_pago_descripcion); 
+                carga();
 
             }
+
+           
             
         }
 

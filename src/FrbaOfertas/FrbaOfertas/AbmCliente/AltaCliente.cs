@@ -119,7 +119,7 @@ namespace FrbaOfertas.AbmCliente
             txtPiso.Clear();
             txtDpto.Clear();
             txtCP.Clear();
-            //dateTimePicker1.Today();          FALTA EL DATE TIME PICKER
+            dateTimePicker1.Value = DateTime.Now;
 
         }
 

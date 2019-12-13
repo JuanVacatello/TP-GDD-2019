@@ -163,19 +163,38 @@ namespace FrbaOfertas.AbmRol
 
             cn.Open();
             query.ExecuteNonQuery();
+            MessageBox.Show("Nombre de rol modificado");
             cn.Close();
           }
+
+        public void nuevoNombre()
+        {
+            try
+            {
+                if (comboBox3.SelectedValue.ToString() != null)
+                {
+                    string rol_nombre = comboBox3.SelectedValue.ToString();
+                    modificarNombre(rol_nombre);
+                }
+            }
+            catch (Exception Em)
+            {
+                MessageBox.Show(Em.Message.ToString());
+            }
+        }
 
 
         public void button5_Click(object sender, EventArgs e)
         {
-            //BOTON MODIFICAR NOMBRE
-
-            if (comboBox3.SelectedValue.ToString() != null)
+            if (txtNombreNuevo.TextLength == 0)
+                MessageBox.Show("Ingrese un nombre de rol ");
+            else
             {
-                string rol_nombre = comboBox3.SelectedValue.ToString();
-                modificarNombre(rol_nombre);
+                this.nuevoNombre();
+
             }
+
+            
         }
 
         private void button4_Click(object sender, EventArgs e)

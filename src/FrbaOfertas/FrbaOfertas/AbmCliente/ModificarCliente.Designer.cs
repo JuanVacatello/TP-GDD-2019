@@ -70,7 +70,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(227, 107);
+            this.label13.Location = new System.Drawing.Point(223, 178);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(27, 13);
             this.label13.TabIndex = 54;
@@ -78,7 +78,7 @@
             // 
             // txtNuevoPiso
             // 
-            this.txtNuevoPiso.Location = new System.Drawing.Point(230, 125);
+            this.txtNuevoPiso.Location = new System.Drawing.Point(226, 196);
             this.txtNuevoPiso.Name = "txtNuevoPiso";
             this.txtNuevoPiso.Size = new System.Drawing.Size(100, 20);
             this.txtNuevoPiso.TabIndex = 53;
@@ -86,7 +86,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(227, 199);
+            this.label12.Location = new System.Drawing.Point(223, 275);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(74, 13);
             this.label12.TabIndex = 52;
@@ -94,7 +94,7 @@
             // 
             // txtNuevoDpto
             // 
-            this.txtNuevoDpto.Location = new System.Drawing.Point(230, 217);
+            this.txtNuevoDpto.Location = new System.Drawing.Point(226, 291);
             this.txtNuevoDpto.Name = "txtNuevoDpto";
             this.txtNuevoDpto.Size = new System.Drawing.Size(100, 20);
             this.txtNuevoDpto.TabIndex = 51;
@@ -102,7 +102,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(227, 155);
+            this.label11.Location = new System.Drawing.Point(223, 226);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(43, 13);
             this.label11.TabIndex = 50;
@@ -110,7 +110,7 @@
             // 
             // txtNuevaCiudad
             // 
-            this.txtNuevaCiudad.Location = new System.Drawing.Point(230, 173);
+            this.txtNuevaCiudad.Location = new System.Drawing.Point(226, 244);
             this.txtNuevaCiudad.Name = "txtNuevaCiudad";
             this.txtNuevaCiudad.Size = new System.Drawing.Size(100, 20);
             this.txtNuevaCiudad.TabIndex = 49;
@@ -118,7 +118,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(227, 63);
+            this.label10.Location = new System.Drawing.Point(223, 134);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(79, 13);
             this.label10.TabIndex = 48;
@@ -142,7 +142,7 @@
             // 
             // txtNuevaDirec
             // 
-            this.txtNuevaDirec.Location = new System.Drawing.Point(230, 81);
+            this.txtNuevaDirec.Location = new System.Drawing.Point(226, 151);
             this.txtNuevaDirec.Name = "txtNuevaDirec";
             this.txtNuevaDirec.Size = new System.Drawing.Size(100, 20);
             this.txtNuevaDirec.TabIndex = 43;
@@ -150,7 +150,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(227, 40);
+            this.label6.Location = new System.Drawing.Point(223, 113);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(52, 13);
             this.label6.TabIndex = 42;
@@ -287,7 +287,7 @@
             // 
             // btnModificarDpto
             // 
-            this.btnModificarDpto.Location = new System.Drawing.Point(351, 214);
+            this.btnModificarDpto.Location = new System.Drawing.Point(347, 291);
             this.btnModificarDpto.Name = "btnModificarDpto";
             this.btnModificarDpto.Size = new System.Drawing.Size(75, 23);
             this.btnModificarDpto.TabIndex = 63;
@@ -297,7 +297,7 @@
             // 
             // btnModificarCiudad
             // 
-            this.btnModificarCiudad.Location = new System.Drawing.Point(351, 171);
+            this.btnModificarCiudad.Location = new System.Drawing.Point(347, 242);
             this.btnModificarCiudad.Name = "btnModificarCiudad";
             this.btnModificarCiudad.Size = new System.Drawing.Size(75, 23);
             this.btnModificarCiudad.TabIndex = 64;
@@ -307,7 +307,7 @@
             // 
             // btnModificarPiso
             // 
-            this.btnModificarPiso.Location = new System.Drawing.Point(351, 123);
+            this.btnModificarPiso.Location = new System.Drawing.Point(347, 194);
             this.btnModificarPiso.Name = "btnModificarPiso";
             this.btnModificarPiso.Size = new System.Drawing.Size(75, 23);
             this.btnModificarPiso.TabIndex = 65;
@@ -317,7 +317,7 @@
             // 
             // btnModificarDirec
             // 
-            this.btnModificarDirec.Location = new System.Drawing.Point(351, 78);
+            this.btnModificarDirec.Location = new System.Drawing.Point(347, 149);
             this.btnModificarDirec.Name = "btnModificarDirec";
             this.btnModificarDirec.Size = new System.Drawing.Size(75, 23);
             this.btnModificarDirec.TabIndex = 66;
@@ -348,7 +348,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(227, 253);
+            this.label9.Location = new System.Drawing.Point(223, 43);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(106, 13);
             this.label9.TabIndex = 69;
@@ -356,7 +356,7 @@
             // 
             // btnModificarFecha
             // 
-            this.btnModificarFecha.Location = new System.Drawing.Point(447, 273);
+            this.btnModificarFecha.Location = new System.Drawing.Point(351, 88);
             this.btnModificarFecha.Name = "btnModificarFecha";
             this.btnModificarFecha.Size = new System.Drawing.Size(75, 23);
             this.btnModificarFecha.TabIndex = 71;
@@ -366,9 +366,9 @@
             // 
             // btnAtras
             // 
-            this.btnAtras.Location = new System.Drawing.Point(351, 326);
+            this.btnAtras.Location = new System.Drawing.Point(180, 337);
             this.btnAtras.Name = "btnAtras";
-            this.btnAtras.Size = new System.Drawing.Size(75, 23);
+            this.btnAtras.Size = new System.Drawing.Size(107, 23);
             this.btnAtras.TabIndex = 72;
             this.btnAtras.Text = "Atrás";
             this.btnAtras.UseVisualStyleBackColor = true;
@@ -376,9 +376,9 @@
             // 
             // btnListo
             // 
-            this.btnListo.Location = new System.Drawing.Point(447, 326);
+            this.btnListo.Location = new System.Drawing.Point(302, 337);
             this.btnListo.Name = "btnListo";
-            this.btnListo.Size = new System.Drawing.Size(75, 23);
+            this.btnListo.Size = new System.Drawing.Size(120, 23);
             this.btnListo.TabIndex = 73;
             this.btnListo.Text = "Listo";
             this.btnListo.UseVisualStyleBackColor = true;
@@ -386,7 +386,7 @@
             // 
             // dateTimePickerNuevaFecha
             // 
-            this.dateTimePickerNuevaFecha.Location = new System.Drawing.Point(230, 274);
+            this.dateTimePickerNuevaFecha.Location = new System.Drawing.Point(226, 59);
             this.dateTimePickerNuevaFecha.Name = "dateTimePickerNuevaFecha";
             this.dateTimePickerNuevaFecha.Size = new System.Drawing.Size(200, 20);
             this.dateTimePickerNuevaFecha.TabIndex = 74;
@@ -395,7 +395,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(538, 361);
+            this.ClientSize = new System.Drawing.Size(437, 368);
             this.Controls.Add(this.dateTimePickerNuevaFecha);
             this.Controls.Add(this.btnListo);
             this.Controls.Add(this.btnAtras);
@@ -434,7 +434,7 @@
             this.Controls.Add(this.txtNuevoNombre);
             this.Controls.Add(this.label3);
             this.Name = "ModificarCliente";
-            this.Text = "ModificarCliente";
+            this.Text = "Modificar datos del cliente";
             this.Load += new System.EventHandler(this.ModificarCliente_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

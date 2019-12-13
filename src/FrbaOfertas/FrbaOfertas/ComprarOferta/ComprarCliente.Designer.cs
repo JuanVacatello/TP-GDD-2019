@@ -41,11 +41,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
-            this.compranumeroDGV = new System.Windows.Forms.DataGridView();
-            this.button5 = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.compranumeroDGV)).BeginInit();
             this.SuspendLayout();
             // 
             // txtOferta
@@ -81,6 +77,7 @@
             this.txtCantidad.Name = "txtCantidad";
             this.txtCantidad.Size = new System.Drawing.Size(159, 20);
             this.txtCantidad.TabIndex = 13;
+            this.txtCantidad.TextChanged += new System.EventHandler(this.txtCantidad_TextChanged);
             // 
             // label1
             // 
@@ -166,41 +163,11 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // compranumeroDGV
-            // 
-            this.compranumeroDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.compranumeroDGV.Location = new System.Drawing.Point(316, 459);
-            this.compranumeroDGV.Name = "compranumeroDGV";
-            this.compranumeroDGV.Size = new System.Drawing.Size(140, 39);
-            this.compranumeroDGV.TabIndex = 30;
-            this.compranumeroDGV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.compranumeroDGV_CellContentClick);
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(349, 504);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 29;
-            this.button5.Text = "OK";
-            this.button5.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(325, 433);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(128, 13);
-            this.label2.TabIndex = 28;
-            this.label2.Text = "Su número de compra es:";
-            // 
             // ComprarCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(771, 534);
-            this.Controls.Add(this.compranumeroDGV);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.label2);
+            this.ClientSize = new System.Drawing.Size(771, 418);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.txtTransferir);
             this.Controls.Add(this.label5);
@@ -217,7 +184,6 @@
             this.Name = "ComprarCliente";
             this.Text = "ComprarCliente";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.compranumeroDGV)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -238,8 +204,5 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.DataGridView compranumeroDGV;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Label label2;
     }
 }

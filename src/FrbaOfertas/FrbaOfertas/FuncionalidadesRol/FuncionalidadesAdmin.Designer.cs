@@ -43,11 +43,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.button12 = new System.Windows.Forms.Button();
+            this.button13 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(265, 401);
+            this.button4.Location = new System.Drawing.Point(471, 431);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 9;
@@ -150,7 +151,7 @@
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(162, 58);
             this.button10.TabIndex = 16;
-            this.button10.Text = "CAMBIAR CONTRASEÑA";
+            this.button10.Text = "CAMBIAR CONTRASEÑA PROPIA";
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
@@ -192,11 +193,22 @@
             this.button12.UseVisualStyleBackColor = true;
             this.button12.Click += new System.EventHandler(this.button12_Click);
             // 
+            // button13
+            // 
+            this.button13.Location = new System.Drawing.Point(38, 396);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(162, 58);
+            this.button13.TabIndex = 21;
+            this.button13.Text = "CAMBIAR CONTRASEÑA A USUARIO";
+            this.button13.UseVisualStyleBackColor = true;
+            this.button13.Click += new System.EventHandler(this.button13_Click);
+            // 
             // FuncionalidadesAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(619, 436);
+            this.ClientSize = new System.Drawing.Size(619, 466);
+            this.Controls.Add(this.button13);
             this.Controls.Add(this.button12);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -236,5 +248,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.Button button13;
     }
 }

@@ -79,16 +79,35 @@ namespace FrbaOfertas.ListadoEstadistico
 
         }
 
+        private void listado()
+        {
+            try
+            {
+                if (comboBox1.SelectedValue.ToString() != null)
+                {
+                    if (comboBox2.SelectedValue.ToString() != null)
+                    {
+                        string listado_id = comboBox1.SelectedValue.ToString();
+                        string semestre_id = comboBox2.SelectedValue.ToString();
+                        confeccionarListado(listado_id, semestre_id);
+                    }
+                }
+            }
+            catch (Exception Em)
+            {
+                MessageBox.Show(Em.Message.ToString());
+            }
+        }
+
+
         private void btnSeleccionar_Click(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedValue.ToString() != null)
+            if (txtAnio.TextLength == 0)
+                MessageBox.Show("Ingrese el año en el que desea facturar");
+            else
             {
-                if (comboBox2.SelectedValue.ToString() != null)
-                {
-                    string listado_id = comboBox1.SelectedValue.ToString();
-                    string semestre_id = comboBox2.SelectedValue.ToString();
-                    confeccionarListado(listado_id, semestre_id);
-                }
+                listado();
+
             }
         }
 

@@ -353,6 +353,10 @@ IF OBJECT_ID('LIL_MIX.mostrarCompra') IS NOT NULL
 	DROP PROCEDURE LIL_MIX.mostrarCompra
 GO
 
+IF OBJECT_ID('LIL_MIX.listadoRolHabilitados') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoRolHabilitados
+GO
+
 -----DROPS TRIGGERS
 
 IF OBJECT_ID('LIL_MIX.noRepetirFuncionalidadesEnUnRol') IS NOT NULL
@@ -821,7 +825,7 @@ BEGIN
 		BEGIN TRAN
 
 			IF @rol_nombre IN (SELECT rol_nombre FROM LIL_MIX.rol)
-				THROW 50004, 'Rol existente', 1
+				THROW 50004, 'Ya existe en el sistema un rol con ese nombre.', 1
 
 			INSERT INTO LIL_MIX.rol (rol_nombre)
 			VALUES (@rol_nombre)
@@ -836,6 +840,19 @@ BEGIN
 	END TRY
 
 	BEGIN CATCH
+
+	    DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+       RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+
 		ROLLBACK
 
 	END CATCH
@@ -853,6 +870,14 @@ BEGIN
 	SELECT rol_nombre FROM LIL_MIX.rol
 END
 GO
+
+CREATE PROCEDURE LIL_MIX.listadoRolHabilitados
+AS
+BEGIN
+	SELECT rol_nombre FROM LIL_MIX.rol WHERE rol_habilitado = 1
+END
+GO
+
 
 -- 2.1) Modificar nombre
 
@@ -880,6 +905,19 @@ BEGIN
 
 	END TRY
 	BEGIN CATCH
+
+	    DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+		
 
 		ROLLBACK TRANSACTION
 
@@ -1083,6 +1121,18 @@ BEGIN
 
 	BEGIN CATCH
 
+	DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+
 		ROLLBACK
 
 	END CATCH
@@ -1144,6 +1194,19 @@ BEGIN
 
 	BEGIN CATCH
 
+	    DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+		
+
 		ROLLBACK
 
 	END CATCH
@@ -1162,28 +1225,36 @@ BEGIN
 BEGIN TRY
 	BEGIN TRANSACTION
 
-	-- Chequeo existencia del rol
-
-	IF @rol_nombre NOT IN (SELECT rol_nombre FROM LIL_MIX.rol)
-		THROW 50015, 'Rol inexistente.', 1
-
 	-- Chequeo existencia del usuario
 
 	IF @usuario_nombre NOT IN (SELECT usuario_nombre FROM LIL_MIX.usuario)
-		THROW 50016, 'Usuario inexistente.', 1
+		--THROW 50016, 'Usuario inexistente.', 1
+		RAISERROR('Usuario inexistente',16,1)
 
 	INSERT INTO LIL_MIX.rolxusuario (rol_id, usuario_id)
 	VALUES ((SELECT rol_id FROM LIL_MIX.rol WHERE rol_nombre = @rol_nombre),
 		(SELECT usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre))
 
-	COMMIT
+	COMMIT TRANSACTION
 END TRY
 
 BEGIN CATCH
 
-	ROLLBACK
+        DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
 
-END CATCH
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+       RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+
+		ROLLBACK TRANSACTION
+
+	END CATCH
 
 END
 GO
@@ -1200,9 +1271,16 @@ BEGIN
 		BEGIN TRANSACTION
 
 		DECLARE @usuariohabilitado BIT
+				
 
 		SELECT @usuariohabilitado = usuario_habilitado FROM LIL_MIX.usuario
 		WHERE usuario_nombre = @usuario_nombre
+
+		IF @usuario_nombre NOT IN (SELECT usuario_nombre FROM LIL_MIX.usuario)
+			THROW 51111, 'No existe el usuario a quien desea cambiarle la contraseña.', 1
+
+		IF HASHBYTES('SHA2_256', @anteriorcontra) NOT IN (SELECT usuario_password FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre)
+			THROW 51112, 'Contraseña incorrecta', 1
 
 		IF @usuariohabilitado = 0
 			THROW 50017, 'El usuario esta inhabilitado. Por lo tanto, no puede cambiar su contraseña.', 1
@@ -1216,6 +1294,19 @@ BEGIN
 	END TRY
 
 	BEGIN CATCH
+
+	    DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+		
 
 		ROLLBACK
 
@@ -1231,9 +1322,37 @@ CREATE PROCEDURE LIL_MIX.darDeBajaUsuario
 @usuario_nombre VARCHAR(255)
 AS
 BEGIN
+	BEGIN TRY
+			BEGIN TRANSACTION
+
+	IF @usuario_nombre NOT IN (SELECT usuario_nombre FROM LIL_MIX.usuario)
+			THROW 51121, 'No existe el usuario a quien desea dar de baja.', 1
+
 	UPDATE LIL_MIX.usuario
 	SET usuario_habilitado = 0
 	WHERE usuario_nombre = @usuario_nombre
+
+		COMMIT TRANSACTION
+	END TRY
+
+	BEGIN CATCH 
+
+	DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+		
+		ROLLBACK TRANSACTION
+
+    END CATCH
+
 END
 GO
 
@@ -1838,13 +1957,13 @@ BEGIN
 			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente = @cliente AND tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento != @tarjeta_fecha_vencimiento)
 				THROW 50019, 'Error al ingresar tarjeta.', 1
 
-			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente = @cliente AND tarjeta_numero = @tarjeta_numero AND tarjeta_tipo != @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento AND tarjeta_id_cliente = @cliente)
+			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente = @cliente AND tarjeta_numero = @tarjeta_numero AND tarjeta_tipo != @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento )
 				THROW 50020, 'Error al ingresar tarjeta.', 1
 
-			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente = @cliente AND tarjeta_numero != @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento AND tarjeta_id_cliente != @cliente)
+			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente = @cliente AND tarjeta_numero != @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento )
 				THROW 50021, 'Error al ingresar tarjeta.', 1
 
-			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente != @cliente AND tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento AND tarjeta_id_cliente != @cliente)
+			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente != @cliente AND tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento)
 				THROW 50022, 'La tarjeta pertenece a otro cliente. No puede utilizarla.', 1
 
 			-- Si en la tabla TARJETA no está registrada dicha tarjeta para dicho cliente, la registro
@@ -1880,6 +1999,18 @@ BEGIN
 	END TRY
 
 	BEGIN CATCH
+
+	    DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
 
 		ROLLBACK TRANSACTION
 

@@ -40,12 +40,13 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // txtAnio
             // 
-            this.txtAnio.Location = new System.Drawing.Point(345, 77);
+            this.txtAnio.Location = new System.Drawing.Point(130, 89);
             this.txtAnio.Name = "txtAnio";
             this.txtAnio.Size = new System.Drawing.Size(94, 20);
             this.txtAnio.TabIndex = 18;
@@ -53,9 +54,9 @@
             // 
             // btnSeleccionar
             // 
-            this.btnSeleccionar.Location = new System.Drawing.Point(564, 74);
+            this.btnSeleccionar.Location = new System.Drawing.Point(543, 87);
             this.btnSeleccionar.Name = "btnSeleccionar";
-            this.btnSeleccionar.Size = new System.Drawing.Size(96, 23);
+            this.btnSeleccionar.Size = new System.Drawing.Size(78, 23);
             this.btnSeleccionar.TabIndex = 17;
             this.btnSeleccionar.Text = "Visualizar Informe";
             this.btnSeleccionar.UseVisualStyleBackColor = true;
@@ -66,7 +67,7 @@
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(33, 113);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 126);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.Size = new System.Drawing.Size(609, 164);
@@ -76,7 +77,7 @@
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(456, 76);
+            this.comboBox2.Location = new System.Drawing.Point(12, 90);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(96, 21);
             this.comboBox2.TabIndex = 15;
@@ -85,7 +86,7 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(33, 77);
+            this.comboBox1.Location = new System.Drawing.Point(240, 88);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(286, 21);
             this.comboBox1.TabIndex = 14;
@@ -94,7 +95,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(453, 61);
+            this.label3.Location = new System.Drawing.Point(9, 74);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(105, 13);
             this.label3.TabIndex = 13;
@@ -103,7 +104,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(342, 61);
+            this.label2.Location = new System.Drawing.Point(127, 74);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 13);
             this.label2.TabIndex = 12;
@@ -112,7 +113,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(30, 61);
+            this.label1.Location = new System.Drawing.Point(237, 74);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(109, 13);
             this.label1.TabIndex = 11;
@@ -120,7 +121,7 @@
             // 
             // btnVolver
             // 
-            this.btnVolver.Location = new System.Drawing.Point(579, 297);
+            this.btnVolver.Location = new System.Drawing.Point(552, 296);
             this.btnVolver.Name = "btnVolver";
             this.btnVolver.Size = new System.Drawing.Size(69, 36);
             this.btnVolver.TabIndex = 10;
@@ -131,7 +132,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(30, 9);
+            this.label4.Location = new System.Drawing.Point(9, 30);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(362, 13);
             this.label4.TabIndex = 19;
@@ -140,7 +141,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(30, 35);
+            this.label5.Location = new System.Drawing.Point(9, 48);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(187, 13);
             this.label5.TabIndex = 20;
@@ -148,19 +149,29 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(489, 297);
+            this.button1.Location = new System.Drawing.Point(468, 296);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(69, 36);
             this.button1.TabIndex = 21;
-            this.button1.Text = "Limpiar";
+            this.button1.Text = "Limpiar campos";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(9, 8);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(229, 13);
+            this.label6.TabIndex = 22;
+            this.label6.Text = "Listados estadísticos que se pueden visualizar:";
             // 
             // ListadoEstadistico
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(674, 349);
+            this.ClientSize = new System.Drawing.Size(654, 344);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -174,7 +185,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnVolver);
             this.Name = "ListadoEstadistico";
-            this.Text = "Form1";
+            this.Text = "Listado estadístico";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -195,5 +206,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label6;
     }
 }
