@@ -14,7 +14,8 @@ namespace FrbaOfertas.CrearOferta
 {
     public partial class CrearOferta : Form
     {
-        DateTime dte = new DateTime(2023, 3, 9, 16, 5, 7, 123); //reemplazar por fecha sistema
+        DateTime fecha = Properties.Settings.Default.fecha_actual;
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
 
         public CrearOferta()
         {
@@ -33,7 +34,6 @@ namespace FrbaOfertas.CrearOferta
         {
             try
             {
-                SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
                 SqlCommand query = new SqlCommand("LIL_MIX.crearOferta", cn);
                 query.CommandType = CommandType.StoredProcedure;
                 query.Parameters.Add(new SqlParameter("@usuario_nombre", this.txtUsuario.Text));
@@ -43,8 +43,7 @@ namespace FrbaOfertas.CrearOferta
                 query.Parameters.Add(new SqlParameter("@oferta_precio_lista", this.txtPrecioLista.Text));
                 query.Parameters.Add(new SqlParameter("@oferta_stock", this.txtStock.Text));
                 query.Parameters.Add(new SqlParameter("@oferta_restriccion_compra", this.txtMaximo.Text));
-                //  string fecha = ConfigurationManager.AppSettings["current_date"];
-                query.Parameters.Add(new SqlParameter("@fechaactualdelsistema", dte)); //aca tambien
+                query.Parameters.Add(new SqlParameter("@fechaactualdelsistema", fecha));
 
                 cn.Open();
                 query.ExecuteNonQuery();
@@ -68,7 +67,7 @@ namespace FrbaOfertas.CrearOferta
         {
             if (txtUsuario.TextLength == 0)
                 MessageBox.Show("Ingrese el usuario del proveedor dueño de la oferta");
-            if (txtDescrip.TextLength == 0)
+            else if (txtDescrip.TextLength == 0)
                 MessageBox.Show("Ingrese la descripcion de la oferta");
             else if (txtPrecioOferta.TextLength == 0)
                 MessageBox.Show("Ingrese el precio de oferta de la oferta");

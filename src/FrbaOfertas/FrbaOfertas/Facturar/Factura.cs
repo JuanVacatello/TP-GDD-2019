@@ -15,6 +15,8 @@ namespace FrbaOfertas.Facturar
 {
     public partial class Factura : Form
     {
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
+
         public Factura()
         {
             InitializeComponent();
@@ -34,7 +36,6 @@ namespace FrbaOfertas.Facturar
         {
             DataTable dt = new DataTable();
             dt.Clear();
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.todasLasOfertasAdquiridas", cn);
             query.CommandType = CommandType.StoredProcedure;
             query.Parameters.Add(new SqlParameter("@fecha_inicio", ElegirFechayProveedor.inicio));
@@ -51,7 +52,6 @@ namespace FrbaOfertas.Facturar
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.facturacionProveedor", cn);
             query.CommandType = CommandType.StoredProcedure;
             query.Parameters.Add(new SqlParameter("@fecha_inicio", ElegirFechayProveedor.inicio));
@@ -64,9 +64,9 @@ namespace FrbaOfertas.Facturar
 
             MessageBox.Show("Proveedor facturado");
 
-            FuncionalidadesRol.FuncionalidadesAdmin adm = new FuncionalidadesRol.FuncionalidadesAdmin();
+            MostrarImporteAdmin mos = new MostrarImporteAdmin();
             this.Hide();
-            adm.Show();
+            mos.Show();
 
             cn.Close();
         }

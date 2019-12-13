@@ -60,6 +60,7 @@
             this.txtCantidad.Name = "txtCantidad";
             this.txtCantidad.Size = new System.Drawing.Size(159, 20);
             this.txtCantidad.TabIndex = 2;
+            this.txtCantidad.TextChanged += new System.EventHandler(this.txtCantidad_TextChanged);
             // 
             // button1
             // 
@@ -106,6 +107,7 @@
             this.txtUsuario.Name = "txtUsuario";
             this.txtUsuario.Size = new System.Drawing.Size(159, 20);
             this.txtUsuario.TabIndex = 8;
+            this.txtUsuario.TextChanged += new System.EventHandler(this.txtUsuario_TextChanged);
             // 
             // dataGridView1
             // 
@@ -128,7 +130,7 @@
             // 
             // txtOferta
             // 
-            this.txtOferta.Location = new System.Drawing.Point(14, 340);
+            this.txtOferta.Location = new System.Drawing.Point(15, 340);
             this.txtOferta.Name = "txtOferta";
             this.txtOferta.Size = new System.Drawing.Size(179, 20);
             this.txtOferta.TabIndex = 11;
@@ -170,7 +172,7 @@
             this.label6.Text = "Si desea transferir lo comprado, ingrese el nombre de usuario de la persona a qui" +
     "en desea transferir el cupon";
             // 
-            // OfertasVigentes
+            // ComprarAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -189,7 +191,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.txtCantidad);
             this.Controls.Add(this.label1);
-            this.Name = "OfertasVigentes";
+            this.Name = "ComprarAdmin";
             this.Text = "Ofertas";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

@@ -14,6 +14,8 @@ namespace FrbaOfertas.AbmRol
 {
     public partial class BajaRol : Form
     {
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
+
         public BajaRol()
         {
             InitializeComponent();
@@ -22,7 +24,6 @@ namespace FrbaOfertas.AbmRol
 
         public void cargarDatos()
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             cn.Open();
             SqlCommand query = new SqlCommand("LIL_MIX.listadoRolHabilitados", cn);
             query.CommandType = CommandType.StoredProcedure;
@@ -30,8 +31,6 @@ namespace FrbaOfertas.AbmRol
             DataTable dt = new DataTable();
             da.Fill(dt);
             cn.Close();
-
-
 
             DataRow fila = dt.NewRow();
             fila["rol_nombre"] = "Seleccione un rol";
@@ -45,7 +44,6 @@ namespace FrbaOfertas.AbmRol
 
         public void eliminarRol(string rol_nombre)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.bajaRol", cn);
             query.CommandType = CommandType.StoredProcedure;
             query.Parameters.Add(new SqlParameter("@rol_nombre", rol_nombre));

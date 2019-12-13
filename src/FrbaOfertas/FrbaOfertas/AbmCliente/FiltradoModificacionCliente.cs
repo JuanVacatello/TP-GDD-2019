@@ -14,6 +14,8 @@ namespace FrbaOfertas.AbmCliente
 {
     public partial class FiltradoModificacionCliente : Form
     {
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
+
         public FiltradoModificacionCliente()
         {
             InitializeComponent();
@@ -31,7 +33,6 @@ namespace FrbaOfertas.AbmCliente
         {
             DataTable dt = new DataTable();
             dt.Clear();
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.listadoClientes", cn);
             query.CommandType = CommandType.StoredProcedure;
             query.Parameters.Add(new SqlParameter("@nombre", this.txtNombre.Text));

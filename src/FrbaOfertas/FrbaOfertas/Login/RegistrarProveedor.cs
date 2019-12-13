@@ -14,6 +14,8 @@ namespace FrbaOfertas.Login
 {
     public partial class RegistrarProveedor : Form
     {
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
+
         public RegistrarProveedor()
         {
             InitializeComponent();
@@ -21,7 +23,6 @@ namespace FrbaOfertas.Login
 
         void CrearProveedor()
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.altaUsuarioProveedor", cn);
             query.CommandType = CommandType.StoredProcedure;
             query.Parameters.Add(new SqlParameter("@usuario_nombre", this.txtNombreUsuario.Text));

@@ -14,6 +14,8 @@ namespace FrbaOfertas.ListadoEstadistico
 {
     public partial class ListadoEstadisticoProv : Form
     {
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
+
         public ListadoEstadisticoProv()
         {
             InitializeComponent();
@@ -23,7 +25,6 @@ namespace FrbaOfertas.ListadoEstadistico
 
         public void cargarDatosListado()
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             cn.Open();
             SqlCommand query = new SqlCommand("LIL_MIX.seleccionarListado", cn);
             query.CommandType = CommandType.StoredProcedure;
@@ -42,7 +43,6 @@ namespace FrbaOfertas.ListadoEstadistico
 
         public void cargarDatosSemestre()
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             cn.Open();
             SqlCommand query = new SqlCommand("LIL_MIX.seleccionarSemestre", cn);
             query.CommandType = CommandType.StoredProcedure;
@@ -63,7 +63,6 @@ namespace FrbaOfertas.ListadoEstadistico
         {
             DataTable dt = new DataTable();
             dt.Clear();
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.crearListadoEstadistico", cn);
             query.CommandType = CommandType.StoredProcedure;
             query.Parameters.Add(new SqlParameter("@semestre", Convert.ToInt64(semestre_id)));

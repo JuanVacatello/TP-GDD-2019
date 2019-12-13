@@ -174,6 +174,12 @@
     <Compile Include="ComprarOferta\NumeroDeCompra.Designer.cs">
       <DependentUpon>NumeroDeCompra.cs</DependentUpon>
     </Compile>
+    <Compile Include="ComprarOferta\NumeroDeCompraAdmin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ComprarOferta\NumeroDeCompraAdmin.Designer.cs">
+      <DependentUpon>NumeroDeCompraAdmin.cs</DependentUpon>
+    </Compile>
     <Compile Include="CrearOferta\ConfeccionOfertaProve.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -197,6 +203,12 @@
     </Compile>
     <Compile Include="Facturar\Factura.Designer.cs">
       <DependentUpon>Factura.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Facturar\MostrarImporteAdmin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Facturar\MostrarImporteAdmin.Designer.cs">
+      <DependentUpon>MostrarImporteAdmin.cs</DependentUpon>
     </Compile>
     <Compile Include="FuncionalidadesRol\AgregarRolAUsuario.cs">
       <SubType>Form</SubType>
@@ -227,6 +239,18 @@
     </Compile>
     <Compile Include="FuncionalidadesRol\CambiarContraAUsuarios.Designer.cs">
       <DependentUpon>CambiarContraAUsuarios.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\ConsumoDeOfertaAdmin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\ConsumoDeOfertaAdmin.Designer.cs">
+      <DependentUpon>ConsumoDeOfertaAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\ConsumoDeOfertaProv.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FuncionalidadesRol\ConsumoDeOfertaProv.Designer.cs">
+      <DependentUpon>ConsumoDeOfertaProv.cs</DependentUpon>
     </Compile>
     <Compile Include="FuncionalidadesRol\DarDeBajaUsuario.cs">
       <SubType>Form</SubType>
@@ -365,6 +389,9 @@
     <EmbeddedResource Include="ComprarOferta\NumeroDeCompra.resx">
       <DependentUpon>NumeroDeCompra.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ComprarOferta\NumeroDeCompraAdmin.resx">
+      <DependentUpon>NumeroDeCompraAdmin.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CrearOferta\ConfeccionOfertaProve.resx">
       <DependentUpon>ConfeccionOfertaProve.cs</DependentUpon>
     </EmbeddedResource>
@@ -376,6 +403,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Facturar\Factura.resx">
       <DependentUpon>Factura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Facturar\MostrarImporteAdmin.resx">
+      <DependentUpon>MostrarImporteAdmin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FuncionalidadesRol\AgregarRolAUsuario.resx">
       <DependentUpon>AgregarRolAUsuario.cs</DependentUpon>
@@ -391,6 +421,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FuncionalidadesRol\CambiarContraAUsuarios.resx">
       <DependentUpon>CambiarContraAUsuarios.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FuncionalidadesRol\ConsumoDeOfertaAdmin.resx">
+      <DependentUpon>ConsumoDeOfertaAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FuncionalidadesRol\ConsumoDeOfertaProv.resx">
+      <DependentUpon>ConsumoDeOfertaProv.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FuncionalidadesRol\DarDeBajaUsuario.resx">
       <DependentUpon>DarDeBajaUsuario.cs</DependentUpon>

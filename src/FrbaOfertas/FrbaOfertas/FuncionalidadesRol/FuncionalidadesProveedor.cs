@@ -45,6 +45,13 @@ namespace FrbaOfertas.FuncionalidadesRol
             cam.Show();
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ConsumoDeOfertaProv con = new ConsumoDeOfertaProv();
+            this.Hide();
+            con.Show();
+        }
+
         
     }
 }

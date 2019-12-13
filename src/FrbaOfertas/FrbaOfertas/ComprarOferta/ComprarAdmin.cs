@@ -14,9 +14,13 @@ namespace FrbaOfertas.ComprarOferta
 {
     public partial class ComprarAdmin : Form
     {
-        DateTime dte = new DateTime(2023, 3, 9, 16, 5, 7, 123); //reemplazar por fecha sistema
-       // string fecha = ConfigurationManager.AppSettings["current_date"];
-        //query.Parameters.Add(new SqlParameter("@diaactual", Convert.ToDateTime(fecha)))
+        DateTime fecha = Properties.Settings.Default.fecha_actual;
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
+
+        public static string codigo;
+        public static string cantidad;
+        public static string cliente;
+
         public ComprarAdmin()
         {
             InitializeComponent();
@@ -27,10 +31,9 @@ namespace FrbaOfertas.ComprarOferta
 
             DataTable dt = new DataTable();
             dt.Clear();
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.ofertasVigentesHastaDiaActual", cn);
             query.CommandType = CommandType.StoredProcedure;
-            query.Parameters.Add(new SqlParameter("@diaactual", dte)); //aca tambien
+            query.Parameters.Add(new SqlParameter("@diaactual", fecha));
 
             SqlDataAdapter da = new SqlDataAdapter(query);
             cn.Open();
@@ -49,21 +52,20 @@ namespace FrbaOfertas.ComprarOferta
         {
             try
             {
-                SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
                 SqlCommand query = new SqlCommand("LIL_MIX.comprarOferta", cn);
                 query.CommandType = CommandType.StoredProcedure;
                 query.Parameters.Add(new SqlParameter("@nombre_usuario", this.txtUsuario.Text));
                 query.Parameters.Add(new SqlParameter("@oferta_codigo", this.txtOferta.Text));
                 query.Parameters.Add(new SqlParameter("@cantidad", this.txtCantidad.Text));
-                query.Parameters.Add(new SqlParameter("@diadecompra", dte)); // aca tambien
+                query.Parameters.Add(new SqlParameter("@diadecompra", fecha)); 
                 query.Parameters.Add(new SqlParameter("@clientedestino", this.txtTransferir.Text));
 
                 cn.Open();
                 query.ExecuteNonQuery();
 
-                MessageBox.Show("Compra efectuada. El numero de compra es: ");
+                MessageBox.Show("Compra efectuada.");
 
-                FuncionalidadesRol.FuncionalidadesAdmin fun = new FuncionalidadesRol.FuncionalidadesAdmin();
+                NumeroDeCompraAdmin fun = new NumeroDeCompraAdmin();
                 this.Hide();
                 fun.Show();
 
@@ -74,7 +76,6 @@ namespace FrbaOfertas.ComprarOferta
                 MessageBox.Show(ex.Message.ToString());
             }
         }
-            //cmd.Parameters.AddWithValue("@name", nombre_s); //Parametrizamos la consulta
 
         private void button2_Click(object sender, EventArgs e)
         {   
@@ -98,7 +99,7 @@ namespace FrbaOfertas.ComprarOferta
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-
+            codigo = this.txtOferta.Text;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -126,6 +127,16 @@ namespace FrbaOfertas.ComprarOferta
         private void button3_Click(object sender, EventArgs e)
         {
             this.limpiarCampos();
+        }
+
+        private void txtCantidad_TextChanged(object sender, EventArgs e)
+        {
+            cantidad = this.txtCantidad.Text;
+        }
+
+        private void txtUsuario_TextChanged(object sender, EventArgs e)
+        {
+            cliente = this.txtUsuario.Text;
         }
 
      

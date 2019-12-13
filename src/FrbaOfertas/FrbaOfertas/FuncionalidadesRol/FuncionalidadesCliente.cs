@@ -12,6 +12,7 @@ namespace FrbaOfertas.FuncionalidadesRol
 {
     public partial class FuncionalidadesCliente : Form
     {
+
         public FuncionalidadesCliente()
         {
             InitializeComponent();

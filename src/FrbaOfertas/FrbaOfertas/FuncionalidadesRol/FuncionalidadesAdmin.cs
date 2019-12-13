@@ -12,6 +12,7 @@ namespace FrbaOfertas.FuncionalidadesRol
 {
     public partial class FuncionalidadesAdmin : Form
     {
+
         public FuncionalidadesAdmin()
         {
             InitializeComponent();
@@ -107,6 +108,13 @@ namespace FrbaOfertas.FuncionalidadesRol
             CambiarContraAUsuarios cam = new CambiarContraAUsuarios();
             this.Hide();
             cam.Show();
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            ConsumoDeOfertaAdmin adm = new ConsumoDeOfertaAdmin();
+            this.Hide();
+            adm.Show();
         }
     }
 }

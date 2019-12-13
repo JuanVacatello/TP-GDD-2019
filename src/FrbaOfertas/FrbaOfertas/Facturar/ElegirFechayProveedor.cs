@@ -14,6 +14,8 @@ namespace FrbaOfertas.Facturar
 {
     public partial class ElegirFechayProveedor : Form
     {
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
+
         public static DateTime inicio;
         public static DateTime fin;
         public static String cuit_prov; 
@@ -59,15 +61,12 @@ namespace FrbaOfertas.Facturar
         public void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
 
-            
-
         }
 
         void verProveedoresAFacturar()
         {
             DataTable dt = new DataTable();
             dt.Clear();
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.proveedores", cn);
             query.CommandType = CommandType.StoredProcedure;
 

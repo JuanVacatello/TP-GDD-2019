@@ -14,6 +14,8 @@ namespace FrbaOfertas.AbmRol
 {
     public partial class ModificarRol : Form
     {
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
+
         public ModificarRol()
         {
             InitializeComponent();
@@ -22,8 +24,6 @@ namespace FrbaOfertas.AbmRol
 
         public void cargarMasDatos(string rol_nombre)
         {
-
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             cn.Open();
             SqlCommand query = new SqlCommand("LIL_MIX.listadoFuncionalidadesExistentes", cn);
             query.Parameters.Add(new SqlParameter("@rol_nombre", rol_nombre));
@@ -44,7 +44,6 @@ namespace FrbaOfertas.AbmRol
 
         public void cargarFuncionalidades(string rol_nombre)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             cn.Open();
             SqlCommand query = new SqlCommand("LIL_MIX.listadoFuncionalidadesNoExistentes", cn);
             query.CommandType = CommandType.StoredProcedure;
@@ -66,7 +65,6 @@ namespace FrbaOfertas.AbmRol
 
         public void cargarDatos()
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             cn.Open();
             SqlCommand query = new SqlCommand("LIL_MIX.listadoRol", cn);
             query.CommandType = CommandType.StoredProcedure;
@@ -87,7 +85,6 @@ namespace FrbaOfertas.AbmRol
 
         private void habilitarRol(string rol_nombre)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.habilitarRol", cn);
             query.CommandType = CommandType.StoredProcedure;
             query.Parameters.Add(new SqlParameter("@rol_nombre", rol_nombre));
@@ -123,7 +120,6 @@ namespace FrbaOfertas.AbmRol
 
         public void agregarFuncionalidad(string rol_nombre, string funcionalidad_descripcion)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarRolAgregarFuncionalidad", cn);
             query.CommandType = CommandType.StoredProcedure;
             query.Parameters.Add(new SqlParameter("@rol_nombre", rol_nombre));
@@ -139,7 +135,6 @@ namespace FrbaOfertas.AbmRol
 
         public void eliminarFuncionalidad(string rol_nombre, string funcionalidad_descripcion)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarRolEliminarFuncionalidad", cn);
             query.CommandType = CommandType.StoredProcedure;
             query.Parameters.Add(new SqlParameter("@rol_nombre", rol_nombre));
@@ -155,7 +150,6 @@ namespace FrbaOfertas.AbmRol
 
         public void modificarNombre(string rol_nombre)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarRolNombre", cn);
             query.CommandType = CommandType.StoredProcedure;
             query.Parameters.Add(new SqlParameter("@rol_nombre", rol_nombre));

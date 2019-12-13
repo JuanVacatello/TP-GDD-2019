@@ -14,6 +14,8 @@ namespace FrbaOfertas.Login
 {
     public partial class RegistrarCliente : Form
     {
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
+
         public RegistrarCliente()
         {
             InitializeComponent();
@@ -30,7 +32,6 @@ namespace FrbaOfertas.Login
         {
             try
             {
-                SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
                 SqlCommand query = new SqlCommand("LIL_MIX.altaUsuarioCliente", cn);
                 query.CommandType = CommandType.StoredProcedure;
                 query.Parameters.Add(new SqlParameter("@usuario_nombre", this.txtNombreUsuario.Text));

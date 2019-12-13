@@ -15,6 +15,8 @@ namespace FrbaOfertas.AbmProveedor
 {
     public partial class AltaProveedor : Form
     {
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
+
         public AltaProveedor()
         {
             InitializeComponent();
@@ -24,7 +26,6 @@ namespace FrbaOfertas.AbmProveedor
         {
             try
             {
-                SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
                 SqlCommand query = new SqlCommand("LIL_MIX.altaUsuarioProveedor", cn);
                 query.CommandType = CommandType.StoredProcedure;
                 query.Parameters.Add(new SqlParameter("@usuario_nombre", this.txtNombreUsuario.Text));
@@ -116,7 +117,6 @@ namespace FrbaOfertas.AbmProveedor
             txtPiso.Clear();
             txtDepto.Clear();
             txtCodigoPostal.Clear();
-            //dateTimePicker1.Today();
 
         }
 

@@ -141,6 +141,10 @@ IF OBJECT_ID('LIL_MIX.login') IS NOT NULL
 	DROP PROCEDURE LIL_MIX.login
 GO
 
+IF OBJECT_ID('LIL_MIX.mostrarImporteFactura') IS NOT NULL
+	DROP PROCEDURE LIL_MIX.mostrarImporteFactura
+GO
+
 IF OBJECT_ID('LIL_MIX.altaUsuarioCliente') IS NOT NULL
  DROP PROCEDURE LIL_MIX.altaUsuarioCliente
 GO
@@ -404,13 +408,13 @@ GO
 
 CREATE TABLE LIL_MIX.proveedor ( proveedor_id INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
 				   proveedor_direccion_id INT FOREIGN KEY REFERENCES LIL_MIX.direccion(direccion_id),
-				   proveedor_telefono INT,
-				   proveedor_cuit VARCHAR(13) UNIQUE,
-				   proveedor_rubro VARCHAR(255),
+				   proveedor_telefono INT NOT NULL,
+				   proveedor_cuit VARCHAR(13) NOT NULL UNIQUE,
+				   proveedor_rubro VARCHAR(255) NOT NULL,
 				   proveedor_mail VARCHAR(255),
 				   proveedor_cp SMALLINT,
-				   proveedor_nombre_contacto VARCHAR(255),
-				   proveedor_rs VARCHAR(255) UNIQUE,
+				   proveedor_nombre_contacto VARCHAR(255) NOT NULL,
+				   proveedor_rs VARCHAR(255) UNIQUE NOT NULL,
 				   proveedor_habilitado BIT DEFAULT 1,
 				   proveedor_usuario_id INT FOREIGN KEY REFERENCES LIL_MIX.usuario(usuario_id) )
 GO
@@ -537,29 +541,29 @@ GO
 
 --                        Funcionalidades
 
--- 1) Login y seguridad
-INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Login y seguridad')
-GO
--- 2) ABM ROL
+-- 1) ABM ROL
 INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('ABM de ROL')
 GO
--- 3) Registro de usuario
+-- 2) Registro de usuario
 INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Registro de Usuario')
 GO
--- 4) ABM CLIENTE.
+-- 3) ABM CLIENTE.
 INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('ABM de CLIENTE')
 GO
--- 5) ABM PROVEEDOR.
+-- 4) ABM PROVEEDOR.
 INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('ABM de PROVEEDOR')
 GO
--- 6) Carga de credito
+-- 5) Carga de credito
 INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Carga de credito')
 GO
--- 7) Comprar oferta
+-- 6) Comprar oferta
 INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Comprar oferta')
 GO
--- 8) Confeccion y publicacion de oferta
+-- 7) Confeccion y publicacion de oferta
 INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Conf. y publ. de oferta')
+GO
+-- 8) Consumo de oferta
+INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Consumo de oferta')
 GO
 -- 9) Facturacion a proveedor
 INSERT INTO LIL_MIX.funcionalidad(funcionalidad_descripcion) VALUES ('Facturacion a proveedor')
@@ -595,16 +599,15 @@ INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (1,10)
 GO
 
 -- Funciones Cliente
-INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,1)
-INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,3)
+INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,2)
+INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,5)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,6)
-INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,7)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (2,10)
 GO
 
 -- Funciones Proveedor
-INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (3,1)
-INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (3,3)
+INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (3,2)
+INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (3,7)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (3,8)
 INSERT INTO  LIL_MIX.funcionalidadxrol(rol_id,funcionalidad_id) VALUES (3,10)
 GO
@@ -1004,13 +1007,16 @@ BEGIN
 	DECLARE @password_del_usuario VARCHAR(255),
 			@password_encriptada VARCHAR(255),
 			@intentos tinyint,
-			@usuario_habilitado bit
+			@usuario_habilitado bit,
+			@usuarioid INT
 
 	IF NOT EXISTS (SELECT * FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario)
 	BEGIN
 		RAISERROR('El usuario ingresado no existe.', 16, 1)
 		RETURN
 	END
+
+	SELECT @usuarioid = usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario
 
 	SELECT @password_del_usuario = usuario_password, @usuario_habilitado = usuario_habilitado
 	FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario
@@ -1045,6 +1051,16 @@ BEGIN
 			UPDATE LIL_MIX.usuario
 			SET usuario_habilitado = 0
 			WHERE usuario_nombre = @usuario
+
+			IF @usuarioid IN (SELECT usuario_id FROM LIL_MIX.rolxusuario WHERE rol_id = 3)
+				UPDATE LIL_MIX.proveedor
+				SET proveedor_habilitado = 0
+				WHERE proveedor_usuario_id = @usuarioid
+
+			IF @usuarioid IN (SELECT usuario_id FROM LIL_MIX.rolxusuario WHERE rol_id = 2)
+				UPDATE LIL_MIX.cliente
+				SET cliente_habilitado = 0
+				WHERE cliente_usuario_id = @usuarioid
 
 			RETURN
 		END
@@ -1325,12 +1341,26 @@ BEGIN
 	BEGIN TRY
 			BEGIN TRANSACTION
 
+	DECLARE @usuarioid INT
+
+	SELECT @usuarioid = usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre
+
 	IF @usuario_nombre NOT IN (SELECT usuario_nombre FROM LIL_MIX.usuario)
 			THROW 51121, 'No existe el usuario a quien desea dar de baja.', 1
 
 	UPDATE LIL_MIX.usuario
 	SET usuario_habilitado = 0
 	WHERE usuario_nombre = @usuario_nombre
+
+	IF @usuarioid IN (SELECT usuario_id FROM LIL_MIX.rolxusuario WHERE rol_id = 3)
+		UPDATE LIL_MIX.proveedor
+		SET proveedor_habilitado = 0
+		WHERE proveedor_usuario_id = @usuarioid
+
+	IF @usuarioid IN (SELECT usuario_id FROM LIL_MIX.rolxusuario WHERE rol_id = 2)
+		UPDATE LIL_MIX.cliente
+		SET cliente_habilitado = 0
+		WHERE cliente_usuario_id = @usuarioid
 
 		COMMIT TRANSACTION
 	END TRY
@@ -1925,22 +1955,39 @@ GO
 CREATE PROCEDURE LIL_MIX.cargarCredito
 @usuario_nombre VARCHAR(255), @monto BIGINT,
 @tipo_de_pago VARCHAR(30), --efectivo, credito o debito
-@fechadecarga DATETIME, @tarjeta_numero BIGINT, @tarjeta_tipo VARCHAR(30), @tarjeta_fecha_vencimiento DATETIME
+@fechadecarga DATETIME, 
+@tarjeta_numero BIGINT, @tarjeta_tipo VARCHAR(30), @tarjeta_fecha_vencimiento DATETIME
 AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
 
-		DECLARE @cliente INT,
-				@tipodepago VARCHAR(30),
-				@clientehabilitado BIT
+		DECLARE @cliente INT, 
+			@clientehabilitado BIT, 
+			@tipodepago VARCHAR(30),
+			@usuarioid INT
+
+		-- Chequeamos si el usuario ingresado existe
+
+		IF @usuario_nombre NOT IN (SELECT usuario_nombre FROM LIL_MIX.usuario)
+			THROW 54433, 'El usuario a quien desea cargarle credito no existe.', 1
+
+		-- Si el usuario no existe o no es cliente, informamos el error
+
+		SELECT @usuarioid = usuario_id FROM LIL_MIX.usuario WHERE usuario_nombre = @usuario_nombre
+
+
+		IF @usuarioid NOT IN (SELECT usuario_id FROM LIL_MIX.rolxusuario WHERE rol_id = 2)
+			THROW 53333, 'Usuario a quien desea cargarle crédito no es cliente.', 1
+
+		-- Si el usuario existe y es cliente, empieza con la operacion
 
 		SELECT @cliente = cliente_id, @clientehabilitado = cliente_habilitado
-		FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id)
-		WHERE u.usuario_nombre = @usuario_nombre
+				FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id)
+				WHERE u.usuario_nombre = @usuario_nombre
 
 		SELECT @tipodepago = tipo_de_pago_id FROM LIL_MIX.tipoDePago
-		WHERE tipo_de_pago_descripcion = @tipo_de_pago
+				WHERE tipo_de_pago_descripcion = @tipo_de_pago
 
 		-- Un cliente inhabilitado no podrá comprar ofertas ni cargarse crédito bajo ninguna forma
 
@@ -1952,27 +1999,21 @@ BEGIN
 
 		IF @tipodepago != 1 -- No es 'Efectivo'
 		BEGIN
-			-- Chequeo si los datos de la tarjeta ingresada están en la tabla TARJETA pero algún dato no concuerda
+		-- Chequeo si los datos de la tarjeta ingresada están en la tabla TARJETA pero algún dato no concuerda
 
-			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente = @cliente AND tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento != @tarjeta_fecha_vencimiento)
-				THROW 50019, 'Error al ingresar tarjeta.', 1
 
-			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente = @cliente AND tarjeta_numero = @tarjeta_numero AND tarjeta_tipo != @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento )
-				THROW 50020, 'Error al ingresar tarjeta.', 1
+		IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_numero = @tarjeta_numero AND (tarjeta_id_cliente != @cliente OR tarjeta_tipo != @tarjeta_tipo OR tarjeta_fecha_vencimiento != @tarjeta_fecha_vencimiento))
+				THROW 50019, 'La tarjeta pertenece a otro cliente o está ingresando mal alguno de los datos', 1
 
-			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente = @cliente AND tarjeta_numero != @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento )
-				THROW 50021, 'Error al ingresar tarjeta.', 1
+		-- Si en la tabla TARJETA no está registrada dicha tarjeta, la registro
 
-			IF EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_id_cliente != @cliente AND tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento)
-				THROW 50022, 'La tarjeta pertenece a otro cliente. No puede utilizarla.', 1
+		IF NOT EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_numero = @tarjeta_numero)
+		BEGIN	
 
-			-- Si en la tabla TARJETA no está registrada dicha tarjeta para dicho cliente, la registro
+		INSERT INTO LIL_MIX.tarjeta (tarjeta_numero, tarjeta_tipo,tarjeta_fecha_vencimiento, tarjeta_id_cliente)
+		VALUES (@tarjeta_numero, @tarjeta_tipo, @tarjeta_fecha_vencimiento, @cliente)
 
-			IF NOT EXISTS (SELECT * FROM LIL_MIX.tarjeta WHERE tarjeta_numero = @tarjeta_numero AND tarjeta_tipo = @tarjeta_tipo AND tarjeta_fecha_vencimiento = @tarjeta_fecha_vencimiento AND tarjeta_id_cliente = @cliente)
-			BEGIN	
-				INSERT INTO LIL_MIX.tarjeta (tarjeta_numero, tarjeta_tipo, tarjeta_fecha_vencimiento, tarjeta_id_cliente)
-				VALUES (@tarjeta_numero, @tarjeta_tipo, @tarjeta_fecha_vencimiento, @cliente)
-			END
+		END
 
 		INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_monto, carga_id_cliente, carga_tipo_de_pago, carga_tarjeta_numero)
 		VALUES (@fechadecarga, @monto , @cliente, @tipodepago, @tarjeta_numero)
@@ -1988,14 +2029,14 @@ BEGIN
 		ELSE
 		BEGIN
 			INSERT INTO LIL_MIX.cargaDeCredito (carga_fecha, carga_monto, carga_id_cliente, carga_tipo_de_pago)
-			VALUES (@fechadecarga, @monto , @cliente, @tipodepago)
+			VALUES (@fechadecarga, @monto, @cliente, @tipodepago)
 
 			UPDATE LIL_MIX.cliente
 			SET cliente_credito = cliente_credito + @monto
 			WHERE cliente_id = @cliente
 		END
 
-		COMMIT TRANSACTION
+COMMIT TRANSACTION
 	END TRY
 
 	BEGIN CATCH
@@ -2017,6 +2058,7 @@ BEGIN
 	END CATCH
 END
 GO
+
 
 ---------------------------------------  CONFECCIÓN Y PUBLICACIÓN DE OFERTAS ------------------------------------------
 
@@ -2049,7 +2091,7 @@ BEGIN
 		-- El proveedor podrá ir cargando ofertas con diferentes fechas,
 		-- esta fecha debe ser mayor o igual a la fecha actual del sistema
 
-		IF @oferta_fecha_vencimiento < @fechaactualdelsistema
+		IF @oferta_fecha_vencimiento >= @fechaactualdelsistema
 			THROW 50024, 'La fecha de vencimiento debe ser mayor o igual a la fecha actual.', 1
 
 		-- Un cupón consta de 2 precios, que son determinados por el proveedor:
@@ -2101,7 +2143,7 @@ CREATE PROCEDURE LIL_MIX.ofertasVigentesHastaDiaActual
 AS
 BEGIN
 	SELECT * FROM LIL_MIX.oferta
-	WHERE oferta_fecha_vencimiento < @diaactual
+	WHERE oferta_fecha_vencimiento >= @diaactual
 END
 GO
 
@@ -2126,14 +2168,22 @@ BEGIN
 			@stockdisponible INT,
 			@clientehabilitado BIT,
 			@usuarioid INT
+			
+		
+		IF @nombre_usuario NOT IN (SELECT usuario_nombre FROM LIL_MIX.usuario)
+			THROW 52232, 'El usuario no existe.', 1
 
 		SELECT @creditocliente = c.cliente_credito, @clienteid = c.cliente_id, @clientehabilitado = c.cliente_habilitado
 		FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id)
 		WHERE u.usuario_nombre = @nombre_usuario
 
+		IF @oferta_codigo NOT IN (SELECT oferta_codigo FROM LIL_MIX.oferta)
+			THROW 52341, 'La oferta ingresada no existe.',1
+
 		SELECT @ofertaid = oferta_id, @preciooferta = oferta_precio_oferta, @fechavenc = oferta_fecha_vencimiento,
 		@ofertadesc = oferta_decripcion, @cantmaximadeofertas = oferta_restriccion_compra, @stockdisponible = oferta_stock
 		FROM LIL_MIX.oferta WHERE oferta_codigo = @oferta_codigo
+
 		
 		SELECT @usuarioid = usuario_id
 		FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario
@@ -2141,7 +2191,7 @@ BEGIN
 		--Chequear si el usuario ingresado existe y/o es cliente
 
 		IF @usuarioid NOT IN (SELECT usuario_id FROM LIL_MIX.rolxusuario WHERE rol_id = 2)
-			THROW 52222, 'El usuario que está ingresando no existe y/o no es cliente.', 1
+			THROW 52222, 'El usuario que está ingresando no es cliente.', 1
 
 		-- Un cliente inhabilitado no podrá comprar ofertas ni cargarse crédito bajo ninguna forma
 
@@ -2183,23 +2233,26 @@ BEGIN
 		WHERE cliente_id = @clienteid
 
 		-- Generación automática del cupón
-
-		DECLARE	@clidestid INT
-			
-		SELECT @clidestid = c.cliente_id FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id)
-		WHERE u.usuario_nombre = @clientedestino
 		
 		IF(@clientedestino != NULL)
 		BEGIN
-			DECLARE @usuarioiddest INT
+			DECLARE @usudestid INT		
 
-			SELECT @usuarioiddest = usuario_id
-			FROM LIL_MIX.usuario WHERE usuario_id = @clientedestino
+			IF @clientedestino NOT IN (SELECT usuario_nombre FROM LIL_MIX.usuario)
+				THROW 53345, 'El usuario de destino no existe.', 1
 
+			SELECT @usudestid = usuario_id FROM LIL_MIX.usuario 
+			WHERE usuario_nombre = @clientedestino
+			
 			--Chequear si el usuario destino ingresado existe y/o es cliente
 
-			IF @usuarioiddest NOT IN (SELECT usuario_id FROM LIL_MIX.rolxusuario WHERE rol_id = 2)
-				THROW 52223, 'El usuario que está ingresando no existe y/o no es cliente.', 1
+			IF @usudestid NOT IN (SELECT usuario_id FROM LIL_MIX.rolxusuario WHERE rol_id = 2)
+				THROW 52623, 'El usuario a quien desea destinar el no es cliente.', 1
+
+			DECLARE @clidestid INT
+
+			SELECT @clidestid = c.cliente_id FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (c.cliente_usuario_id = u.usuario_id)
+			WHERE u.usuario_nombre = @clientedestino
 
 			INSERT INTO LIL_MIX.cupon (cupon_fecha_vencimiento, cupon_compra_id, cupon_cliente_id)
 			VALUES (DATEADD(day, 30, @diadecompra), @compraid, @clidestid)
@@ -2290,6 +2343,14 @@ BEGIN
 		FROM LIL_MIX.proveedor p JOIN LIL_MIX.usuario u ON (p.proveedor_usuario_id = u.usuario_id)
 		WHERE u.usuario_nombre = @nombre_usuario
 
+		IF @cuponid NOT IN (SELECT cupon_id FROM LIL_MIX.cupon)
+			THROW 50120, 'El codigo de compra ingresado es inexistente', 1
+
+		-- Validarse que dicho cupón entrega corresponda al proveedor
+
+		IF @proveedorid != @proveedoridchequear
+			THROW 50033, 'El cupón no corresponde al proveedor.', 1
+
 		IF @usuariohabilitado = 0
 			THROW 50030, 'El proveedor está inhabilitado. No puede entregar ofertas.', 1
 
@@ -2302,11 +2363,6 @@ BEGIN
 
 		IF @fechavenc < @diadeconsumo
 			THROW 50032, 'El cupón está vencido', 1
-
-		-- Validarse que dicho cupón entrega corresponda al proveedor
-
-		IF @proveedorid != @proveedoridchequear
-			THROW 50033, 'El cupón no corresponde al proveedor.', 1
 
 	-- Para dar de baja un cupón disponible para consumir es necesario que se registre: Fecha de consumo, Código de cupón, Cliente
 
@@ -2351,6 +2407,20 @@ CREATE PROCEDURE LIL_MIX.proveedores
 AS
 BEGIN
 	SELECT * FROM LIL_MIX.proveedor
+END
+GO
+
+CREATE PROCEDURE LIL_MIX.mostrarImporteFactura
+@fecha_inicio DATETIME , @fecha_fin DATETIME , @proveedor_cuit VARCHAR(13)
+AS
+BEGIN
+	DECLARE @proveid INT
+
+	SELECT @proveid = proveedor_id FROM LIL_MIX.proveedor 
+	WHERE proveedor_cuit = @proveedor_cuit
+
+	SELECT '$'+CONVERT(VARCHAR,factura_importe) as 'Importe', factura_id as 'Numero de factura' FROM LIL_MIX.factura
+	WHERE factura_proveedor_id = @proveid AND factura_fecha_inicio = @fecha_inicio AND factura_fecha_fin = @fecha_fin
 END
 GO
 

@@ -14,8 +14,8 @@ namespace FrbaOfertas.CargaDeCredito
 {
     public partial class CargaCredito : Form
     {
-
-        DateTime dte = new DateTime(2023, 3, 9, 16, 5, 7, 123); //reemplazar por fecha sistema (global)
+        DateTime fecha = Properties.Settings.Default.fecha_actual;
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
 
         public CargaCredito()
         {
@@ -25,7 +25,6 @@ namespace FrbaOfertas.CargaDeCredito
 
         public void cargarDatos()
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             cn.Open();
             SqlCommand query = new SqlCommand("LIL_MIX.listadoTiposDePago", cn);
             query.CommandType = CommandType.StoredProcedure;
@@ -45,15 +44,13 @@ namespace FrbaOfertas.CargaDeCredito
 
         public void cargarCredito(string tipo_de_pago_descripcion)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.cargarCredito", cn);
             query.CommandType = CommandType.StoredProcedure;
             query.Parameters.Add(new SqlParameter("@tipo_de_pago", tipo_de_pago_descripcion));
             query.Parameters.Add(new SqlParameter("@monto", Convert.ToInt32(this.txtMonto.Text)));
             query.Parameters.Add(new SqlParameter("@tarjeta_numero",this.txtTarjetaNumero.Text));
             query.Parameters.Add(new SqlParameter("@tarjeta_fecha_vencimiento", this.dateTimePicker1.Value));
-        //    string fecha = ConfigurationManager.AppSettings["current_date"];
-            query.Parameters.Add(new SqlParameter("@fechadecarga", dte)); // aca tambien
+            query.Parameters.Add(new SqlParameter("@fechadecarga", fecha)); 
             query.Parameters.Add(new SqlParameter("@tarjeta_tipo", this.textBox1.Text));
             query.Parameters.Add(new SqlParameter("@usuario_nombre", this.txtUser.Text));
 

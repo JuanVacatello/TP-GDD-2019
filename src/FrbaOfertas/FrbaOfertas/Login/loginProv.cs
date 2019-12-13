@@ -14,6 +14,8 @@ namespace FrbaOfertas.Login
 {
     public partial class loginProv : Form
     {
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
+
         public static string nombre_usuario;
 
         public loginProv()
@@ -27,7 +29,6 @@ namespace FrbaOfertas.Login
             try
             {
 
-                SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
                 SqlCommand query = new SqlCommand("LIL_MIX.login", cn);
                 query.CommandType = CommandType.StoredProcedure;
                 query.Parameters.Add(new SqlParameter("@usuario", this.txtUsuario.Text));

@@ -12,20 +12,13 @@ using System.Windows.Forms;
 
 namespace FrbaOfertas.ComprarOferta
 {
-    public partial class NumeroDeCompra : Form
+    public partial class NumeroDeCompraAdmin : Form
     {
         SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
 
-        public NumeroDeCompra()
+        public NumeroDeCompraAdmin()
         {
             InitializeComponent();
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            FuncionalidadesRol.FuncionalidadesCliente fun = new FuncionalidadesRol.FuncionalidadesCliente();
-            this.Hide();
-            fun.Show();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -34,9 +27,9 @@ namespace FrbaOfertas.ComprarOferta
             dt.Clear();
             SqlCommand select = new SqlCommand("LIL_MIX.mostrarCompra", cn);
             select.CommandType = CommandType.StoredProcedure;
-            select.Parameters.Add(new SqlParameter("@usuario_nombre", login.nombre_usuario));
-            select.Parameters.Add(new SqlParameter("@ofertacodigo", ComprarCliente.codigo));
-            select.Parameters.Add(new SqlParameter("@cantidad", ComprarCliente.cantidad));
+            select.Parameters.Add(new SqlParameter("@usuario_nombre", ComprarAdmin.cliente));
+            select.Parameters.Add(new SqlParameter("@ofertacodigo", ComprarAdmin.codigo));
+            select.Parameters.Add(new SqlParameter("@cantidad", ComprarAdmin.cantidad));
             SqlDataAdapter da = new SqlDataAdapter(select);
 
             cn.Open();
@@ -44,12 +37,13 @@ namespace FrbaOfertas.ComprarOferta
             compranumeroDGV.DataSource = dt;
             compranumeroDGV.ReadOnly = true;
             cn.Close();
-
         }
 
-        private void compranumeroDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void button5_Click(object sender, EventArgs e)
         {
-
+            FuncionalidadesRol.FuncionalidadesAdmin fun = new FuncionalidadesRol.FuncionalidadesAdmin();
+            this.Hide();
+            fun.Show();
         }
     }
 }

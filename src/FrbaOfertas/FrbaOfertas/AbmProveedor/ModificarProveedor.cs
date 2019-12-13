@@ -14,6 +14,8 @@ namespace FrbaOfertas.AbmProveedor
 {
     public partial class ModificarProveedor : Form
     {
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
+
         public ModificarProveedor()
         {
             InitializeComponent();
@@ -38,7 +40,6 @@ namespace FrbaOfertas.AbmProveedor
 
         private void button3_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarProveedorCuit", cn);
             query.CommandType = CommandType.StoredProcedure;
             //query.Parameters.Add(new SqlParameter("@usuario_nombre", ---));
@@ -57,7 +58,6 @@ namespace FrbaOfertas.AbmProveedor
 
         private void btnModificarNombreContacto_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarProveedorNombreContacto", cn);
             query.CommandType = CommandType.StoredProcedure;
             //query.Parameters.Add(new SqlParameter("@usuario_nombre", ---));
@@ -71,7 +71,6 @@ namespace FrbaOfertas.AbmProveedor
 
         private void btnModificarTelefono_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarProveedorTelefono", cn);
             query.CommandType = CommandType.StoredProcedure;
             //query.Parameters.Add(new SqlParameter("@usuario_nombre", ---));
@@ -85,7 +84,6 @@ namespace FrbaOfertas.AbmProveedor
 
         private void btnModificarCodigoPostal_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarProveedorCP", cn);
             query.CommandType = CommandType.StoredProcedure;
             //query.Parameters.Add(new SqlParameter("@usuario_nombre", ---));
@@ -99,7 +97,6 @@ namespace FrbaOfertas.AbmProveedor
 
         private void btnModificarRubro_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarProveedorRubro", cn);
             query.CommandType = CommandType.StoredProcedure;
             //query.Parameters.Add(new SqlParameter("@usuario_nombre", ---));
@@ -113,7 +110,6 @@ namespace FrbaOfertas.AbmProveedor
 
         private void btnModificarMail_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarProveedorMail", cn);
             query.CommandType = CommandType.StoredProcedure;
             //query.Parameters.Add(new SqlParameter("@usuario_nombre", ---));
@@ -127,7 +123,6 @@ namespace FrbaOfertas.AbmProveedor
 
         private void btnModificarRazonSocial_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarProveedorRS", cn);
             query.CommandType = CommandType.StoredProcedure;
             //query.Parameters.Add(new SqlParameter("@usuario_nombre", ---));
@@ -141,7 +136,6 @@ namespace FrbaOfertas.AbmProveedor
 
         private void btnModificarDireccion_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarCalleDirecProveedor", cn);
             query.CommandType = CommandType.StoredProcedure;
             //query.Parameters.Add(new SqlParameter("@usuario_nombre", ---));
@@ -155,7 +149,6 @@ namespace FrbaOfertas.AbmProveedor
 
         private void btnModificarPiso_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarPisoDirecProveedor", cn);
             query.CommandType = CommandType.StoredProcedure;
             //query.Parameters.Add(new SqlParameter("@usuario_nombre", ---));
@@ -169,7 +162,6 @@ namespace FrbaOfertas.AbmProveedor
 
         private void btnModificarCiudad_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarDptoDirecProveedor", cn);
             query.CommandType = CommandType.StoredProcedure;
             //query.Parameters.Add(new SqlParameter("@usuario_nombre", ---));
@@ -183,7 +175,6 @@ namespace FrbaOfertas.AbmProveedor
 
         private void btnModificarDepto_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarCiudadProveedor", cn);
             query.CommandType = CommandType.StoredProcedure;
             //query.Parameters.Add(new SqlParameter("@usuario_nombre", ---));

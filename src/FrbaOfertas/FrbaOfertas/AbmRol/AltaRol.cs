@@ -14,6 +14,8 @@ namespace FrbaOfertas.AbmRol
 {
     public partial class AltaRol : Form
     {
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
+
         public AltaRol()
         {
             InitializeComponent();
@@ -22,7 +24,6 @@ namespace FrbaOfertas.AbmRol
 
         public void cargarDatos()
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             cn.Open();
             SqlCommand query = new SqlCommand("LIL_MIX.listadoFuncionalidades", cn);
             query.CommandType = CommandType.StoredProcedure;
@@ -32,9 +33,6 @@ namespace FrbaOfertas.AbmRol
             cn.Close();
 
             DataRow fila = dt.NewRow();
-            // LO SACAMOS PARA EVITAR Q NO SE PUEDA ELEGIR FUNCIONALIDAD
-            //fila["funcionalidad_descripcion"] = "seleccione una funcionalidad";
-            //dt.Rows.InsertAt(fila, 0);
 
             cmbFuncionalidad.ValueMember = "funcionalidad_descripcion";
             cmbFuncionalidad.DisplayMember = "funcionalidad_descripcion";
@@ -42,8 +40,8 @@ namespace FrbaOfertas.AbmRol
 
         }
 
-        public void registrarRol(string funcionalidad_descripcion) {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
+        public void registrarRol(string funcionalidad_descripcion) 
+        {
             SqlCommand query = new SqlCommand("LIL_MIX.altaRol", cn);
             query.CommandType = CommandType.StoredProcedure;
             query.Parameters.Add(new SqlParameter("@rol_nombre", this.txtNombre.Text));

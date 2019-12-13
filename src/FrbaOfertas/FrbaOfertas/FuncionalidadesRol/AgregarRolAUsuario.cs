@@ -14,6 +14,8 @@ namespace FrbaOfertas.FuncionalidadesRol
 {
     public partial class AgregarRolAUsuario : Form
     {
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
+
         public AgregarRolAUsuario()
         {
             InitializeComponent();
@@ -22,7 +24,6 @@ namespace FrbaOfertas.FuncionalidadesRol
 
         public void cargarDatos()
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             cn.Open();
             SqlCommand query = new SqlCommand("LIL_MIX.listadoRol", cn);
             query.CommandType = CommandType.StoredProcedure;
@@ -43,7 +44,6 @@ namespace FrbaOfertas.FuncionalidadesRol
 
         public void agregarRol(string rol_nombre)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.agregarRolAUsuario", cn);
             query.CommandType = CommandType.StoredProcedure;
             query.Parameters.Add(new SqlParameter("@rol_nombre", rol_nombre));

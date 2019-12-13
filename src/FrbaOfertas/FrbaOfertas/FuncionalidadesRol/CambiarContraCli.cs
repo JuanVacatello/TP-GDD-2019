@@ -14,6 +14,8 @@ namespace FrbaOfertas.FuncionalidadesRol
 {
     public partial class CambiarContraCli : Form
     {
+        SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
+
         public CambiarContraCli()
         {
             InitializeComponent();
@@ -30,7 +32,6 @@ namespace FrbaOfertas.FuncionalidadesRol
         {
             try
             {
-                SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
                 SqlCommand query = new SqlCommand("LIL_MIX.modificarContrasenia", cn);
                 query.CommandType = CommandType.StoredProcedure;
                 query.Parameters.Add(new SqlParameter("@usuario_nombre", login.nombre_usuario));

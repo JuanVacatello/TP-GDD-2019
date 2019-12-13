@@ -10,5 +10,8 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=localhost\SQLSERVER2012;Initial Catalog=GD2C2019;Integrated Security=True</Value>
     </Setting>
+    <Setting Name="fecha_actual" Type="System.DateTime" Scope="Application">
+      <Value Profile="(Default)">2019-12-15</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
