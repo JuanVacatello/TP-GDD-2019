@@ -56,5 +56,27 @@ namespace FrbaOfertas.AbmCliente
             dgvBajaCliente.ReadOnly = true;
             cn.Close();
         }
+
+        void limpiarCampos()
+        {
+            txtNombreFiltro.Clear();
+            txtApellidoFiltro.Clear();
+            txtMailFiltro.Clear();
+            txtDniFiltro.Clear();
+            dgvBajaCliente.DataSource = null;
+            dgvBajaCliente.Refresh();
+
+        }
+
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            limpiarCampos();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

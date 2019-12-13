@@ -79,11 +79,17 @@ namespace FrbaOfertas.Facturar
 
         }
 
-
-        /*public void button3_Click(object sender, EventArgs e)
+        void limpiarCampos()
         {
-            this.facturar(inicio, fin, nombre_prov);
+            dataGridView1.DataSource = null;
+            dataGridView1.Refresh();
 
-        }*/
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.limpiarCampos();
+        }
+
     }
 }

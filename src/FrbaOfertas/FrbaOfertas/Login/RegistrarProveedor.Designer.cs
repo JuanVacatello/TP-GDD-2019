@@ -58,6 +58,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtNombreUsuario = new System.Windows.Forms.TextBox();
             this.Usuario = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtNombreContacto
@@ -307,11 +308,22 @@
             this.Usuario.TabIndex = 62;
             this.Usuario.Text = "Nombre de usuario (*)";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(56, 419);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(102, 23);
+            this.button1.TabIndex = 92;
+            this.button1.Text = "Limpiar campos";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // RegistrarProveedor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(268, 425);
+            this.ClientSize = new System.Drawing.Size(268, 448);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.txtNombreContacto);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.btnRegistrar);
@@ -381,5 +393,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtNombreUsuario;
         private System.Windows.Forms.Label Usuario;
+        private System.Windows.Forms.Button button1;
     }
 }

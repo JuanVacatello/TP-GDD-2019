@@ -38,7 +38,7 @@ namespace FrbaOfertas.CrearOferta
             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.crearOferta", cn);
             query.CommandType = CommandType.StoredProcedure;
-            query.Parameters.Add(new SqlParameter("@usuario_nombre", this.txtUsuario.Text));
+            query.Parameters.Add(new SqlParameter("@usuario_nombre", Login.loginProv.nombre_usuario));
             query.Parameters.Add(new SqlParameter("@oferta_descripcion", this.txtDescrip.Text));
             query.Parameters.Add(new SqlParameter("@oferta_fecha_vencimiento", this.dateTimePicker1.Value));
             query.Parameters.Add(new SqlParameter("@oferta_precio_oferta", this.txtPrecioOferta.Text));

@@ -116,6 +116,15 @@ namespace FrbaOfertas.ListadoEstadistico
 
         private void button1_Click(object sender, EventArgs e)
         {
+            this.limpiarCampos();
+
+        }
+
+        private void limpiarCampos()
+        {
+            txtAnio.Clear();
+            dataGridView1.DataSource = null;
+            dataGridView1.Refresh();
         }
 
         private void txtAnio_TextChanged(object sender, EventArgs e)

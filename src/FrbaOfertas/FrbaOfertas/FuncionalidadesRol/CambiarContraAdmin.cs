@@ -31,7 +31,7 @@ namespace FrbaOfertas.FuncionalidadesRol
             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.modificarContrasenia", cn);
             query.CommandType = CommandType.StoredProcedure;
-            query.Parameters.Add(new SqlParameter("@usuario_nombre", this.txtUsuario.Text));
+            query.Parameters.Add(new SqlParameter("@usuario_nombre", Login.loginAdm.nombre_usuario));
             query.Parameters.Add(new SqlParameter("@anteriorcontra", this.txtContraActual.Text));
             query.Parameters.Add(new SqlParameter("@nuevacontra", this.txtContraNueva.Text));
 

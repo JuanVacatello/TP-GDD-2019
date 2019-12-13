@@ -45,12 +45,13 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(465, 403);
+            this.button1.Location = new System.Drawing.Point(465, 305);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(69, 36);
             this.button1.TabIndex = 33;
             this.button1.Text = "Limpiar";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label5
             // 
@@ -95,7 +96,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(15, 123);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(609, 253);
+            this.dataGridView1.Size = new System.Drawing.Size(609, 163);
             this.dataGridView1.TabIndex = 28;
             // 
             // comboBox2
@@ -143,7 +144,7 @@
             // 
             // btnVolver
             // 
-            this.btnVolver.Location = new System.Drawing.Point(555, 403);
+            this.btnVolver.Location = new System.Drawing.Point(555, 305);
             this.btnVolver.Name = "btnVolver";
             this.btnVolver.Size = new System.Drawing.Size(69, 36);
             this.btnVolver.TabIndex = 22;
@@ -155,7 +156,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(650, 453);
+            this.ClientSize = new System.Drawing.Size(650, 355);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);

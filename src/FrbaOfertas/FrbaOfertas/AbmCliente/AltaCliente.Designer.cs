@@ -58,6 +58,7 @@
             this.txtMail = new System.Windows.Forms.TextBox();
             this.txtDNI = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label14
@@ -296,6 +297,7 @@
             this.txtDNI.Name = "txtDNI";
             this.txtDNI.Size = new System.Drawing.Size(100, 20);
             this.txtDNI.TabIndex = 59;
+            this.txtDNI.TextChanged += new System.EventHandler(this.txtDNI_TextChanged);
             // 
             // label2
             // 
@@ -306,11 +308,22 @@
             this.label2.TabIndex = 60;
             this.label2.Text = "DNI (*)";
             // 
-            // AltaCliente
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(55, 419);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(102, 23);
+            this.button1.TabIndex = 92;
+            this.button1.Text = "Limpiar campos";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // RegistroCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(260, 428);
+            this.ClientSize = new System.Drawing.Size(260, 454);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtDNI);
             this.Controls.Add(this.txtMail);
@@ -341,7 +354,7 @@
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.label4);
-            this.Name = "AltaCliente";
+            this.Name = "RegistroCliente";
             this.Text = "AltaCliente";
             this.Load += new System.EventHandler(this.AltaCliente_Load);
             this.ResumeLayout(false);
@@ -381,5 +394,6 @@
         private System.Windows.Forms.TextBox txtMail;
         private System.Windows.Forms.TextBox txtDNI;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button1;
     }
 }

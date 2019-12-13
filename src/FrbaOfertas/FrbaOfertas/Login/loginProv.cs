@@ -14,6 +14,8 @@ namespace FrbaOfertas.Login
 {
     public partial class loginProv : Form
     {
+        public static string nombre_usuario;
+
         public loginProv()
         {
             InitializeComponent();
@@ -41,6 +43,8 @@ namespace FrbaOfertas.Login
             this.Hide();
             funpro.Show();
 
+            nombre_usuario = this.txtUsuario.Text;
+
             cn.Close();
         }
 
@@ -49,6 +53,11 @@ namespace FrbaOfertas.Login
             Login.RegistrarProveedor prov = new Login.RegistrarProveedor();
             this.Hide();
             prov.Show();
+        }
+
+        private void txtUsuario_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

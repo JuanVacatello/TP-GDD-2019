@@ -28,23 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.txt_nombre = new System.Windows.Forms.Label();
             this.txtNombre = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.btnAgregarRol = new System.Windows.Forms.Button();
             this.cmbFuncionalidad = new System.Windows.Forms.ComboBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // txt_nombre
-            // 
-            this.txt_nombre.AutoSize = true;
-            this.txt_nombre.Location = new System.Drawing.Point(41, 23);
-            this.txt_nombre.Name = "txt_nombre";
-            this.txt_nombre.Size = new System.Drawing.Size(44, 13);
-            this.txt_nombre.TabIndex = 0;
-            this.txt_nombre.Text = "Nombre";
-            this.txt_nombre.Click += new System.EventHandler(this.label1_Click);
             // 
             // txtNombre
             // 
@@ -53,15 +44,6 @@
             this.txtNombre.Size = new System.Drawing.Size(217, 20);
             this.txtNombre.TabIndex = 1;
             this.txtNombre.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(41, 93);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(73, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Funcionalidad";
             // 
             // button1
             // 
@@ -92,17 +74,46 @@
             this.cmbFuncionalidad.TabIndex = 8;
             this.cmbFuncionalidad.SelectedIndexChanged += new System.EventHandler(this.cmbFuncionalidad_SelectedIndexChanged);
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(90, 214);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(130, 23);
+            this.button2.TabIndex = 9;
+            this.button2.Text = "Limpiar campos";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(44, 13);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(44, 13);
+            this.label2.TabIndex = 10;
+            this.label2.Text = "Nombre";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(44, 100);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(73, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "Funcionalidad";
+            // 
             // AltaRol
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(318, 230);
+            this.ClientSize = new System.Drawing.Size(318, 249);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.cmbFuncionalidad);
             this.Controls.Add(this.btnAgregarRol);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.txtNombre);
-            this.Controls.Add(this.txt_nombre);
             this.Name = "AltaRol";
             this.Text = "Alta Rol";
             this.Load += new System.EventHandler(this.AltaRol_Load);
@@ -113,11 +124,12 @@
 
         #endregion
 
-        private System.Windows.Forms.Label txt_nombre;
         private System.Windows.Forms.TextBox txtNombre;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btnAgregarRol;
         private System.Windows.Forms.ComboBox cmbFuncionalidad;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
     }
 }

@@ -51,6 +51,8 @@ namespace FrbaOfertas.AbmRol
             cn.Open();
             query.ExecuteNonQuery();
 
+            MessageBox.Show("Rol registrado");
+
             ABM_de_Rol abmrol = new ABM_de_Rol();
             this.Hide();
             abmrol.Show();
@@ -59,10 +61,6 @@ namespace FrbaOfertas.AbmRol
             
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -72,11 +70,13 @@ namespace FrbaOfertas.AbmRol
         
         private void button2_Click(object sender, EventArgs e)
         {
-            if (cmbFuncionalidad.SelectedValue.ToString() != null)
+            if (txtNombre.TextLength != 0 & cmbFuncionalidad.SelectedValue.ToString() != null)
             {
                 string funcionalidad_descripcion = cmbFuncionalidad.SelectedValue.ToString();
                 registrarRol(funcionalidad_descripcion);
             }
+            else
+                MessageBox.Show("Ingrese un nombre de rol o funcionalidad");
             
         }
 
@@ -100,6 +100,18 @@ namespace FrbaOfertas.AbmRol
         private void cmbFuncionalidad_SelectedIndexChanged(object sender, EventArgs e)
         {
         }
+
+        void limpiarCampos()
+        {
+            txtNombre.Clear();
+           // cmbFuncionalidad.Items.Clear();       FALTA EL COMBO BOX
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            this.limpiarCampos();
+        }
         
+
     }
 }

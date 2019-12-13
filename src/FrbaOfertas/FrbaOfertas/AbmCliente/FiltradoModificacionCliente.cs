@@ -53,6 +53,21 @@ namespace FrbaOfertas.AbmCliente
 
         }
 
+        void limpiarCampos()
+        {
+            txtNombre.Clear();
+            txtApellido.Clear();
+            txtDni.Clear();
+            txtMail.Clear();
+            dataGridView1.DataSource = null;
+            dataGridView1.Refresh();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.limpiarCampos();
+        }
+
        
 
     }

@@ -28,5 +28,20 @@ namespace FrbaOfertas.AbmProveedor
             this.Hide();
             abm.Show();
         }
+
+        private void limpiarCampos()
+        {
+            textBox1.Clear();
+            textBox2.Clear();
+            textBox3.Clear();
+            dataGridView1.DataSource = null;
+            dataGridView1.Refresh();
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            limpiarCampos();
+        }
     }
 }

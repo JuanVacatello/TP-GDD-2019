@@ -162,11 +162,11 @@
     <Compile Include="ComprarOferta\ComprarCliente.Designer.cs">
       <DependentUpon>ComprarCliente.cs</DependentUpon>
     </Compile>
-    <Compile Include="ComprarOferta\OfertasVigentes.cs">
+    <Compile Include="ComprarOferta\ComprarAdmin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ComprarOferta\OfertasVigentes.Designer.cs">
-      <DependentUpon>OfertasVigentes.cs</DependentUpon>
+    <Compile Include="ComprarOferta\ComprarAdmin.Designer.cs">
+      <DependentUpon>ComprarAdmin.cs</DependentUpon>
     </Compile>
     <Compile Include="CrearOferta\ConfeccionOfertaProve.cs">
       <SubType>Form</SubType>
@@ -347,8 +347,8 @@
     <EmbeddedResource Include="ComprarOferta\ComprarCliente.resx">
       <DependentUpon>ComprarCliente.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ComprarOferta\OfertasVigentes.resx">
-      <DependentUpon>OfertasVigentes.cs</DependentUpon>
+    <EmbeddedResource Include="ComprarOferta\ComprarAdmin.resx">
+      <DependentUpon>ComprarAdmin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CrearOferta\ConfeccionOfertaProve.resx">
       <DependentUpon>ConfeccionOfertaProve.cs</DependentUpon>

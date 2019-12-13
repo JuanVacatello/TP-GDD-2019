@@ -14,6 +14,8 @@ namespace FrbaOfertas.Login
 {
     public partial class loginAdm : Form
     {
+        public static string nombre_usuario;
+
         public loginAdm()
         {
             InitializeComponent();
@@ -40,6 +42,8 @@ namespace FrbaOfertas.Login
             FuncionalidadesRol.FuncionalidadesAdmin funadm = new FuncionalidadesRol.FuncionalidadesAdmin();
             this.Hide();
             funadm.Show();
+
+            nombre_usuario = this.txtUsuario.Text;
 
             cn.Close();
         }

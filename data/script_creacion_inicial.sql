@@ -341,6 +341,18 @@ IF OBJECT_ID('LIL_MIX.proveedores') IS NOT NULL
 	DROP PROCEDURE LIL_MIX.proveedores
 GO
 
+IF OBJECT_ID('LIL_MIX.listadoFuncionalidadesExistentes') IS NOT NULL
+	DROP PROCEDURE LIL_MIX.listadoFuncionalidadesExistentes
+GO
+
+IF OBJECT_ID('LIL_MIX.listadoFuncionalidadesNoExistentes') IS NOT NULL
+	DROP PROCEDURE LIL_MIX.listadoFuncionalidadesNoExistentes
+GO
+
+IF OBJECT_ID('LIL_MIX.mostrarCompra') IS NOT NULL
+	DROP PROCEDURE LIL_MIX.mostrarCompra
+GO
+
 -----DROPS TRIGGERS
 
 IF OBJECT_ID('LIL_MIX.noRepetirFuncionalidadesEnUnRol') IS NOT NULL
@@ -374,15 +386,15 @@ GO
 
 CREATE TABLE LIL_MIX.usuario ( usuario_id INT NOT NULL IDENTITY(1000,1) PRIMARY KEY,
 			           usuario_nombre VARCHAR(255) NOT NULL UNIQUE,
-	                           usuario_password VARCHAR(255) NOT NULL,
+	                   usuario_password VARCHAR(255) NOT NULL,
 			           usuario_intentos TINYINT DEFAULT 0,
 			           usuario_habilitado BIT DEFAULT 1 )
 GO
 
 CREATE TABLE LIL_MIX.direccion ( direccion_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 				   direccion_calle VARCHAR(255),
-				   direccion_piso TINYINT,
-				   direccion_dpto CHAR(1),
+				   direccion_piso TINYINT DEFAULT NULL,
+				   direccion_dpto CHAR(1) DEFAULT NULL,
 				   direccion_ciudad VARCHAR(255) )
 GO
 
@@ -486,7 +498,7 @@ CREATE TABLE LIL_MIX.cargaDeCredito ( carga_id INT NOT NULL IDENTITY(1,1) PRIMAR
 				                      carga_id_cliente INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.cliente(cliente_id),
 				                      carga_tipo_de_pago INT NOT NULL FOREIGN KEY REFERENCES LIL_MIX.tipoDePago(tipo_de_pago_id),
 				                      carga_monto BIGINT NOT NULL,
-				                      carga_tarjeta_numero BIGINT FOREIGN KEY REFERENCES LIL_MIX.tarjeta(tarjeta_numero) )
+				                      carga_tarjeta_numero BIGINT DEFAULT NULL FOREIGN KEY REFERENCES LIL_MIX.tarjeta(tarjeta_numero))
 GO
 
 CREATE TABLE LIL_MIX.semestre ( semestre_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
@@ -770,6 +782,35 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE LIL_MIX.listadoFuncionalidadesExistentes
+@rol_nombre VARCHAR(255)
+AS
+BEGIN
+	DECLARE @rolid INT
+
+	SELECT @rolid = rol_id FROM LIL_MIX.rol WHERE rol_nombre = @rol_nombre
+
+	SELECT f.funcionalidad_descripcion 
+	FROM LIL_MIX.funcionalidadxrol fr JOIN LIL_MIX.funcionalidad f ON (f.funcionalidad_id = fr.funcionalidad_id)
+	WHERE rol_id = @rolid
+END
+GO
+
+CREATE PROCEDURE LIL_MIX.listadoFuncionalidadesNoExistentes
+@rol_nombre VARCHAR(255)
+AS
+BEGIN
+	DECLARE @rolid INT
+
+	SELECT @rolid = rol_id FROM LIL_MIX.rol WHERE rol_nombre = @rol_nombre
+	
+	SELECT funcionalidad_descripcion FROM LIL_MIX.funcionalidad
+	WHERE funcionalidad_id NOT IN 
+		(SELECT funcionalidad_id FROM LIL_MIX.funcionalidadxrol WHERE rol_id = @rolid)
+
+END
+GO
+
  -- 2)
 
 CREATE PROCEDURE LIL_MIX.altaRol
@@ -781,9 +822,6 @@ BEGIN
 
 			IF @rol_nombre IN (SELECT rol_nombre FROM LIL_MIX.rol)
 				THROW 50004, 'Rol existente', 1
-
-			IF @funcionalidad_descripcion NOT IN (SELECT funcionalidad_descripcion FROM LIL_MIX.funcionalidad)
-				THROW 50005, 'Funcionalidad inexistente', 1
 
 			INSERT INTO LIL_MIX.rol (rol_nombre)
 			VALUES (@rol_nombre)
@@ -824,19 +862,28 @@ CREATE PROCEDURE LIL_MIX.modificarRolNombre
 @rol_nombre VARCHAR(30), @rol_nombre_nuevo VARCHAR(30)
 AS
 BEGIN
-BEGIN TRY
-	BEGIN TRAN
-	IF @rol_nombre_nuevo IN (SELECT rol_nombre FROM LIL_MIX.rol)
-		THROW 50035, 'Ya existe rol con ese nombre', 1
+	BEGIN TRY
+		BEGIN TRANSACTION
 
-	UPDATE LIL_MIX.rol
-	SET rol_nombre = @rol_nombre_nuevo
-	WHERE rol_nombre = @rol_nombre
-	COMMIT
-END TRY
-BEGIN CATCH
-ROLLBACK
-END CATCH
+		IF @rol_nombre_nuevo IN (SELECT rol_nombre FROM LIL_MIX.rol)
+			THROW 50035, 'Ya existe rol con ese nombre', 1
+
+		DECLARE @rolid INT
+
+		SELECT @rolid = rol_id FROM LIL_MIX.rol WHERE rol_nombre = @rol_nombre
+
+		UPDATE LIL_MIX.rol
+		SET rol_nombre = @rol_nombre_nuevo
+		WHERE rol_id = @rolid
+
+		COMMIT TRANSACTION
+
+	END TRY
+	BEGIN CATCH
+
+		ROLLBACK TRANSACTION
+
+	END CATCH
 END
 GO
 
@@ -862,32 +909,18 @@ CREATE PROCEDURE LIL_MIX.modificarRolEliminarFuncionalidad
 @rol_nombre VARCHAR(30), @funcionalidad_descripcion VARCHAR(30)
 AS
 BEGIN
-	BEGIN TRY
-		BEGIN TRAN
+		DECLARE @funcid INT,
+			@rolid INT
 
-			DECLARE @funcid INT,
-				@rolid INT
+		SELECT @funcid = funcionalidad_id FROM LIL_MIX.funcionalidad
+		WHERE funcionalidad_descripcion = @funcionalidad_descripcion
 
-			SELECT @funcid = funcionalidad_id FROM LIL_MIX.funcionalidad
-			WHERE funcionalidad_descripcion = @funcionalidad_descripcion
+		SELECT @rolid = rol_id FROM LIL_MIX.rol
+		WHERE rol_nombre = @rol_nombre
 
-			SELECT @rolid = rol_id FROM LIL_MIX.rol
-			WHERE rol_nombre = @rol_nombre
+		DELETE FROM LIL_MIX.funcionalidadxrol
+		WHERE rol_id = @rolid AND funcionalidad_id = @funcid
 
-			IF @funcid NOT IN (SELECT funcionalidad_id FROM LIL_MIX.funcionalidadxrol WHERE rol_id = @rolid)
-				THROW 50007, 'No existe esa funcionalidad en este rol.', 1
-
-			DELETE FROM LIL_MIX.funcionalidadxrol
-			WHERE funcionalidad_id = @funcid AND rol_id = @rolid
-
-		COMMIT
-	END TRY
-
-	BEGIN CATCH
-
-		ROLLBACK
-
-	END CATCH
 END
 GO
 
@@ -1941,7 +1974,7 @@ BEGIN
 END
 GO
 
--- 17)
+-- 17.1)
 
 CREATE PROCEDURE LIL_MIX.comprarOferta
 @nombre_usuario VARCHAR(255), @oferta_codigo VARCHAR(255), @cantidad TINYINT,
@@ -2053,6 +2086,29 @@ DECLARE @ErrorMessage NVARCHAR(4000);
 END
 GO
 
+--17.2)
+
+-- Debe mostrar por pantalla al usuario su numero de compra
+
+CREATE PROCEDURE LIL_MIX.mostrarCompra
+@ofertacodigo VARCHAR(255), @usuario_nombre VARCHAR(255), @cantidad TINYINT
+AS
+BEGIN
+	DECLARE @clienteid INT,
+			@ofertaid INT
+
+	SELECT @clienteid = c.cliente_id 
+	FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (c.cliente_usuario_id = u.usuario_id)
+	WHERE u.usuario_nombre = @usuario_nombre
+
+	SELECT @ofertaid = oferta_id FROM LIL_MIX.oferta
+	WHERE oferta_codigo = @ofertacodigo
+
+	SELECT compra_id FROM LIL_MIX.compra
+	WHERE compra_oferta_numero = @ofertaid AND compra_cliente_id = @clienteid AND compra_cantidad = @cantidad
+
+END
+GO
 ---------------------------------------  ENTREGA/CONSUMO DE OFERTA ------------------------------------------
 
 -- 18)

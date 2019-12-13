@@ -54,7 +54,7 @@ namespace FrbaOfertas.FuncionalidadesRol
 
         private void button6_Click(object sender, EventArgs e)
         {
-            ComprarOferta.OfertasVigentes of = new ComprarOferta.OfertasVigentes();
+            ComprarOferta.ComprarAdmin of = new ComprarOferta.ComprarAdmin();
             this.Hide();
             of.Show();
         }

@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtUsuario = new System.Windows.Forms.TextBox();
             this.txtContraActual = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -38,25 +36,9 @@
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(211, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Ingrese nuevamente su nombre de usuario:";
-            // 
-            // txtUsuario
-            // 
-            this.txtUsuario.Location = new System.Drawing.Point(15, 25);
-            this.txtUsuario.Name = "txtUsuario";
-            this.txtUsuario.Size = new System.Drawing.Size(208, 20);
-            this.txtUsuario.TabIndex = 1;
-            // 
             // txtContraActual
             // 
-            this.txtContraActual.Location = new System.Drawing.Point(15, 79);
+            this.txtContraActual.Location = new System.Drawing.Point(12, 27);
             this.txtContraActual.Name = "txtContraActual";
             this.txtContraActual.Size = new System.Drawing.Size(208, 20);
             this.txtContraActual.TabIndex = 2;
@@ -64,7 +46,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 63);
+            this.label2.Location = new System.Drawing.Point(9, 11);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(147, 13);
             this.label2.TabIndex = 3;
@@ -73,7 +55,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 121);
+            this.label3.Location = new System.Drawing.Point(9, 69);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(145, 13);
             this.label3.TabIndex = 4;
@@ -81,14 +63,14 @@
             // 
             // txtContraNueva
             // 
-            this.txtContraNueva.Location = new System.Drawing.Point(15, 137);
+            this.txtContraNueva.Location = new System.Drawing.Point(12, 85);
             this.txtContraNueva.Name = "txtContraNueva";
             this.txtContraNueva.Size = new System.Drawing.Size(208, 20);
             this.txtContraNueva.TabIndex = 5;
             // 
             // Atrás
             // 
-            this.Atrás.Location = new System.Drawing.Point(15, 175);
+            this.Atrás.Location = new System.Drawing.Point(12, 123);
             this.Atrás.Name = "Atrás";
             this.Atrás.Size = new System.Drawing.Size(75, 23);
             this.Atrás.TabIndex = 6;
@@ -98,7 +80,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(96, 175);
+            this.button1.Location = new System.Drawing.Point(93, 123);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(127, 23);
             this.button1.TabIndex = 7;
@@ -110,15 +92,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(240, 214);
+            this.ClientSize = new System.Drawing.Size(230, 160);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.Atrás);
             this.Controls.Add(this.txtContraNueva);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtContraActual);
-            this.Controls.Add(this.txtUsuario);
-            this.Controls.Add(this.label1);
             this.Name = "CambiarContraCli";
             this.Text = "CambiarContraCli";
             this.ResumeLayout(false);
@@ -128,8 +108,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtUsuario;
         private System.Windows.Forms.TextBox txtContraActual;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;

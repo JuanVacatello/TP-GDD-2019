@@ -98,5 +98,17 @@ namespace FrbaOfertas.ListadoEstadistico
             this.Hide();
             cre.Show();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.limpiarCampos();
+        }
+
+        private void limpiarCampos()
+        {
+            txtAnio.Clear();
+            dataGridView1.DataSource = null;
+            dataGridView1.Refresh();
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace FrbaOfertas.ComprarOferta
     public partial class ComprarCliente : Form
 
     {
+        public static int compra;
         DateTime dte = new DateTime(2023, 3, 9, 16, 5, 7, 123); //reemplazar por fecha sistema
 
         public ComprarCliente()
@@ -51,20 +52,39 @@ namespace FrbaOfertas.ComprarOferta
             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.comprarOferta", cn);
             query.CommandType = CommandType.StoredProcedure;
-            query.Parameters.Add(new SqlParameter("@nombre_usuario", this.txtUsuario.Text));
-            query.Parameters.Add(new SqlParameter("@oferta_codigo", this.textBox1.Text));
+            query.Parameters.Add(new SqlParameter("@nombre_usuario", login.nombre_usuario));
+            query.Parameters.Add(new SqlParameter("@oferta_codigo", this.txtOferta.Text));
             query.Parameters.Add(new SqlParameter("@cantidad", this.txtCantidad.Text));
             query.Parameters.Add(new SqlParameter("@diadecompra", dte)); // aca tambien
             query.Parameters.Add(new SqlParameter("@clientedestino", this.txtTransferir.Text));
 
-            string numeroComp = "SELECT TOP 1 compra_id FROM LIL_MIX.compra ORDER BY 1 DESC";
-            SqlCommand cmd = new SqlCommand(numeroComp, cn);
+            ////
+
+            DataTable dt = new DataTable();
+            dt.Clear();
+            SqlCommand select = new SqlCommand("LIL_MIX.mostrarCompra", cn);
+            select.CommandType = CommandType.StoredProcedure;
+            select.Parameters.Add(new SqlParameter("@usuario_nombre", login.nombre_usuario));
+            select.Parameters.Add(new SqlParameter("@ofertacodigo", this.txtOferta.Text));
+            select.Parameters.Add(new SqlParameter("@cantidad", this.txtCantidad.Text));
+            SqlDataAdapter da = new SqlDataAdapter(select);
 
             cn.Open();
+
             query.ExecuteNonQuery();
-            MessageBox.Show("Compra efectuada. El numero de compra es: ");
-            MessageBox.Show(numeroComp);
+            
+            MessageBox.Show("Compra efectuada.");
+
+            da.Fill(dt);
+            compranumeroDGV.DataSource = dt;
+            compranumeroDGV.ReadOnly = true;
+
+            FuncionalidadesRol.FuncionalidadesCliente fun = new FuncionalidadesRol.FuncionalidadesCliente();
+            this.Hide();
+            fun.Show();
+            
             cn.Close();
+
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -75,7 +95,7 @@ namespace FrbaOfertas.ComprarOferta
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             dataGridView1.CurrentRow.Selected = true;
-            this.textBox1.Text = dataGridView1.Rows[e.RowIndex].Cells[1].FormattedValue.ToString();
+            this.txtOferta.Text = dataGridView1.Rows[e.RowIndex].Cells[1].FormattedValue.ToString();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -83,6 +103,31 @@ namespace FrbaOfertas.ComprarOferta
             FuncionalidadesRol.FuncionalidadesCliente cli = new FuncionalidadesRol.FuncionalidadesCliente();
             this.Hide();
             cli.Show();
+        }
+
+        void limpiarCampos() 
+        {
+            txtOferta.Clear();
+            txtCantidad.Clear();
+            txtTransferir.Clear();
+            dataGridView1.DataSource = null;
+            dataGridView1.Refresh();
+        }
+           
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.limpiarCampos();
+        }
+
+        private void txtOferta_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void compranumeroDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

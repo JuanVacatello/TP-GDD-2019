@@ -17,17 +17,16 @@ namespace FrbaOfertas.AbmRol
         public ModificarRol()
         {
             InitializeComponent();
-            cargarFuncionalidades();
             cargarDatos();
-            cargarMasDatos();
         }
 
-        public void cargarMasDatos()
+        public void cargarMasDatos(string rol_nombre)
         {
 
             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             cn.Open();
-            SqlCommand query = new SqlCommand("LIL_MIX.listadoFuncionalidades", cn);
+            SqlCommand query = new SqlCommand("LIL_MIX.listadoFuncionalidadesExistentes", cn);
+            query.Parameters.Add(new SqlParameter("@rol_nombre", rol_nombre));
             query.CommandType = CommandType.StoredProcedure;
             SqlDataAdapter da = new SqlDataAdapter(query);
             DataTable dt = new DataTable();
@@ -43,12 +42,13 @@ namespace FrbaOfertas.AbmRol
             comboBox2.DataSource = dt;
         }
 
-        public void cargarFuncionalidades()
+        public void cargarFuncionalidades(string rol_nombre)
         {
             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             cn.Open();
-            SqlCommand query = new SqlCommand("LIL_MIX.listadoFuncionalidades", cn);
+            SqlCommand query = new SqlCommand("LIL_MIX.listadoFuncionalidadesNoExistentes", cn);
             query.CommandType = CommandType.StoredProcedure;
+            query.Parameters.Add(new SqlParameter("@rol_nombre", rol_nombre));
             SqlDataAdapter da = new SqlDataAdapter(query);
             DataTable dt = new DataTable();
             da.Fill(dt);
@@ -204,8 +204,7 @@ namespace FrbaOfertas.AbmRol
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // COMBOBOX DE FUNCIONALIDADES
-            // NO SE SI TENGO QUE PONER ALGO
+            
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -234,6 +233,16 @@ namespace FrbaOfertas.AbmRol
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if (comboBox3.SelectedValue.ToString() != null)
+            {
+                string rol_nombre = comboBox3.SelectedValue.ToString();
+                cargarFuncionalidades(rol_nombre);
+                cargarMasDatos(rol_nombre);
+            }
         }
     }
 }

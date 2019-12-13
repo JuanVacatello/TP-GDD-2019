@@ -1,6 +1,6 @@
 ﻿namespace FrbaOfertas.ComprarOferta
 {
-    partial class OfertasVigentes
+    partial class ComprarAdmin
     {
         /// <summary>
         /// Required designer variable.
@@ -37,14 +37,18 @@
             this.txtUsuario = new System.Windows.Forms.TextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtOferta = new System.Windows.Forms.TextBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.txtTransferir = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(488, 319);
+            this.label1.Location = new System.Drawing.Point(240, 315);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(146, 13);
             this.label1.TabIndex = 1;
@@ -52,14 +56,14 @@
             // 
             // txtCantidad
             // 
-            this.txtCantidad.Location = new System.Drawing.Point(491, 344);
+            this.txtCantidad.Location = new System.Drawing.Point(243, 340);
             this.txtCantidad.Name = "txtCantidad";
             this.txtCantidad.Size = new System.Drawing.Size(159, 20);
             this.txtCantidad.TabIndex = 2;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(313, 453);
+            this.button1.Location = new System.Drawing.Point(391, 453);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(112, 23);
             this.button1.TabIndex = 3;
@@ -69,7 +73,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(454, 453);
+            this.button2.Location = new System.Drawing.Point(662, 453);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(112, 23);
             this.button2.TabIndex = 4;
@@ -90,7 +94,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(363, 376);
+            this.label2.Location = new System.Drawing.Point(441, 314);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(142, 13);
             this.label2.TabIndex = 7;
@@ -98,7 +102,7 @@
             // 
             // txtUsuario
             // 
-            this.txtUsuario.Location = new System.Drawing.Point(360, 402);
+            this.txtUsuario.Location = new System.Drawing.Point(438, 340);
             this.txtUsuario.Name = "txtUsuario";
             this.txtUsuario.Size = new System.Drawing.Size(159, 20);
             this.txtUsuario.TabIndex = 8;
@@ -116,26 +120,66 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(260, 319);
+            this.label3.Location = new System.Drawing.Point(12, 315);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(102, 13);
             this.label3.TabIndex = 10;
             this.label3.Text = "Oferta seleccionada";
             // 
-            // textBox1
+            // txtOferta
             // 
-            this.textBox1.Location = new System.Drawing.Point(262, 344);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(179, 20);
-            this.textBox1.TabIndex = 11;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.txtOferta.Location = new System.Drawing.Point(14, 340);
+            this.txtOferta.Name = "txtOferta";
+            this.txtOferta.Size = new System.Drawing.Size(179, 20);
+            this.txtOferta.TabIndex = 11;
+            this.txtOferta.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(528, 453);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(115, 23);
+            this.button3.TabIndex = 28;
+            this.button3.Text = "Limpiar campos";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // txtTransferir
+            // 
+            this.txtTransferir.Location = new System.Drawing.Point(15, 397);
+            this.txtTransferir.Name = "txtTransferir";
+            this.txtTransferir.Size = new System.Drawing.Size(312, 20);
+            this.txtTransferir.TabIndex = 31;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 431);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(315, 13);
+            this.label5.TabIndex = 30;
+            this.label5.Text = "(*) Recuerde que el usuario debe estar registrado en la aplicacion";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(12, 372);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(517, 13);
+            this.label6.TabIndex = 29;
+            this.label6.Text = "Si desea transferir lo comprado, ingrese el nombre de usuario de la persona a qui" +
+    "en desea transferir el cupon";
             // 
             // OfertasVigentes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(883, 488);
-            this.Controls.Add(this.textBox1);
+            this.ClientSize = new System.Drawing.Size(883, 497);
+            this.Controls.Add(this.txtTransferir);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.txtOferta);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.txtUsuario);
@@ -164,6 +208,10 @@
         private System.Windows.Forms.TextBox txtUsuario;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtOferta;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.TextBox txtTransferir;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
     }
 }

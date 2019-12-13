@@ -28,10 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtOferta = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.txtUsuario = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.txtCantidad = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -42,41 +40,30 @@
             this.txtTransferir = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
+            this.compranumeroDGV = new System.Windows.Forms.DataGridView();
+            this.button5 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.compranumeroDGV)).BeginInit();
             this.SuspendLayout();
             // 
-            // textBox1
+            // txtOferta
             // 
-            this.textBox1.Location = new System.Drawing.Point(286, 270);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(179, 20);
-            this.textBox1.TabIndex = 19;
+            this.txtOferta.Location = new System.Drawing.Point(193, 271);
+            this.txtOferta.Name = "txtOferta";
+            this.txtOferta.Size = new System.Drawing.Size(179, 20);
+            this.txtOferta.TabIndex = 19;
+            this.txtOferta.TextChanged += new System.EventHandler(this.txtOferta_TextChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(283, 245);
+            this.label3.Location = new System.Drawing.Point(190, 246);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(102, 13);
             this.label3.TabIndex = 18;
             this.label3.Text = "Oferta seleccionada";
-            // 
-            // txtUsuario
-            // 
-            this.txtUsuario.Location = new System.Drawing.Point(23, 270);
-            this.txtUsuario.Name = "txtUsuario";
-            this.txtUsuario.Size = new System.Drawing.Size(159, 20);
-            this.txtUsuario.TabIndex = 16;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(23, 245);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(209, 13);
-            this.label2.TabIndex = 15;
-            this.label2.Text = "Repita su nombre de usuario por seguridad";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // button4
             // 
@@ -90,7 +77,7 @@
             // 
             // txtCantidad
             // 
-            this.txtCantidad.Location = new System.Drawing.Point(524, 270);
+            this.txtCantidad.Location = new System.Drawing.Point(431, 271);
             this.txtCantidad.Name = "txtCantidad";
             this.txtCantidad.Size = new System.Drawing.Size(159, 20);
             this.txtCantidad.TabIndex = 13;
@@ -98,7 +85,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(521, 245);
+            this.label1.Location = new System.Drawing.Point(428, 246);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(146, 13);
             this.label1.TabIndex = 12;
@@ -125,7 +112,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(388, 384);
+            this.button2.Location = new System.Drawing.Point(478, 384);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(112, 23);
             this.button2.TabIndex = 23;
@@ -135,7 +122,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(247, 384);
+            this.button1.Location = new System.Drawing.Point(180, 384);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(112, 23);
             this.button1.TabIndex = 22;
@@ -169,11 +156,52 @@
             this.label6.Text = "Si desea transferir lo comprado, ingrese el nombre de usuario de la persona a qui" +
     "en desea transferir el cupon";
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(328, 384);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(115, 23);
+            this.button3.TabIndex = 27;
+            this.button3.Text = "Limpiar campos";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // compranumeroDGV
+            // 
+            this.compranumeroDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.compranumeroDGV.Location = new System.Drawing.Point(316, 459);
+            this.compranumeroDGV.Name = "compranumeroDGV";
+            this.compranumeroDGV.Size = new System.Drawing.Size(140, 39);
+            this.compranumeroDGV.TabIndex = 30;
+            this.compranumeroDGV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.compranumeroDGV_CellContentClick);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(349, 504);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 29;
+            this.button5.Text = "OK";
+            this.button5.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(325, 433);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(128, 13);
+            this.label2.TabIndex = 28;
+            this.label2.Text = "Su número de compra es:";
+            // 
             // ComprarCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(771, 421);
+            this.ClientSize = new System.Drawing.Size(771, 534);
+            this.Controls.Add(this.compranumeroDGV);
+            this.Controls.Add(this.button5);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.txtTransferir);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label6);
@@ -181,16 +209,15 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtOferta);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.txtUsuario);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.txtCantidad);
             this.Controls.Add(this.label1);
             this.Name = "ComprarCliente";
             this.Text = "ComprarCliente";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.compranumeroDGV)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -198,10 +225,8 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtOferta;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtUsuario;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.TextBox txtCantidad;
         private System.Windows.Forms.Label label1;
@@ -212,5 +237,9 @@
         private System.Windows.Forms.TextBox txtTransferir;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.DataGridView compranumeroDGV;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Label label2;
     }
 }

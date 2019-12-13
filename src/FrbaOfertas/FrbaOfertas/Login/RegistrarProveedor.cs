@@ -53,5 +53,28 @@ namespace FrbaOfertas.Login
             this.Hide();
             log.Show();
         }
+
+        void limpiarCampos()
+        {
+            txtNombreUsuario.Clear();
+            txtContrasenia.Clear();
+            txtCUIT.Clear();
+            txt_rubro.Clear();
+            txtRazonSocial.Clear();
+            txtMail.Clear();
+            txtTelefono.Clear();
+            txtNombreContacto.Clear();
+            txtDireccion.Clear();
+            txtCiudad.Clear();
+            txtPiso.Clear();
+            txtDepto.Clear();
+            txtCodigoPostal.Clear();
+            //dateTimePicker1.Today();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            limpiarCampos();
+        }
     }
 }

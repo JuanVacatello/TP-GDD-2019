@@ -41,9 +41,6 @@ namespace FrbaOfertas.Facturar
             fin = this.dateTimePicker2.Value;
             cuit_prov = this.textBox1.Text;
 
-            MessageBox.Show(inicio.ToString());
-            MessageBox.Show(fin.ToString());
-            MessageBox.Show(cuit_prov.ToString());
 
         }
 
@@ -74,6 +71,21 @@ namespace FrbaOfertas.Facturar
             dataGridView1.DataSource = dt;
             dataGridView1.ReadOnly = true;
             cn.Close();
+        }
+
+        void limpiarCampos()
+        {
+            textBox1.Clear();
+            //falta el clear del datetimepicker
+            dataGridView1.DataSource = null;
+            dataGridView1.Refresh();
+
+        }
+
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.limpiarCampos();
         }
     }
 }

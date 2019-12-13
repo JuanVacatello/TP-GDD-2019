@@ -60,7 +60,7 @@ namespace FrbaOfertas.CargaDeCredito
             cn.Open();
             query.ExecuteNonQuery(); 
             
-            MessageBox.Show("Credito Cargado");
+            
 
             FuncionalidadesRol.FuncionalidadesAdmin abmrol = new FuncionalidadesRol.FuncionalidadesAdmin();
             this.Hide();
@@ -84,11 +84,17 @@ namespace FrbaOfertas.CargaDeCredito
         private void button2_Click(object sender, EventArgs e)
         {
             //BOTON CARGAR
-
-            if ((comboBox1.SelectedValue.ToString() != null))
+            if (txtUser.TextLength == 0)
+                MessageBox.Show("Ingrese el nombre de usuario a quien desea cargar");
+            if (comboBox1.SelectedValue.ToString() == null)
+                MessageBox.Show("Ingrese el tipo de pago");
+            if (txtMonto.TextLength == 0)
+                MessageBox.Show("Ingrese el monto que desea cargar");
+            
             {
                 string tipo_de_pago_descripcion = comboBox1.SelectedValue.ToString();
                 cargarCredito(tipo_de_pago_descripcion);
+                MessageBox.Show("Credito Cargado");
             }
 
           }

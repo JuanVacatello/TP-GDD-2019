@@ -54,7 +54,7 @@ namespace FrbaOfertas.CargaDeCredito
           //  string fecha = ConfigurationManager.AppSettings["current_date"];
             query.Parameters.Add(new SqlParameter("@fechadecarga", dte)); // aca tambien
             query.Parameters.Add(new SqlParameter("@tarjeta_tipo", this.txtTipoTarj.Text));
-            query.Parameters.Add(new SqlParameter("@usuario_nombre", this.txtUser.Text));
+            query.Parameters.Add(new SqlParameter("@usuario_nombre", login.nombre_usuario));
 
             cn.Open();
             query.ExecuteNonQuery();
