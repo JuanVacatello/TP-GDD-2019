@@ -118,7 +118,6 @@ namespace FrbaOfertas.ListadoEstadistico
             else
             {
                 listado();
-
             }
         }
 

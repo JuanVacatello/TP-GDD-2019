@@ -2124,7 +2124,8 @@ BEGIN
 			@ofertadesc VARCHAR(255),
 			@fechavenc DATETIME,
 			@stockdisponible INT,
-			@clientehabilitado BIT
+			@clientehabilitado BIT,
+			@usuarioid INT
 
 		SELECT @creditocliente = c.cliente_credito, @clienteid = c.cliente_id, @clientehabilitado = c.cliente_habilitado
 		FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id)
@@ -2133,6 +2134,14 @@ BEGIN
 		SELECT @ofertaid = oferta_id, @preciooferta = oferta_precio_oferta, @fechavenc = oferta_fecha_vencimiento,
 		@ofertadesc = oferta_decripcion, @cantmaximadeofertas = oferta_restriccion_compra, @stockdisponible = oferta_stock
 		FROM LIL_MIX.oferta WHERE oferta_codigo = @oferta_codigo
+		
+		SELECT @usuarioid = usuario_id
+		FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario
+
+		--Chequear si el usuario ingresado existe y/o es cliente
+
+		IF @usuarioid NOT IN (SELECT usuario_id FROM LIL_MIX.rolxusuario WHERE rol_id = 2)
+			THROW 52222, 'El usuario que está ingresando no existe y/o no es cliente.', 1
 
 		-- Un cliente inhabilitado no podrá comprar ofertas ni cargarse crédito bajo ninguna forma
 
@@ -2182,6 +2191,16 @@ BEGIN
 		
 		IF(@clientedestino != NULL)
 		BEGIN
+			DECLARE @usuarioiddest INT
+
+			SELECT @usuarioiddest = usuario_id
+			FROM LIL_MIX.usuario WHERE usuario_id = @clientedestino
+
+			--Chequear si el usuario destino ingresado existe y/o es cliente
+
+			IF @usuarioiddest NOT IN (SELECT usuario_id FROM LIL_MIX.rolxusuario WHERE rol_id = 2)
+				THROW 52223, 'El usuario que está ingresando no existe y/o no es cliente.', 1
+
 			INSERT INTO LIL_MIX.cupon (cupon_fecha_vencimiento, cupon_compra_id, cupon_cliente_id)
 			VALUES (DATEADD(day, 30, @diadecompra), @compraid, @clidestid)
 		END
@@ -2300,7 +2319,19 @@ BEGIN
 	END TRY
 
 	BEGIN CATCH
+		DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
 
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+
+		ROLLBACK TRANSACTION
 		ROLLBACK TRANSACTION
 
 	END CATCH
@@ -2491,7 +2522,19 @@ BEGIN
 	END TRY
 
 	BEGIN CATCH
+		DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
 
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+
+		ROLLBACK TRANSACTION
 		ROLLBACK
 
 	END CATCH

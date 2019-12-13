@@ -88,13 +88,10 @@ namespace FrbaOfertas.FuncionalidadesRol
         private void button2_Click(object sender, EventArgs e)
         {
             if (txtUsuario.TextLength == 0)
-                MessageBox.Show("Ingrese un nombre de usuario al que le desea agregar el rol");
+                MessageBox.Show("Ingrese el nombre de usuario al que le desea agregar el rol");
 
             else
-            {
                 agregarRolAUsuario();
-
-            }
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)

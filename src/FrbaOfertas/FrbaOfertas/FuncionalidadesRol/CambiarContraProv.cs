@@ -58,13 +58,10 @@ namespace FrbaOfertas.FuncionalidadesRol
         {
             if (txtContraActual.TextLength == 0)
                 MessageBox.Show("Ingrese su contraseña actual");
-            if (txtContraNueva.TextLength == 0)
+            else if (txtContraNueva.TextLength == 0)
                 MessageBox.Show("Ingrese su nueva contraseña");
             else
-            {
-                this.cambiarContra();
-
-            }
+                cambiarContra();
         }
 
         private void CambiarContraProv_Load(object sender, EventArgs e)

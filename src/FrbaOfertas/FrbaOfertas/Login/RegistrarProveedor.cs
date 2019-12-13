@@ -19,7 +19,7 @@ namespace FrbaOfertas.Login
             InitializeComponent();
         }
 
-        private void btnRegistrar_Click(object sender, EventArgs e)
+        void CrearProveedor()
         {
             SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
             SqlCommand query = new SqlCommand("LIL_MIX.altaUsuarioProveedor", cn);
@@ -45,6 +45,36 @@ namespace FrbaOfertas.Login
             this.Hide();
             log.Show();
             cn.Close();
+        }
+
+        private void btnRegistrar_Click(object sender, EventArgs e)
+        {
+            if (txtNombreUsuario.TextLength == 0)
+                MessageBox.Show("Ingrese un nombre de usuario");
+            else if (txtContrasenia.TextLength == 0)
+                MessageBox.Show("Ingrese una contraseña");
+            else if (txtRazonSocial.TextLength == 0)
+                MessageBox.Show("Ingrese su razon social");
+            else if (txt_rubro.TextLength == 0)
+                MessageBox.Show("Ingrese su rubro");
+            else if (txtCUIT.TextLength != 13)
+                MessageBox.Show("Ingrese un CUIT valido");
+            else if (txtMail.TextLength == 0)
+                MessageBox.Show("Ingrese su mail");
+            else if ((txtTelefono.TextLength != 8 ))
+                MessageBox.Show("Ingrese un numero de teléfono valido");
+            else if (txtNombreContacto.TextLength == 0)
+                MessageBox.Show("Ingrese su nombre de contacto");
+            else if (txtCiudad.TextLength == 0)
+                MessageBox.Show("Ingrese su ciudad");
+            else if (txtDireccion.TextLength == 0)
+                MessageBox.Show("Ingrese su calle");
+
+            else
+            {
+                CrearProveedor();
+
+            }
         }
 
         private void btnAtras_Click(object sender, EventArgs e)

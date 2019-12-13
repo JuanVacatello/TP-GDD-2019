@@ -104,16 +104,12 @@ namespace FrbaOfertas.CargaDeCredito
             //BOTON CARGAR
             if (txtUser.TextLength == 0)
                 MessageBox.Show("Ingrese el nombre de usuario a quien desea cargar");
-            if (comboBox1.SelectedValue.ToString() == null)
+            else if (comboBox1.SelectedValue.ToString() == null)
                 MessageBox.Show("Ingrese el tipo de pago");
-            if (txtMonto.TextLength == 0)
+            else if (txtMonto.TextLength == 0)
                 MessageBox.Show("Ingrese el monto que desea cargar");
             else
-            {
                 carga();
-
-            }
-
           }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)

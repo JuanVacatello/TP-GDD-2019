@@ -92,7 +92,7 @@ namespace FrbaOfertas.AbmRol
                 MessageBox.Show("Ingrese un nombre de rol");
             else
             {
-                this.altaRol();
+                altaRol();
 
             }
 

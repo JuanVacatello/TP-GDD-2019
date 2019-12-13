@@ -56,13 +56,15 @@ namespace FrbaOfertas.FuncionalidadesRol
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (txtContraActual.TextLength == 0)
+            if (textBox1.TextLength == 0)
+                MessageBox.Show("Ingrese el nombre de usuario al que le desea cambiar la contraseña");
+            else if(txtContraActual.TextLength == 0)
                 MessageBox.Show("Ingrese su contraseña actual");
-            if (txtContraNueva.TextLength == 0)
+            else if (txtContraNueva.TextLength == 0)
                 MessageBox.Show("Ingrese su nueva contraseña");
             else
             {
-                this.cambiarContra();
+                cambiarContra();
 
             }
         }

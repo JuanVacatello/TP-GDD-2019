@@ -45,27 +45,48 @@ namespace FrbaOfertas.ComprarOferta
             
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        void efectuarCompra()
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
-            SqlCommand query = new SqlCommand("LIL_MIX.comprarOferta", cn);
-            query.CommandType = CommandType.StoredProcedure;
-            query.Parameters.Add(new SqlParameter("@nombre_usuario", this.txtUsuario.Text));
-            query.Parameters.Add(new SqlParameter("@oferta_codigo", this.txtOferta.Text));
-            query.Parameters.Add(new SqlParameter("@cantidad", this.txtCantidad.Text));
-            query.Parameters.Add(new SqlParameter("@diadecompra", dte)); // aca tambien
-            query.Parameters.Add(new SqlParameter("@clientedestino", this.txtTransferir.Text));
+            try
+            {
+                SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
+                SqlCommand query = new SqlCommand("LIL_MIX.comprarOferta", cn);
+                query.CommandType = CommandType.StoredProcedure;
+                query.Parameters.Add(new SqlParameter("@nombre_usuario", this.txtUsuario.Text));
+                query.Parameters.Add(new SqlParameter("@oferta_codigo", this.txtOferta.Text));
+                query.Parameters.Add(new SqlParameter("@cantidad", this.txtCantidad.Text));
+                query.Parameters.Add(new SqlParameter("@diadecompra", dte)); // aca tambien
+                query.Parameters.Add(new SqlParameter("@clientedestino", this.txtTransferir.Text));
 
-            cn.Open();
-            query.ExecuteNonQuery();
-            
-            MessageBox.Show("Compra efectuada. El numero de compra es: ");
+                cn.Open();
+                query.ExecuteNonQuery();
 
+                MessageBox.Show("Compra efectuada. El numero de compra es: ");
 
-            cn.Close();
-                 
+                FuncionalidadesRol.FuncionalidadesAdmin fun = new FuncionalidadesRol.FuncionalidadesAdmin();
+                this.Hide();
+                fun.Show();
+
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+            }
+        }
             //cmd.Parameters.AddWithValue("@name", nombre_s); //Parametrizamos la consulta
-               
+
+        private void button2_Click(object sender, EventArgs e)
+        {   
+            if(txtOferta.TextLength == 0)
+                MessageBox.Show("Seleccione la oferta que desea comprar");
+            else if (txtCantidad.TextLength == 0)
+                MessageBox.Show("Ingrese la cantidad que desea comprar");
+            else if(txtUsuario.TextLength == 0)
+                MessageBox.Show("Ingrese el usuario del cliente que realiza la compra");
+            else
+                efectuarCompra();
+              
         }
         
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)

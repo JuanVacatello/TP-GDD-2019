@@ -50,28 +50,47 @@ namespace FrbaOfertas.ComprarOferta
 
         }
 
+        void efectuarCompra() 
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
+                SqlCommand query = new SqlCommand("LIL_MIX.comprarOferta", cn);
+                query.CommandType = CommandType.StoredProcedure;
+                query.Parameters.Add(new SqlParameter("@nombre_usuario", login.nombre_usuario));
+                query.Parameters.Add(new SqlParameter("@oferta_codigo", this.txtOferta.Text));
+                query.Parameters.Add(new SqlParameter("@cantidad", this.txtCantidad.Text));
+                query.Parameters.Add(new SqlParameter("@diadecompra", dte)); // aca tambien
+                query.Parameters.Add(new SqlParameter("@clientedestino", this.txtTransferir.Text));
+
+                cn.Open();
+
+                query.ExecuteNonQuery();
+
+                MessageBox.Show("Compra efectuada.");
+
+                NumeroDeCompra num = new NumeroDeCompra();
+                this.Hide();
+                num.Show();
+
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message.ToString());
+            }
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["cs"].ConnectionString);
-            SqlCommand query = new SqlCommand("LIL_MIX.comprarOferta", cn);
-            query.CommandType = CommandType.StoredProcedure;
-            query.Parameters.Add(new SqlParameter("@nombre_usuario", login.nombre_usuario));
-            query.Parameters.Add(new SqlParameter("@oferta_codigo", this.txtOferta.Text));
-            query.Parameters.Add(new SqlParameter("@cantidad", this.txtCantidad.Text));
-            query.Parameters.Add(new SqlParameter("@diadecompra", dte)); // aca tambien
-            query.Parameters.Add(new SqlParameter("@clientedestino", this.txtTransferir.Text));
-
-            cn.Open();
-
-            query.ExecuteNonQuery();
             
-            MessageBox.Show("Compra efectuada.");
 
-            NumeroDeCompra num = new NumeroDeCompra();       
-            this.Hide();
-            num.Show();
-            
-            cn.Close();
+            if (txtOferta.TextLength == 0)
+                MessageBox.Show("Seleccione la oferta que desea comprar");
+            else if (txtCantidad.TextLength == 0)
+                MessageBox.Show("Ingrese la cantidad que desea comprar");
+            else
+                efectuarCompra();
 
         }
 

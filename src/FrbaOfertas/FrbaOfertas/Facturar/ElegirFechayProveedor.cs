@@ -31,7 +31,7 @@ namespace FrbaOfertas.Facturar
             fun.Show();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        void elegirProveedorAFacturar()
         {
             Factura fa = new Factura();
             this.Hide();
@@ -40,8 +40,14 @@ namespace FrbaOfertas.Facturar
             inicio = this.dateTimePicker1.Value;
             fin = this.dateTimePicker2.Value;
             cuit_prov = this.textBox1.Text;
+        }
 
-
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (textBox1.TextLength == 0)
+                MessageBox.Show("Elija a qué proveedor desea facturar");
+            else
+                this.elegirProveedorAFacturar();
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -57,7 +63,7 @@ namespace FrbaOfertas.Facturar
 
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        void verProveedoresAFacturar()
         {
             DataTable dt = new DataTable();
             dt.Clear();
@@ -71,6 +77,14 @@ namespace FrbaOfertas.Facturar
             dataGridView1.DataSource = dt;
             dataGridView1.ReadOnly = true;
             cn.Close();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (dateTimePicker1.Value > dateTimePicker2.Value)
+                MessageBox.Show("Seleccione un período valido"); //NO ESTA FUNCIONANDO BIEN
+            else
+                this.verProveedoresAFacturar();
         }
 
         void limpiarCampos()

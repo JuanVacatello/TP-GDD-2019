@@ -98,19 +98,12 @@ namespace FrbaOfertas.CargaDeCredito
         private void button2_Click(object sender, EventArgs e)
         {
             //BOTON CARGAR
-       
             if (comboBox1.SelectedValue.ToString() == null)
                 MessageBox.Show("Ingrese el tipo de pago");
-            if (txtMonto.TextLength == 0)
+            else if (txtMonto.TextLength == 0)
                 MessageBox.Show("Ingrese el monto que desea cargar");
             else
-            {
-                carga();
-
-            }
-
-           
-            
+                carga();    
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
