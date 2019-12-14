@@ -200,7 +200,7 @@
             this.Controls.Add(this.txtDescrip);
             this.Controls.Add(this.label1);
             this.Name = "CrearOferta";
-            this.Text = "ConfeccionOferta";
+            this.Text = "Confeccionar oferta";
             this.ResumeLayout(false);
             this.PerformLayout();
 

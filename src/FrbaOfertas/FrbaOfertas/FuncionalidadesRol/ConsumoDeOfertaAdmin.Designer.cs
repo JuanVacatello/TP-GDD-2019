@@ -100,7 +100,7 @@
             this.Controls.Add(this.txtCupon);
             this.Controls.Add(this.label1);
             this.Name = "ConsumoDeOfertaAdmin";
-            this.Text = "ConsumoDeOfertaAdmin";
+            this.Text = "Entregar oferta";
             this.ResumeLayout(false);
             this.PerformLayout();
 

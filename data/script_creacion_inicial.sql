@@ -113,6 +113,16 @@ IF OBJECT_ID('LIL_MIX.altaRol') IS NOT NULL
   DROP PROCEDURE LIL_MIX.altaRol
 GO
 
+
+IF OBJECT_ID('LIL_MIX.comprarOfertaSinCliDest')  IS NOT NULL
+	DROP PROCEDURE LIL_MIX.comprarOfertaSinCliDest
+GO
+
+IF OBJECT_ID('LIL_MIX.comprarOfertaConCliDest') IS NOT NULL
+	  DROP PROCEDURE LIL_MIX.comprarOfertaConCliDest 
+GO
+
+
 IF OBJECT_ID('LIL_MIX.listadoRol') IS NOT NULL
   DROP PROCEDURE LIL_MIX.listadoRol
 GO
@@ -169,8 +179,40 @@ IF OBJECT_ID('LIL_MIX.bajaCliente') IS NOT NULL
   DROP PROCEDURE LIL_MIX.bajaCliente
 GO
 
-IF OBJECT_ID('LIL_MIX.listadoClientes') IS NOT NULL
-  DROP PROCEDURE LIL_MIX.listadoClientes
+IF OBJECT_ID('LIL_MIX.listadoClientes1') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoClientes1
+GO
+
+IF OBJECT_ID('LIL_MIX.listadoClientes2') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoClientes2
+GO
+
+IF OBJECT_ID('LIL_MIX.listadoClientes3') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoClientes3
+GO
+
+IF OBJECT_ID('LIL_MIX.listadoClientes4') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoClientes4
+GO
+
+IF OBJECT_ID('LIL_MIX.listadoClientes5') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoClientes5
+GO
+
+IF OBJECT_ID('LIL_MIX.listadoClientes6') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoClientes6
+GO
+
+IF OBJECT_ID('LIL_MIX.listadoClientes7') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoClientes7
+GO
+
+IF OBJECT_ID('LIL_MIX.listadoClientes8') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoClientes8
+GO
+
+IF OBJECT_ID('LIL_MIX.listadoClientes9') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoClientes9
 GO
 
 IF OBJECT_ID('LIL_MIX.habilitarCliente') IS NOT NULL
@@ -225,8 +267,24 @@ IF OBJECT_ID('LIL_MIX.bajaProveedor') IS NOT NULL
   DROP PROCEDURE LIL_MIX.bajaProveedor
 GO
 
-IF OBJECT_ID('LIL_MIX.listadoProveedores') IS NOT NULL
-  DROP PROCEDURE LIL_MIX.listadoProveedores
+IF OBJECT_ID('LIL_MIX.listadoProveedores1') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoProveedores1
+GO
+
+IF OBJECT_ID('LIL_MIX.listadoProveedores2') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoProveedores2
+GO
+
+IF OBJECT_ID('LIL_MIX.listadoProveedores3') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoProveedores3
+GO
+
+IF OBJECT_ID('LIL_MIX.listadoProveedores4') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoProveedores4
+GO
+
+IF OBJECT_ID('LIL_MIX.listadoProveedores5') IS NOT NULL
+  DROP PROCEDURE LIL_MIX.listadoProveedores5
 GO
 
 IF OBJECT_ID('LIL_MIX.habilitarProveedor') IS NOT NULL
@@ -305,16 +363,12 @@ IF OBJECT_ID('LIL_MIX.cargarCredito') IS NOT NULL
 	DROP PROCEDURE LIL_MIX.cargarCredito
 GO
 
-IF OBJECT_ID('LIL_MIX.crearOferta') IS NOT NULL
-	DROP PROCEDURE LIL_MIX.crearOferta
-GO
-
 IF OBJECT_ID('LIL_MIX.ofertasVigentesHastaDiaActual') IS NOT NULL
 	DROP PROCEDURE LIL_MIX.ofertasVigentesHastaDiaActual
 GO
 
-IF OBJECT_ID('LIL_MIX.comprarOferta') IS NOT NULL
-	DROP PROCEDURE LIL_MIX.comprarOferta
+IF OBJECT_ID('LIL_MIX.crearOferta') IS NOT NULL
+	DROP PROCEDURE LIL_MIX.crearOferta
 GO
 
 IF OBJECT_ID('LIL_MIX.consumoDeOferta') IS NOT NULL
@@ -973,9 +1027,41 @@ CREATE PROCEDURE LIL_MIX.habilitarRol
 @rol_nombre VARCHAR(30)
 AS
 BEGIN
+BEGIN TRY
+	BEGIN TRAN
+
+	DECLARE @rolhabilitado BIT
+
+	SELECT @rolhabilitado = rol_habilitado FROM LIL_MIX.rol WHERE rol_nombre = @rol_nombre
+
+	IF @rolhabilitado = 1
+		THROW 12123, 'El rol ya estaba habilitado', 1
+
 	UPDATE LIL_MIX.rol
 	SET rol_habilitado = 1
 	WHERE rol_nombre = @rol_nombre
+
+
+		COMMIT
+	END TRY
+
+	BEGIN CATCH
+
+	DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+
+		ROLLBACK
+
+	END CATCH
 END
 GO
 
@@ -1408,41 +1494,116 @@ GO
 -- que permita filtrar simultáneamente por alguno o todos los siguientes campos:
 --  Nombre (texto libre)  Apellido (texto libre)  DNI (texto libre exacto)  Email (texto libre)
 
-CREATE PROCEDURE LIL_MIX.listadoClientes
-@nombre VARCHAR(255), @apellido VARCHAR(255), @dni INT, @email VARCHAR(255)
+-- IF (@dni != null)
+
+CREATE PROCEDURE LIL_MIX.listadoClientes1
+@dni INT
 AS
 BEGIN
-	-- Probamos con ifs todas las combinaciones posibles
+	SELECT u.usuario_nombre as 'Nombre de usuario', c.cliente_nombre as 'Nombre', c.cliente_apellido as 'Apellido',
+		c.cliente_mail as 'Mail', c.cliente_dni as 'DNI', c.cliente_fecha_nacimiento as 'Fecha de nacimiento', c.cliente_telefono as 'Telefono'
+	FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id)
+	WHERE cliente_dni = @dni --Hay un solo cliente con ese DNI
+END
+GO
 
-	IF (@dni != NULL)
-		SELECT * FROM LIL_MIX.cliente WHERE cliente_dni = @dni --Hay un solo cliente con ese DNI
+-- IF (@dni = NULL AND @nombre != NULL AND @apellido != NULL AND @email != NULL)
 
-	IF (@dni = NULL AND @nombre != NULL AND @apellido != NULL AND @email != NULL)
-		SELECT * FROM LIL_MIX.cliente WHERE cliente_nombre LIKE @nombre AND 
-							cliente_apellido LIKE @apellido AND cliente_mail LIKE @email
+CREATE PROCEDURE LIL_MIX.listadoClientes2
+@nombre VARCHAR(255), @apellido VARCHAR(255), @email VARCHAR(255)
+AS
+BEGIN
+	SELECT u.usuario_nombre as 'Nombre de usuario', c.cliente_nombre as 'Nombre', c.cliente_apellido as 'Apellido',
+		c.cliente_mail as 'Mail', c.cliente_dni as 'DNI', c.cliente_fecha_nacimiento as 'Fecha de nacimiento', c.cliente_telefono as 'Telefono'
+	FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id) 
+	WHERE cliente_nombre LIKE '%'+@nombre+'%' AND cliente_apellido LIKE '%'+@apellido+'%' AND cliente_mail LIKE '%'+@email+'%' 
+END
+GO
 
-	IF (@dni = NULL AND @nombre = NULL AND @apellido != NULL AND @email != NULL)
-		SELECT * FROM LIL_MIX.cliente WHERE cliente_apellido LIKE @apellido AND cliente_mail LIKE @email
+-- IF (@dni = NULL AND @nombre = NULL AND @apellido != NULL AND @email != NULL)
 
-	IF (@dni = NULL AND @nombre != NULL AND @apellido = NULL AND @email != NULL)
-		SELECT * FROM LIL_MIX.cliente WHERE cliente_nombre LIKE @nombre AND cliente_mail LIKE @email
+CREATE PROCEDURE LIL_MIX.listadoClientes3
+@apellido VARCHAR(255), @email VARCHAR(255)
+AS
+BEGIN
+	SELECT u.usuario_nombre as 'Nombre de usuario', c.cliente_nombre as 'Nombre', c.cliente_apellido as 'Apellido',
+		c.cliente_mail as 'Mail', c.cliente_dni as 'DNI', c.cliente_fecha_nacimiento as 'Fecha de nacimiento', c.cliente_telefono as 'Telefono'
+	FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id) 
+	WHERE cliente_apellido LIKE '%'+@apellido+'%' AND cliente_mail LIKE '%'+@email+'%' 
+END
+GO
 
-	IF (@dni = NULL AND @nombre != NULL AND @apellido != NULL AND @email = NULL)
-		SELECT * FROM LIL_MIX.cliente WHERE cliente_nombre LIKE @nombre AND cliente_apellido LIKE @apellido
+-- IF (@dni = NULL AND @nombre != NULL AND @apellido = NULL AND @email != NULL)
+CREATE PROCEDURE LIL_MIX.listadoClientes4
+@nombre VARCHAR(255), @email VARCHAR(255)
+AS
+BEGIN
+	SELECT u.usuario_nombre as 'Nombre de usuario', c.cliente_nombre as 'Nombre', c.cliente_apellido as 'Apellido',
+		c.cliente_mail as 'Mail', c.cliente_dni as 'DNI', c.cliente_fecha_nacimiento as 'Fecha de nacimiento', c.cliente_telefono as 'Telefono'
+	FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id) 
+	WHERE cliente_nombre LIKE '%'+@nombre+'%' AND cliente_mail LIKE '%'+@email+'%' 
+END 
+GO
 
-	IF (@dni = NULL AND @nombre = NULL AND @apellido = NULL AND @email != NULL)
-		SELECT * FROM LIL_MIX.cliente WHERE cliente_mail LIKE @email
+-- IF (@dni = NULL AND @nombre != NULL AND @apellido != NULL AND @email = NULL)
 
-	IF (@dni = NULL AND @nombre = NULL AND @apellido != NULL AND @email = NULL)
-		SELECT * FROM LIL_MIX.cliente WHERE cliente_apellido LIKE @apellido
+CREATE PROCEDURE LIL_MIX.listadoClientes5
+@nombre VARCHAR(255), @apellido VARCHAR(255)
+AS
+BEGIN
+	SELECT u.usuario_nombre as 'Nombre de usuario', c.cliente_nombre as 'Nombre', c.cliente_apellido as 'Apellido',
+		c.cliente_mail as 'Mail', c.cliente_dni as 'DNI', c.cliente_fecha_nacimiento as 'Fecha de nacimiento', c.cliente_telefono as 'Telefono'
+	FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id)
+	WHERE cliente_nombre LIKE '%'+@nombre+'%' AND cliente_apellido LIKE '%'+@apellido+'%' 
+END
+GO
 
-	IF (@dni = NULL AND @nombre != NULL AND @apellido = NULL AND @email = NULL)
-		SELECT * FROM LIL_MIX.cliente WHERE cliente_nombre LIKE @nombre
+--IF (@dni = NULL AND @nombre = NULL AND @apellido = NULL AND @email != NULL)
 
-	-- Si no ingresa nada, mostramos todos los clientes, sin filtros
+CREATE PROCEDURE LIL_MIX.listadoClientes6
+@email VARCHAR(255)
+AS
+BEGIN
+	SELECT u.usuario_nombre as 'Nombre de usuario', c.cliente_nombre as 'Nombre', c.cliente_apellido as 'Apellido',
+		c.cliente_mail as 'Mail', c.cliente_dni as 'DNI', c.cliente_fecha_nacimiento as 'Fecha de nacimiento', c.cliente_telefono as 'Telefono'
+	FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id) 
+	WHERE cliente_mail LIKE '%'+@email+'%' 
+END
+GO
 
-	IF (@dni = NULL AND @nombre = NULL AND @apellido = NULL AND @email = NULL)
-		SELECT * FROM LIL_MIX.cliente
+-- IF (@dni = NULL AND @nombre = NULL AND @apellido != NULL AND @email = NULL)
+CREATE PROCEDURE LIL_MIX.listadoClientes7
+@apellido VARCHAR(255)
+AS
+BEGIN
+	SELECT u.usuario_nombre as 'Nombre de usuario', c.cliente_nombre as 'Nombre', c.cliente_apellido as 'Apellido',
+		c.cliente_mail as 'Mail', c.cliente_dni as 'DNI', c.cliente_fecha_nacimiento as 'Fecha de nacimiento', c.cliente_telefono as 'Telefono'
+	FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id) 
+	WHERE cliente_apellido LIKE '%'+@apellido+'%' 
+END
+GO
+--IF (@dni = NULL AND @nombre != NULL AND @apellido = NULL AND @email = NULL)
+CREATE PROCEDURE LIL_MIX.listadoClientes8
+@nombre VARCHAR(255)
+AS
+BEGIN
+	SELECT u.usuario_nombre as 'Nombre de usuario', c.cliente_nombre as 'Nombre', c.cliente_apellido as 'Apellido',
+		c.cliente_mail as 'Mail', c.cliente_dni as 'DNI', c.cliente_fecha_nacimiento as 'Fecha de nacimiento', c.cliente_telefono as 'Telefono'
+	FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id) 
+	WHERE cliente_nombre LIKE '%'+@nombre+'%' 
+END
+GO
+
+-- Si no ingresa nada, mostramos todos los clientes, sin filtros
+
+--IF (@dni = NULL AND @nombre = NULL AND @apellido = NULL AND @email = NULL)
+
+CREATE PROCEDURE LIL_MIX.listadoClientes9
+AS
+BEGIN
+	SELECT u.usuario_nombre as 'Nombre de usuario', c.cliente_nombre as 'Nombre', c.cliente_apellido as 'Apellido',
+		c.cliente_mail as 'Mail', c.cliente_dni as 'DNI', c.cliente_fecha_nacimiento as 'Fecha de nacimiento', c.cliente_telefono as 'Telefono'
+	FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id)
 END
 GO
 
@@ -1455,15 +1616,43 @@ CREATE PROCEDURE LIL_MIX.habilitarCliente
 @usuario_nombre VARCHAR(255)
 AS
 BEGIN
-	DECLARE @usuarioid INT
+BEGIN TRY
+	BEGIN TRAN
 
-	SELECT @usuarioid = c.cliente_usuario_id
+	DECLARE @usuarioid INT,
+		@habilitado BIT
+
+	SELECT @usuarioid = c.cliente_usuario_id, @habilitado = c.cliente_habilitado
 	FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (u.usuario_id = c.cliente_usuario_id)
 	WHERE u.usuario_nombre = @usuario_nombre
+
+	IF @habilitado = 1
+		THROW 33333, 'El cliente ya estaba habilitado.', 1
 
 	UPDATE LIL_MIX.cliente
 	SET cliente_habilitado = 1
 	WHERE cliente_usuario_id = @usuarioid
+	
+		COMMIT
+	END TRY
+
+	BEGIN CATCH
+
+	DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+
+		ROLLBACK
+
+	END CATCH
 END
 GO
 
@@ -1513,6 +1702,18 @@ CREATE PROCEDURE LIL_MIX.modificarClienteDNI
 @nombre_usuario VARCHAR(255), @dni_nuevo INT
 AS
 BEGIN
+BEGIN TRY
+	BEGIN TRAN
+	-- El alumno deberá determinar un procedimiento para evitar la generación de clientes “gemelos”
+	-- (distinto nombre de usuario, pero igual datos identificatorios según se justifique en la estrategia de resolución).
+
+	IF EXISTS (SELECT * FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (c.cliente_usuario_id = u.usuario_id)
+			 WHERE c.cliente_dni = @dni_nuevo AND u.usuario_nombre != @nombre_usuario) -- Consideramos dato identificatorio al dni y al mail
+	THROW 50910, 'Cliente gemelo. Ya existe cliente con dicho DNI. No puede realizarse la operación.', 1
+
+	IF len(convert(varchar,@dni_nuevo)) != 8
+	THROW 55910, 'Ingrese un DNI valido.', 1
+
 	DECLARE @usuario_id_del_cliente INT
 
 	SELECT @usuario_id_del_cliente = usuario_id FROM LIL_MIX.usuario
@@ -1521,6 +1722,26 @@ BEGIN
 	UPDATE LIL_MIX.cliente
 	SET cliente_dni = @dni_nuevo
 	WHERE cliente_usuario_id = @usuario_id_del_cliente
+
+	COMMIT
+	
+END TRY
+BEGIN CATCH
+
+DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+
+	ROLLBACK
+END CATCH
 
 END
 GO
@@ -1532,6 +1753,14 @@ CREATE PROCEDURE LIL_MIX.modificarClienteMail
 @nombre_usuario VARCHAR(255), @mail_nuevo VARCHAR(255)
 AS
 BEGIN
+BEGIN TRY
+	BEGIN TRAN
+
+	IF EXISTS (SELECT * FROM LIL_MIX.usuario u JOIN LIL_MIX.cliente c ON (c.cliente_usuario_id = u.usuario_id)
+			 WHERE c.cliente_mail = @mail_nuevo AND u.usuario_nombre != @nombre_usuario) -- Consideramos dato identificatorio al dni y al mail
+	THROW 59910, 'Cliente gemelo. Ya existe cliente con dicho MAIL. No puede realizarse la operación.', 1
+
+	
 	DECLARE @usuario_id_del_cliente INT
 
 	SELECT @usuario_id_del_cliente = usuario_id FROM LIL_MIX.usuario
@@ -1540,6 +1769,25 @@ BEGIN
 	UPDATE LIL_MIX.cliente
 	SET cliente_mail = @mail_nuevo
 	WHERE cliente_usuario_id = @usuario_id_del_cliente
+
+	COMMIT
+END TRY
+BEGIN CATCH
+
+DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+
+	ROLLBACK
+END CATCH
 
 END
 GO
@@ -1550,6 +1798,13 @@ CREATE PROCEDURE LIL_MIX.modificarClienteTelefono
 @nombre_usuario VARCHAR(255), @telefono_nuevo INT
 AS
 BEGIN
+BEGIN TRY
+	BEGIN TRAN
+
+	IF len(convert(varchar,@telefono_nuevo)) != 8
+		throw 51234, 'Ingrese un telefono fijo.', 1
+
+
 	DECLARE @usuario_id_del_cliente INT
 
 	SELECT @usuario_id_del_cliente = usuario_id FROM LIL_MIX.usuario
@@ -1558,6 +1813,26 @@ BEGIN
 	UPDATE LIL_MIX.cliente
 	SET cliente_telefono = @telefono_nuevo
 	WHERE cliente_usuario_id = @usuario_id_del_cliente
+	COMMIT
+	
+END TRY
+BEGIN CATCH
+
+DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+
+	ROLLBACK
+END CATCH
+
 END
 GO
 
@@ -1695,28 +1970,68 @@ GO
 --- que permita filtrar simultáneamente por alguno o todos los siguientes campos:
 --  Razón Social (texto libre)  CUIT (texto libre exacto)  Email (texto libre)
 
-CREATE PROCEDURE LIL_MIX.listadoProveedores
-@razonsocial VARCHAR(255), @cuit VARCHAR(13), @mail VARCHAR(255)
+--IF (@cuit != NULL) -- Hay un único proveedor con dicho cuit
+
+CREATE PROCEDURE LIL_MIX.listadoProveedores1
+@cuit VARCHAR(13)
 AS
 BEGIN
-	-- Probamos con ifs todas las combinaciones posibles
+	SELECT u.usuario_nombre as 'Nombre de usuario', p.proveedor_cuit as 'Cuit', p.proveedor_rs as 'Razon Social',
+		p.proveedor_mail as 'Mail', p.proveedor_telefono as 'Telefono'
+	FROM LIL_MIX.proveedor p JOIN LIL_MIX.usuario u ON (p.proveedor_usuario_id = u.usuario_id)
+	WHERE proveedor_cuit = @cuit 
+END
+Go
 
-	IF (@cuit != NULL)
-		SELECT * FROM LIL_MIX.proveedor WHERE proveedor_cuit = @cuit -- Hay un único proveedor con dicho cuit
+-- IF (@cuit = NULL AND @razonsocial != NULL AND @mail != NULL)
 
-	IF (@cuit = NULL AND @razonsocial != NULL AND @mail != NULL)
-		SELECT * FROM LIL_MIX.proveedor WHERE proveedor_rs LIKE '%'+@razonsocial+'%' AND proveedor_mail LIKE '%'+@mail+'%'
+CREATE PROCEDURE LIL_MIX.listadoProveedores2
+@razonsocial VARCHAR(255), @mail VARCHAR(255)
+AS
+BEGIN
+	SELECT u.usuario_nombre as 'Nombre de usuario', p.proveedor_cuit as 'Cuit', p.proveedor_rs as 'Razon Social',
+		p.proveedor_mail as 'Mail', p.proveedor_telefono as 'Telefono'
+	FROM LIL_MIX.proveedor p JOIN LIL_MIX.usuario u ON (p.proveedor_usuario_id = u.usuario_id)
+	WHERE proveedor_rs LIKE '%'+@razonsocial+'%' AND proveedor_mail LIKE '%'+@mail+'%'
+END
+GO
 
-	IF (@cuit = NULL AND @razonsocial = NULL AND @mail != NULL)
-		SELECT * FROM LIL_MIX.proveedor WHERE proveedor_mail LIKE '%'+@mail+'%'
+--IF (@cuit = NULL AND @razonsocial = NULL AND @mail != NULL)
+	
+CREATE PROCEDURE LIL_MIX.listadoProveedores3
+@mail VARCHAR(255)
+AS
+BEGIN
+	SELECT u.usuario_nombre as 'Nombre de usuario', p.proveedor_cuit as 'Cuit', p.proveedor_rs as 'Razon Social',
+		p.proveedor_mail as 'Mail', p.proveedor_telefono as 'Telefono'
+	FROM LIL_MIX.proveedor p JOIN LIL_MIX.usuario u ON (p.proveedor_usuario_id = u.usuario_id)
+	WHERE proveedor_mail LIKE '%'+@mail+'%'
+END
+GO
 
-	IF (@cuit = NULL AND @razonsocial != NULL AND @mail = NULL)
-		SELECT * FROM LIL_MIX.proveedor WHERE proveedor_rs LIKE '%'+@razonsocial+'%'
+--IF (@cuit = NULL AND @razonsocial != NULL AND @mail = NULL)	
 
-	-- Si no ingresa nada, mostramos todos los clientes, sin filtros
+CREATE PROCEDURE LIL_MIX.listadoProveedores4
+@razonsocial VARCHAR(255)
+AS
+BEGIN
+	SELECT u.usuario_nombre as 'Nombre de usuario', p.proveedor_cuit as 'Cuit', p.proveedor_rs as 'Razon Social',
+		p.proveedor_mail as 'Mail', p.proveedor_telefono as 'Telefono'
+	FROM LIL_MIX.proveedor p JOIN LIL_MIX.usuario u ON (p.proveedor_usuario_id = u.usuario_id)
+	WHERE proveedor_rs LIKE '%'+@razonsocial+'%'
+END
+GO
 
-	IF (@cuit = NULL AND @razonsocial = NULL AND @mail = NULL)
-		SELECT * FROM LIL_MIX.proveedor	
+-- Si no ingresa nada, mostramos todos los clientes, sin filtros
+
+--IF (@cuit = NULL AND @razonsocial = NULL AND @mail = NULL)
+
+CREATE PROCEDURE LIL_MIX.listadoProveedores5
+AS
+BEGIN
+	SELECT u.usuario_nombre as 'Nombre de usuario', p.proveedor_cuit as 'Cuit', p.proveedor_rs as 'Razon Social',
+		   p.proveedor_mail as 'Mail', p.proveedor_telefono as 'Telefono'
+	FROM LIL_MIX.proveedor p JOIN LIL_MIX.usuario u ON (p.proveedor_usuario_id = u.usuario_id)
 END
 GO
 
@@ -1728,15 +2043,44 @@ CREATE PROCEDURE LIL_MIX.habilitarProveedor
 @usuario_nombre VARCHAR(255)
 AS
 BEGIN
-	DECLARE @usuarioid INT
+BEGIN TRY
+	BEGIN TRAN
 
-	SELECT @usuarioid = p.proveedor_usuario_id
+	DECLARE @usuarioid INT,
+		@habilitado BIT
+
+	SELECT @usuarioid = p.proveedor_usuario_id, @habilitado = p.proveedor_habilitado
 	FROM LIL_MIX.usuario u JOIN LIL_MIX.proveedor p ON (u.usuario_id = p.proveedor_usuario_id)
 	WHERE u.usuario_nombre = @usuario_nombre
+
+	IF @habilitado = 1
+		THROW 12378, 'El proveedor ya estaba habilitado.', 1
 
 	UPDATE LIL_MIX.proveedor
 	SET proveedor_habilitado = 1
 	WHERE proveedor_usuario_id = @usuarioid
+
+	
+		COMMIT
+	END TRY
+
+	BEGIN CATCH
+
+	DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+
+		ROLLBACK
+
+	END CATCH
 END
 GO
 
@@ -1749,6 +2093,14 @@ CREATE PROCEDURE LIL_MIX.modificarProveedorRS
 @nombre_usuario VARCHAR(255), @razon_social_nueva VARCHAR(255)
 AS
 BEGIN
+BEGIN TRY
+	BEGIN TRAN
+		-- La razón social y cuit son datos únicos, por ende no pueden existir 2 proveedores con la misma razón social y cuit
+		-- El sistema deberá controlar esta restricción e informar debidamente al usuario ante alguna anomalía.
+
+		IF EXISTS (SELECT * FROM LIL_MIX.proveedor WHERE proveedor_rs = @razon_social_nueva)
+			THROW 59014, 'Razón social ya existe en el sistema.', 1
+
 	DECLARE @usuario_id_del_proveedor INT
 
 	SELECT @usuario_id_del_proveedor = usuario_id
@@ -1757,6 +2109,25 @@ BEGIN
 	UPDATE LIL_MIX.proveedor
 	SET proveedor_rs = @razon_social_nueva
 	WHERE proveedor_usuario_id = @usuario_id_del_proveedor
+
+	COMMIT
+END TRY
+BEGIN CATCH
+
+DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+
+	ROLLBACK
+END CATCH
 END
 GO
 
@@ -1817,6 +2188,16 @@ CREATE PROCEDURE LIL_MIX.modificarProveedorCuit
 @nombre_usuario VARCHAR(255), @cuit_nuevo VARCHAR(13)
 AS
 BEGIN
+BEGIN TRY
+	BEGIN TRAN 
+
+	-- La razón social y cuit son datos únicos, por ende no pueden existir 2 proveedores con la misma razón social y cuit
+	-- El sistema deberá controlar esta restricción e informar debidamente al usuario ante alguna anomalía.
+
+	IF EXISTS (SELECT * FROM LIL_MIX.proveedor WHERE proveedor_cuit = @cuit_nuevo)
+		THROW 50013, 'CUIT ya existe en el sistema.', 1
+
+
 	DECLARE @usuario_id_del_proveedor INT
 
 	SELECT @usuario_id_del_proveedor = usuario_id
@@ -1825,6 +2206,24 @@ BEGIN
 	UPDATE LIL_MIX.proveedor
 	SET proveedor_cuit = @cuit_nuevo
 	WHERE proveedor_usuario_id = @usuario_id_del_proveedor
+
+	COMMIT
+END TRY
+BEGIN CATCH
+
+DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+	ROLLBACK
+END CATCH
 END
 GO
 
@@ -1935,6 +2334,7 @@ BEGIN
 
 END
 GO
+
 
 --------------------------------------------  CARGA DE CRÉDITO  -----------------------------------------------
 
@@ -2091,7 +2491,7 @@ BEGIN
 		-- El proveedor podrá ir cargando ofertas con diferentes fechas,
 		-- esta fecha debe ser mayor o igual a la fecha actual del sistema
 
-		IF @oferta_fecha_vencimiento >= @fechaactualdelsistema
+		IF @oferta_fecha_vencimiento <= @fechaactualdelsistema
 			THROW 50024, 'La fecha de vencimiento debe ser mayor o igual a la fecha actual.', 1
 
 		-- Un cupón consta de 2 precios, que son determinados por el proveedor:
@@ -2149,7 +2549,124 @@ GO
 
 -- 17.1)
 
-CREATE PROCEDURE LIL_MIX.comprarOferta
+
+CREATE PROCEDURE LIL_MIX.comprarOfertaSinCliDest
+@nombre_usuario VARCHAR(255), @oferta_codigo VARCHAR(255), @cantidad TINYINT,
+@diadecompra DATETIME
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+
+		DECLARE @creditocliente BIGINT,
+			@preciooferta INT,
+			@cantmaximadeofertas TINYINT,
+			@ofertaid INT,
+			@clienteid INT,
+			@compraid INT,
+			@ofertadesc VARCHAR(255),
+			@fechavenc DATETIME,
+			@stockdisponible INT,
+			@clientehabilitado BIT,
+			@usuarioid INT
+			
+		
+		IF @nombre_usuario NOT IN (SELECT usuario_nombre FROM LIL_MIX.usuario)
+			THROW 52232, 'El usuario no existe.', 1
+
+		SELECT @creditocliente = c.cliente_credito, @clienteid = c.cliente_id, @clientehabilitado = c.cliente_habilitado
+		FROM LIL_MIX.cliente c JOIN LIL_MIX.usuario u ON (u.usuario_id = c.cliente_usuario_id)
+		WHERE u.usuario_nombre = @nombre_usuario
+
+		IF @oferta_codigo NOT IN (SELECT oferta_codigo FROM LIL_MIX.oferta)
+			THROW 52341, 'La oferta ingresada no existe.',1
+
+		SELECT @ofertaid = oferta_id, @preciooferta = oferta_precio_oferta, @fechavenc = oferta_fecha_vencimiento,
+		@ofertadesc = oferta_decripcion, @cantmaximadeofertas = oferta_restriccion_compra, @stockdisponible = oferta_stock
+		FROM LIL_MIX.oferta WHERE oferta_codigo = @oferta_codigo
+
+		
+		SELECT @usuarioid = usuario_id
+		FROM LIL_MIX.usuario WHERE usuario_nombre = @nombre_usuario
+
+		--Chequear si el usuario ingresado existe y/o es cliente
+
+		IF @usuarioid NOT IN (SELECT usuario_id FROM LIL_MIX.rolxusuario WHERE rol_id = 2)
+			THROW 52222, 'El usuario que está ingresando no es cliente.', 1
+
+		-- Un cliente inhabilitado no podrá comprar ofertas ni cargarse crédito bajo ninguna forma
+
+		IF @clientehabilitado = 0
+			THROW 50026, 'Cliente inhabilitado. No puede comprar ofertas.', 1
+
+		-- Chequear si hay stock disponible
+
+		IF @stockdisponible < @cantidad
+			THROW 50027, 'No hay suficiente stock de dicha oferta.', 1
+
+		-- Al momento de realizar la compra el sistema deberá validar que el crédito que posee el usuario sea suficiente
+
+		IF @creditocliente < (@preciooferta * @cantidad)
+			THROW 50028, 'No tiene crédito suficiente para realizar la compra.', 1
+
+		-- Se deberá validar que la adquisición no supere la cantidad máxima de ofertas permitida por usuario.
+
+		IF @cantidad > @cantmaximadeofertas
+			THROW 50029, 'Superó el máximo de unidades permitida para comprar por cliente.', 1
+
+		-- Los datos mínimos a registrar son los siguientes: Fecha de compra, Oferta, Nro de Oferta, Cliente que realizó la compra
+
+		INSERT INTO LIL_MIX.compra (compra_oferta_numero, compra_oferta_descr, compra_cliente_id, compra_cantidad, compra_fecha)
+		VALUES (@ofertaid, @ofertadesc, @clienteid, @cantidad, @diadecompra)
+
+		-- Cuando un cliente adquiere una oferta, se le deberá informar el código de compra
+
+		SELECT @compraid = compra_id FROM LIL_MIX.compra
+		WHERE compra_oferta_numero = @ofertaid AND compra_oferta_descr = @ofertadesc AND compra_cliente_id = @clienteid
+			AND compra_cantidad = @cantidad AND compra_fecha = @diadecompra
+
+		UPDATE LIL_MIX.oferta
+		SET oferta_stock = oferta_stock - @cantidad
+		WHERE oferta_codigo = @oferta_codigo
+
+		UPDATE LIL_MIX.cliente
+		SET cliente_credito = cliente_credito - (@cantidad * @preciooferta)
+		WHERE cliente_id = @clienteid
+
+		-- Generación automática del cupón
+		
+			INSERT INTO LIL_MIX.cupon (cupon_fecha_vencimiento, cupon_compra_id, cupon_cliente_id)
+			VALUES (DATEADD(day, 30, @diadecompra), @compraid, @clienteid)
+
+		COMMIT TRANSACTION
+
+	END TRY
+
+	BEGIN CATCH
+
+	
+DECLARE @ErrorMessage NVARCHAR(4000);  
+        DECLARE @ErrorSeverity INT;  
+        DECLARE @ErrorState INT;  
+
+        SELECT   
+        @ErrorMessage = ERROR_MESSAGE(),  
+        @ErrorSeverity = ERROR_SEVERITY(),  
+        @ErrorState = ERROR_STATE();  
+
+    -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+
+		ROLLBACK TRANSACTION
+
+	END CATCH
+
+END
+GO
+
+-- 17.2)
+
+CREATE PROCEDURE LIL_MIX.comprarOfertaConCliDest
 @nombre_usuario VARCHAR(255), @oferta_codigo VARCHAR(255), @cantidad TINYINT,
 @diadecompra DATETIME, @clientedestino VARCHAR(255)
 AS
@@ -2234,8 +2751,6 @@ BEGIN
 
 		-- Generación automática del cupón
 		
-		IF(@clientedestino != NULL)
-		BEGIN
 			DECLARE @usudestid INT		
 
 			IF @clientedestino NOT IN (SELECT usuario_nombre FROM LIL_MIX.usuario)
@@ -2256,12 +2771,6 @@ BEGIN
 
 			INSERT INTO LIL_MIX.cupon (cupon_fecha_vencimiento, cupon_compra_id, cupon_cliente_id)
 			VALUES (DATEADD(day, 30, @diadecompra), @compraid, @clidestid)
-		END
-		ELSE
-		BEGIN
-			INSERT INTO LIL_MIX.cupon (cupon_fecha_vencimiento, cupon_compra_id, cupon_cliente_id)
-			VALUES (DATEADD(day, 30, @diadecompra), @compraid, @clienteid)
-		END
 
 		COMMIT TRANSACTION
 
@@ -2289,7 +2798,8 @@ DECLARE @ErrorMessage NVARCHAR(4000);
 END
 GO
 
---17.2)
+
+--17.3)
 
 -- Debe mostrar por pantalla al usuario su numero de compra
 
@@ -2319,7 +2829,7 @@ GO
 -- Funcionalidad que permite a un proveedor dar de baja una oferta entregada por un cliente al momento de realizarse el canje.
 
 CREATE PROCEDURE LIL_MIX.consumoDeOferta
-@cuponid INT, @nombre_usuario VARCHAR(13), --proveedor
+@cuponid INT, @nombre_usuario VARCHAR(255), --proveedor
 @diadeconsumo DATETIME
 AS
 BEGIN
@@ -2387,7 +2897,6 @@ BEGIN
     -- RAISE ERROR en bloque catch para forzar la devolución de error personalizado
     RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
 
-		ROLLBACK TRANSACTION
 		ROLLBACK TRANSACTION
 
 	END CATCH

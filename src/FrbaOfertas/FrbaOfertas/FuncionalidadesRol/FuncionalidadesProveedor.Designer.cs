@@ -107,7 +107,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Name = "FuncionalidadesProveedor";
-            this.Text = "FuncionalidadesProveedor";
+            this.Text = "Funcionalidades del proveedor";
             this.ResumeLayout(false);
             this.PerformLayout();
 

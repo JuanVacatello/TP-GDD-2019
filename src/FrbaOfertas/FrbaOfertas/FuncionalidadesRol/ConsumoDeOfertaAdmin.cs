@@ -26,18 +26,18 @@ namespace FrbaOfertas.FuncionalidadesRol
         {
             try
             {
-                SqlCommand query = new SqlCommand("LIL_MIX.altaUsuarioCliente", cn);
+                SqlCommand query = new SqlCommand("LIL_MIX.consumoDeOferta", cn);
                 query.CommandType = CommandType.StoredProcedure;
                 query.Parameters.Add(new SqlParameter("@cuponid", this.txtCupon.Text));
                 query.Parameters.Add(new SqlParameter("@diadeconsumo", fecha));
-                query.Parameters.Add(new SqlParameter("@nombre_usuario", this.txtProve));
+                query.Parameters.Add(new SqlParameter("@nombre_usuario", this.txtProve.Text));
 
                 cn.Open();
                 query.ExecuteNonQuery();
 
                 MessageBox.Show("Compra entregada");
 
-                FuncionalidadesProveedor fun = new FuncionalidadesProveedor();
+                FuncionalidadesAdmin fun = new FuncionalidadesAdmin();
                 this.Hide();
                 fun.Show();
 

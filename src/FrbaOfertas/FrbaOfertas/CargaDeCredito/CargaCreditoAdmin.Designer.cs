@@ -1,6 +1,6 @@
 ﻿namespace FrbaOfertas.CargaDeCredito
 {
-    partial class CargaCredito
+    partial class CargaCreditoAdmin
     {
         /// <summary>
         /// Required designer variable.

@@ -181,7 +181,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnVolver);
             this.Name = "ListadoEstadisticoCli";
-            this.Text = "ListadoEstadisticoCli";
+            this.Text = "Listado estadistico";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

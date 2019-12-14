@@ -71,7 +71,7 @@
             this.Controls.Add(this.compranumeroDGV);
             this.Controls.Add(this.button5);
             this.Name = "MostrarImporteAdmin";
-            this.Text = "MostrarImporteAdmin";
+            this.Text = "Facturado";
             ((System.ComponentModel.ISupportInitialize)(this.compranumeroDGV)).EndInit();
             this.ResumeLayout(false);
 

@@ -48,7 +48,7 @@ namespace FrbaOfertas.FuncionalidadesRol
 
         private void button7_Click(object sender, EventArgs e)
         {
-            CargaDeCredito.CargaCredito carg = new CargaDeCredito.CargaCredito();
+            CargaDeCredito.CargaCreditoAdmin carg = new CargaDeCredito.CargaCreditoAdmin();
             this.Hide();
             carg.Show();
         }

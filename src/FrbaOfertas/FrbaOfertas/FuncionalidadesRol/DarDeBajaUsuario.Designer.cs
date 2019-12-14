@@ -80,7 +80,7 @@
             this.Controls.Add(this.txtUsuario);
             this.Controls.Add(this.label1);
             this.Name = "DarDeBajaUsuario";
-            this.Text = "DarDeBajaUsuario";
+            this.Text = "Dar de baja usuario";
             this.ResumeLayout(false);
             this.PerformLayout();
 

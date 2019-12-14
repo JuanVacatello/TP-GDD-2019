@@ -72,7 +72,7 @@
             this.Controls.Add(this.compranumeroDGV);
             this.Controls.Add(this.button5);
             this.Name = "NumeroDeCompra";
-            this.Text = "Form1";
+            this.Text = "Número de compra/cupon";
             ((System.ComponentModel.ISupportInitialize)(this.compranumeroDGV)).EndInit();
             this.ResumeLayout(false);
 

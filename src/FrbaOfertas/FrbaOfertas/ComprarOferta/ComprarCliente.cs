@@ -20,6 +20,7 @@ namespace FrbaOfertas.ComprarOferta
 
         public static string codigo;
         public static string cantidad;
+        public static string oferta_id;
 
         public ComprarCliente()
         {
@@ -49,14 +50,44 @@ namespace FrbaOfertas.ComprarOferta
 
         }
 
-        void efectuarCompra() 
+        void efectuarCompraSinCliDest() 
         {
             try
             {
-                SqlCommand query = new SqlCommand("LIL_MIX.comprarOferta", cn);
+                SqlCommand query = new SqlCommand("LIL_MIX.comprarOfertaSinCliDest", cn);
                 query.CommandType = CommandType.StoredProcedure;
                 query.Parameters.Add(new SqlParameter("@nombre_usuario", login.nombre_usuario));
-                query.Parameters.Add(new SqlParameter("@oferta_codigo", this.txtOferta.Text));
+                query.Parameters.Add(new SqlParameter("@oferta_codigo", codigo));
+                query.Parameters.Add(new SqlParameter("@cantidad", this.txtCantidad.Text));
+                query.Parameters.Add(new SqlParameter("@diadecompra", fecha));
+
+                cn.Open();
+
+                query.ExecuteNonQuery();
+
+                MessageBox.Show("Compra efectuada.");
+
+                NumeroDeCompra num = new NumeroDeCompra();
+                this.Hide();
+                num.Show();
+
+                cn.Close();
+            }
+            catch (Exception Em)
+            {
+                MessageBox.Show(Em.Message.ToString());
+                cn.Close();
+            }
+        }
+
+        void efectuarCompraConCliDest()
+        {
+            try
+            {
+                SqlCommand query = new SqlCommand("LIL_MIX.comprarOfertaConCliDest", cn);
+                query.CommandType = CommandType.StoredProcedure;
+                query.Parameters.Add(new SqlParameter("@nombre_usuario", login.nombre_usuario));
+                query.Parameters.Add(new SqlParameter("@oferta_codigo", codigo));
                 query.Parameters.Add(new SqlParameter("@cantidad", this.txtCantidad.Text));
                 query.Parameters.Add(new SqlParameter("@diadecompra", fecha));
                 query.Parameters.Add(new SqlParameter("@clientedestino", this.txtTransferir.Text));
@@ -80,16 +111,27 @@ namespace FrbaOfertas.ComprarOferta
             }
         }
 
+
         private void button2_Click(object sender, EventArgs e)
         {
-            
-
-            if (txtOferta.TextLength == 0)
-                MessageBox.Show("Seleccione la oferta que desea comprar");
-            else if (txtCantidad.TextLength == 0)
-                MessageBox.Show("Ingrese la cantidad que desea comprar");
+            if (txtTransferir.TextLength == 0)
+            {
+                if (oferta_id == null)
+                    MessageBox.Show("Seleccione la oferta que desea comprar");
+                else if (txtCantidad.TextLength == 0)
+                    MessageBox.Show("Ingrese la cantidad que desea comprar");
+                else if (codigo == null)
+                    MessageBox.Show("No seleccionó ninguna oferta");
+                else efectuarCompraSinCliDest();
+            }
             else
-                efectuarCompra();
+            {
+                if (oferta_id == null)
+                    MessageBox.Show("Seleccione la oferta que desea comprar");
+                else if (txtCantidad.TextLength == 0)
+                    MessageBox.Show("Ingrese la cantidad que desea comprar");
+                else efectuarCompraConCliDest();
+            }
 
         }
 
@@ -101,7 +143,8 @@ namespace FrbaOfertas.ComprarOferta
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             dataGridView1.CurrentRow.Selected = true;
-            this.txtOferta.Text = dataGridView1.Rows[e.RowIndex].Cells[1].FormattedValue.ToString();
+            codigo = dataGridView1.Rows[e.RowIndex].Cells[1].FormattedValue.ToString();
+            oferta_id = dataGridView1.Rows[e.RowIndex].Cells[0].FormattedValue.ToString();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -113,7 +156,6 @@ namespace FrbaOfertas.ComprarOferta
 
         void limpiarCampos() 
         {
-            txtOferta.Clear();
             txtCantidad.Clear();
             txtTransferir.Clear();
             dataGridView1.DataSource = null;
@@ -128,7 +170,6 @@ namespace FrbaOfertas.ComprarOferta
 
         private void txtOferta_TextChanged(object sender, EventArgs e)
         {
-            codigo = this.txtOferta.Text;
         }
 
         private void compranumeroDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)

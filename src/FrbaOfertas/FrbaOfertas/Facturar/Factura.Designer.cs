@@ -96,7 +96,7 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "Factura";
-            this.Text = "Facturar";
+            this.Text = "Ofertas consumidas ";
             this.Load += new System.EventHandler(this.Facturar_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

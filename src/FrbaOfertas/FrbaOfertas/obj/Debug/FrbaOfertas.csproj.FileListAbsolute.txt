@@ -95,7 +95,6 @@ C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\D
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.FuncionalidadesProveedor.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Login.RegistrarCliente.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Login.RegistrarProveedor.resources
-C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CargaDeCredito.CargaCredito.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CargaDeCredito.CargaCreditoCliente.resources
 C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CrearOferta.ConfeccionOfertaProve.resources
 C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CargaDeCredito.CargaCredito.resources
@@ -138,3 +137,4 @@ C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfer
 C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.Facturar.MostrarImporteAdmin.resources
 C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.ConsumoDeOfertaAdmin.resources
 C:\Users\Rody\Desktop\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.FuncionalidadesRol.ConsumoDeOfertaProv.resources
+C:\Users\Leonardo\Documents\GitHub\TP-GDD-2019\src\FrbaOfertas\FrbaOfertas\obj\Debug\FrbaOfertas.CargaDeCredito.CargaCreditoAdmin.resources

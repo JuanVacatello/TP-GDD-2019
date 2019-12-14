@@ -96,7 +96,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnAtras);
             this.Name = "ABM_de_Rol";
-            this.Text = "ABM_de_Rol";
+            this.Text = "ABM DE ROL";
             this.ResumeLayout(false);
             this.PerformLayout();
 

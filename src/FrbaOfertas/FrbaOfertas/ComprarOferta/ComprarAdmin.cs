@@ -20,6 +20,7 @@ namespace FrbaOfertas.ComprarOferta
         public static string codigo;
         public static string cantidad;
         public static string cliente;
+        public static string oferta_id;
 
         public ComprarAdmin()
         {
@@ -48,46 +49,91 @@ namespace FrbaOfertas.ComprarOferta
             
         }
 
-        void efectuarCompra()
+        void efectuarCompraSinCliDest()
         {
             try
             {
-                SqlCommand query = new SqlCommand("LIL_MIX.comprarOferta", cn);
+                SqlCommand query = new SqlCommand("LIL_MIX.comprarOfertaSinCliDest", cn);
                 query.CommandType = CommandType.StoredProcedure;
                 query.Parameters.Add(new SqlParameter("@nombre_usuario", this.txtUsuario.Text));
-                query.Parameters.Add(new SqlParameter("@oferta_codigo", this.txtOferta.Text));
+                query.Parameters.Add(new SqlParameter("@oferta_codigo", codigo));
                 query.Parameters.Add(new SqlParameter("@cantidad", this.txtCantidad.Text));
-                query.Parameters.Add(new SqlParameter("@diadecompra", fecha)); 
-                query.Parameters.Add(new SqlParameter("@clientedestino", this.txtTransferir.Text));
+                query.Parameters.Add(new SqlParameter("@diadecompra", fecha));
 
                 cn.Open();
+
                 query.ExecuteNonQuery();
 
                 MessageBox.Show("Compra efectuada.");
 
-                NumeroDeCompraAdmin fun = new NumeroDeCompraAdmin();
+                NumeroDeCompraAdmin num = new NumeroDeCompraAdmin();
                 this.Hide();
-                fun.Show();
+                num.Show();
 
                 cn.Close();
             }
-            catch (Exception ex)
+            catch (Exception Em)
             {
-                MessageBox.Show(ex.Message.ToString());
+                MessageBox.Show(Em.Message.ToString());
+                cn.Close();
+            }
+        }
+
+        void efectuarCompraConCliDest()
+        {
+            try
+            {
+                SqlCommand query = new SqlCommand("LIL_MIX.comprarOfertaConCliDest", cn);
+                query.CommandType = CommandType.StoredProcedure;
+                query.Parameters.Add(new SqlParameter("@nombre_usuario", this.txtUsuario.Text));
+                query.Parameters.Add(new SqlParameter("@oferta_codigo", codigo));
+                query.Parameters.Add(new SqlParameter("@cantidad", this.txtCantidad.Text));
+                query.Parameters.Add(new SqlParameter("@diadecompra", fecha));
+                query.Parameters.Add(new SqlParameter("@clientedestino", this.txtTransferir.Text));
+
+                cn.Open();
+
+                query.ExecuteNonQuery();
+
+                MessageBox.Show("Compra efectuada.");
+
+                NumeroDeCompraAdmin num = new NumeroDeCompraAdmin();
+                this.Hide();
+                num.Show();
+
+                cn.Close();
+            }
+            catch (Exception Em)
+            {
+                MessageBox.Show(Em.Message.ToString());
                 cn.Close();
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
-        {   
-            if(txtOferta.TextLength == 0)
-                MessageBox.Show("Seleccione la oferta que desea comprar");
-            else if (txtCantidad.TextLength == 0)
-                MessageBox.Show("Ingrese la cantidad que desea comprar");
-            else if(txtUsuario.TextLength == 0)
-                MessageBox.Show("Ingrese el usuario del cliente que realiza la compra");
+        {
+            if (txtTransferir.TextLength == 0)
+            {
+                if (txtCantidad.TextLength == 0)
+                    MessageBox.Show("Ingrese la cantidad que desea comprar");
+                else if (oferta_id == null)
+                    MessageBox.Show("No seleccionó ninguna oferta");
+                else if (txtUsuario.TextLength == 0)
+                    MessageBox.Show("Ingrese el usuario del cliente que realiza la compra");
+                else
+                    efectuarCompraSinCliDest();
+            }
             else
-                efectuarCompra();
+            {
+                if (txtCantidad.TextLength == 0)
+                    MessageBox.Show("Ingrese la cantidad que desea comprar");
+                else if (oferta_id == null)
+                    MessageBox.Show("No seleccionó ninguna oferta");
+                else if (txtUsuario.TextLength == 0)
+                    MessageBox.Show("Ingrese el usuario del cliente que realiza la compra");
+                else efectuarCompraConCliDest();
+            }
+
               
         }
         
@@ -95,12 +141,13 @@ namespace FrbaOfertas.ComprarOferta
         {
 
             dataGridView1.CurrentRow.Selected = true;
-            this.txtOferta.Text = dataGridView1.Rows[e.RowIndex].Cells[1].FormattedValue.ToString();
+            oferta_id = dataGridView1.Rows[e.RowIndex].Cells[0].FormattedValue.ToString();
+            codigo =  dataGridView1.Rows[e.RowIndex].Cells[1].FormattedValue.ToString();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            codigo = this.txtOferta.Text;
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -117,7 +164,6 @@ namespace FrbaOfertas.ComprarOferta
 
         void limpiarCampos()
         {
-            txtOferta.Clear();
             txtCantidad.Clear();
             txtUsuario.Clear();
             dataGridView1.DataSource = null;

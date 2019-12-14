@@ -39,6 +39,8 @@ namespace FrbaOfertas.FuncionalidadesRol
                 cn.Open();
                 query.ExecuteNonQuery();
 
+                MessageBox.Show("Usuario dado de baja.");
+
                 FuncionalidadesAdmin fun = new FuncionalidadesAdmin();
                 this.Hide();
                 fun.Show();

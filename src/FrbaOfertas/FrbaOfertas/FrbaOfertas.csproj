@@ -144,11 +144,11 @@
     <Compile Include="AbmRol\ModificarRol.Designer.cs">
       <DependentUpon>ModificarRol.cs</DependentUpon>
     </Compile>
-    <Compile Include="CargaDeCredito\CargaCredito.cs">
+    <Compile Include="CargaDeCredito\CargaCreditoAdmin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CargaDeCredito\CargaCredito.Designer.cs">
-      <DependentUpon>CargaCredito.cs</DependentUpon>
+    <Compile Include="CargaDeCredito\CargaCreditoAdmin.Designer.cs">
+      <DependentUpon>CargaCreditoAdmin.cs</DependentUpon>
     </Compile>
     <Compile Include="CargaDeCredito\CargaCreditoCliente.cs">
       <SubType>Form</SubType>
@@ -374,8 +374,8 @@
     <EmbeddedResource Include="AbmRol\ModificarRol.resx">
       <DependentUpon>ModificarRol.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CargaDeCredito\CargaCredito.resx">
-      <DependentUpon>CargaCredito.cs</DependentUpon>
+    <EmbeddedResource Include="CargaDeCredito\CargaCreditoAdmin.resx">
+      <DependentUpon>CargaCreditoAdmin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CargaDeCredito\CargaCreditoCliente.resx">
       <DependentUpon>CargaCreditoCliente.cs</DependentUpon>

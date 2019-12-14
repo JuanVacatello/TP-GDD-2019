@@ -180,7 +180,7 @@
             this.Controls.Add(this.txtDescrip);
             this.Controls.Add(this.label1);
             this.Name = "ConfeccionOfertaProve";
-            this.Text = "ConfeccionOfertaProve";
+            this.Text = "Confeccionar oferta";
             this.Load += new System.EventHandler(this.ConfeccionOfertaProve_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

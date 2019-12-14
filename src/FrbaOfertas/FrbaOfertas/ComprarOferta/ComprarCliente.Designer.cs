@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtOferta = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.txtCantidad = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -44,23 +42,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
-            // txtOferta
-            // 
-            this.txtOferta.Location = new System.Drawing.Point(193, 271);
-            this.txtOferta.Name = "txtOferta";
-            this.txtOferta.Size = new System.Drawing.Size(179, 20);
-            this.txtOferta.TabIndex = 19;
-            this.txtOferta.TextChanged += new System.EventHandler(this.txtOferta_TextChanged);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(190, 246);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(102, 13);
-            this.label3.TabIndex = 18;
-            this.label3.Text = "Oferta seleccionada";
-            // 
             // button4
             // 
             this.button4.Location = new System.Drawing.Point(241, 9);
@@ -73,7 +54,7 @@
             // 
             // txtCantidad
             // 
-            this.txtCantidad.Location = new System.Drawing.Point(431, 271);
+            this.txtCantidad.Location = new System.Drawing.Point(21, 267);
             this.txtCantidad.Name = "txtCantidad";
             this.txtCantidad.Size = new System.Drawing.Size(159, 20);
             this.txtCantidad.TabIndex = 13;
@@ -82,7 +63,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(428, 246);
+            this.label1.Location = new System.Drawing.Point(18, 242);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(146, 13);
             this.label1.TabIndex = 12;
@@ -176,13 +157,11 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.txtOferta);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.txtCantidad);
             this.Controls.Add(this.label1);
             this.Name = "ComprarCliente";
-            this.Text = "ComprarCliente";
+            this.Text = "Comprar oferta";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -191,8 +170,6 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtOferta;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.TextBox txtCantidad;
         private System.Windows.Forms.Label label1;

@@ -16,6 +16,7 @@ namespace FrbaOfertas.CargaDeCredito
     {
         DateTime fecha = Properties.Settings.Default.fecha_actual;
         SqlConnection cn = new SqlConnection(Properties.Settings.Default.GD2C2019ConnectionString);
+        public static string tipo_de_pago_descripcion;
 
         public CargaCreditoCliente()
         {
@@ -80,7 +81,7 @@ namespace FrbaOfertas.CargaDeCredito
             {
                 if ((comboBox1.SelectedValue.ToString() != null))
                 {
-                    string tipo_de_pago_descripcion = comboBox1.SelectedValue.ToString();
+                    tipo_de_pago_descripcion = comboBox1.SelectedValue.ToString();
                     cargarCredito(tipo_de_pago_descripcion);
 
                 }
@@ -97,12 +98,43 @@ namespace FrbaOfertas.CargaDeCredito
         private void button2_Click(object sender, EventArgs e)
         {
             //BOTON CARGAR
-            if (comboBox1.SelectedValue.ToString() == null)
-                MessageBox.Show("Ingrese el tipo de pago");
-            else if (txtMonto.TextLength == 0)
-                MessageBox.Show("Ingrese el monto que desea cargar");
+            //BOTON CARGAR
+
+            if (tipo_de_pago_descripcion == "Crédito")
+            {
+                if (comboBox1.SelectedValue.ToString() == null)
+                    MessageBox.Show("Ingrese el tipo de pago");
+                else if (txtMonto.TextLength == 0)
+                    MessageBox.Show("Ingrese el monto que desea cargar");
+                else if (txtTarjetaNumero.TextLength == 0)
+                    MessageBox.Show("Ingrese el número de su tarjeta");
+                else if (textBox1.TextLength == 0)
+                    MessageBox.Show("Ingrese el tipo de tarjeta: VISA, MASTERCARD, AMERICAN EXPRESS");
+                else
+                    carga();
+            }
+            if (tipo_de_pago_descripcion == "Débito")
+            {
+                if (comboBox1.SelectedValue.ToString() == null)
+                    MessageBox.Show("Ingrese el tipo de pago");
+                else if (txtMonto.TextLength == 0)
+                    MessageBox.Show("Ingrese el monto que desea cargar");
+                else if (txtTarjetaNumero.TextLength == 0)
+                    MessageBox.Show("Ingrese el número de su tarjeta");
+                else if (textBox1.TextLength == 0)
+                    MessageBox.Show("Ingrese el tipo de tarjeta: VISA, MASTERCARD, AMERICAN EXPRESS");
+                else
+                    carga();
+            }
             else
-                carga();    
+            {
+                if (comboBox1.SelectedValue.ToString() == null)
+                    MessageBox.Show("Ingrese el tipo de pago");
+                else if (txtMonto.TextLength == 0)
+                    MessageBox.Show("Ingrese el monto que desea cargar");
+                else
+                    carga();
+            }  
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)

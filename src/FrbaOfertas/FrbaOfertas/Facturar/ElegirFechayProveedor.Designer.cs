@@ -179,7 +179,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "ElegirFechayProveedor";
-            this.Text = "Facturacion";
+            this.Text = "Facturacion: Elegir fecha y proveedor";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

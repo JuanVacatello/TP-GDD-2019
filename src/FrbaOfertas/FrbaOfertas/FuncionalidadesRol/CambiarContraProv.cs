@@ -43,7 +43,7 @@ namespace FrbaOfertas.FuncionalidadesRol
 
                 MessageBox.Show("Contraseña actualizada con exito");
 
-                FuncionalidadesAdmin fun = new FuncionalidadesAdmin();
+                FuncionalidadesProveedor fun = new FuncionalidadesProveedor();
                 this.Hide();
                 fun.Show();
 

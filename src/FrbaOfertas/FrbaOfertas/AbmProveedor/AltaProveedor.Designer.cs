@@ -59,6 +59,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txt_rubro
@@ -79,7 +80,7 @@
             // 
             // btnRegistrar
             // 
-            this.btnRegistrar.Location = new System.Drawing.Point(106, 414);
+            this.btnRegistrar.Location = new System.Drawing.Point(106, 446);
             this.btnRegistrar.Name = "btnRegistrar";
             this.btnRegistrar.Size = new System.Drawing.Size(150, 23);
             this.btnRegistrar.TabIndex = 59;
@@ -89,7 +90,7 @@
             // 
             // btnAtras
             // 
-            this.btnAtras.Location = new System.Drawing.Point(25, 414);
+            this.btnAtras.Location = new System.Drawing.Point(22, 446);
             this.btnAtras.Name = "btnAtras";
             this.btnAtras.Size = new System.Drawing.Size(75, 23);
             this.btnAtras.TabIndex = 58;
@@ -157,7 +158,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(22, 103);
+            this.label9.Location = new System.Drawing.Point(22, 115);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(117, 13);
             this.label9.TabIndex = 49;
@@ -205,7 +206,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(153, 103);
+            this.label7.Location = new System.Drawing.Point(153, 115);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(62, 13);
             this.label7.TabIndex = 43;
@@ -255,6 +256,7 @@
             // 
             this.txtContrasenia.Location = new System.Drawing.Point(156, 25);
             this.txtContrasenia.Name = "txtContrasenia";
+            this.txtContrasenia.PasswordChar = '*';
             this.txtContrasenia.Size = new System.Drawing.Size(100, 20);
             this.txtContrasenia.TabIndex = 34;
             // 
@@ -292,9 +294,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(74, 446);
+            this.button2.Location = new System.Drawing.Point(25, 417);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(108, 23);
+            this.button2.Size = new System.Drawing.Size(230, 23);
             this.button2.TabIndex = 93;
             this.button2.Text = "Limpiar campos";
             this.button2.UseVisualStyleBackColor = true;
@@ -318,11 +320,21 @@
             this.label3.TabIndex = 95;
             this.label3.Text = "CUIT (*)";
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(22, 93);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(200, 13);
+            this.label15.TabIndex = 96;
+            this.label15.Text = "(Recuerde ingresar el CUIT con guiones)";
+            // 
             // AltaProveedor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(277, 481);
+            this.Controls.Add(this.label15);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.button2);
@@ -355,7 +367,7 @@
             this.Controls.Add(this.txtNombreUsuario);
             this.Controls.Add(this.Usuario);
             this.Name = "AltaProveedor";
-            this.Text = "AltaProveedor";
+            this.Text = "Alta de proveedor";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -394,5 +406,6 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label15;
     }
 }
