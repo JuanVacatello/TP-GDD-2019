@@ -74,6 +74,7 @@ namespace FrbaOfertas.ComprarOferta
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message.ToString());
+                cn.Close();
             }
         }
 

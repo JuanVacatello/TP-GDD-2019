@@ -88,6 +88,7 @@ namespace FrbaOfertas.CargaDeCredito
             catch (Exception Em)
             {
                 MessageBox.Show(Em.Message.ToString());
+                cn.Close();
             }
 
         }

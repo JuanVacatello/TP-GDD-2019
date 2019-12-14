@@ -177,17 +177,15 @@ namespace FrbaOfertas.AbmCliente
         private void btnAtras_Click(object sender, EventArgs e)
         {
             FiltradoModificacionCliente filt = new FiltradoModificacionCliente();
-            filt.ShowDialog();
-            if (filt.DialogResult == DialogResult.Yes)
-            { }
+            this.Hide();
+            filt.Show();
         }
 
         private void btnListo_Click(object sender, EventArgs e)
         {
             ABMDeCliente abm = new ABMDeCliente();
-            abm.ShowDialog();
-            if (abm.DialogResult == DialogResult.Yes)
-            { }
+            this.Hide();
+            abm.Show();
         }
     }
 }

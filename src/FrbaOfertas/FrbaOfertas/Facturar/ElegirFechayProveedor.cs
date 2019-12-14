@@ -49,7 +49,7 @@ namespace FrbaOfertas.Facturar
             if (textBox1.TextLength == 0)
                 MessageBox.Show("Elija a qué proveedor desea facturar");
             else
-                this.elegirProveedorAFacturar();
+                elegirProveedorAFacturar();
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -81,9 +81,9 @@ namespace FrbaOfertas.Facturar
         private void button3_Click(object sender, EventArgs e)
         {
             if (dateTimePicker1.Value > dateTimePicker2.Value)
-                MessageBox.Show("Seleccione un período valido"); //NO ESTA FUNCIONANDO BIEN
+                MessageBox.Show("Seleccione un período valido"); //NO ESTA FUNCIONANDO BIEN NO SE SI LO QUIEREN DEJAR O QUE
             else
-                this.verProveedoresAFacturar();
+                verProveedoresAFacturar();
         }
 
         void limpiarCampos()

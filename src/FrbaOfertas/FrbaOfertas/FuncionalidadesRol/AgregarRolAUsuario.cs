@@ -75,6 +75,7 @@ namespace FrbaOfertas.FuncionalidadesRol
             catch (Exception Em)
             {
                 MessageBox.Show(Em.Message.ToString());
+                cn.Close();
             }
         }
 
@@ -89,7 +90,6 @@ namespace FrbaOfertas.FuncionalidadesRol
         {
             if (txtUsuario.TextLength == 0)
                 MessageBox.Show("Ingrese el nombre de usuario al que le desea agregar el rol");
-
             else
                 agregarRolAUsuario();
         }

@@ -174,6 +174,7 @@ namespace FrbaOfertas.AbmRol
             catch (Exception Em)
             {
                 MessageBox.Show(Em.Message.ToString());
+                cn.Close();
             }
         }
 

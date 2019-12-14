@@ -52,6 +52,7 @@ namespace FrbaOfertas.FuncionalidadesRol
             catch (Exception Em)
             {
                 MessageBox.Show(Em.Message.ToString());
+                cn.Close();
             }
         }
 
@@ -61,11 +62,8 @@ namespace FrbaOfertas.FuncionalidadesRol
                 MessageBox.Show("Ingrese su contraseña actual");
             else if (txtContraNueva.TextLength == 0)
                 MessageBox.Show("Ingrese su nueva contraseña");
-            else
-            {
-                cambiarContra();
-
-            }
+            else          
+                cambiarContra();         
         }
     }
 }

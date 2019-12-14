@@ -32,28 +32,29 @@ namespace FrbaOfertas.Login
 
         void login() {
 
-            try {
+            try 
+            {
+                SqlCommand query = new SqlCommand("LIL_MIX.login", cn);
+                query.CommandType = CommandType.StoredProcedure;
+                query.Parameters.Add(new SqlParameter("@usuario", this.txtUsuario.Text));
+                query.Parameters.Add(new SqlParameter("@password_ingresada", this.txtPass.Text));
+                cn.Open();
+                query.ExecuteNonQuery();
+                MessageBox.Show("Login exitoso");
 
-            SqlCommand query = new SqlCommand("LIL_MIX.login", cn);
-            query.CommandType = CommandType.StoredProcedure;
-            query.Parameters.Add(new SqlParameter("@usuario", this.txtUsuario.Text));
-            query.Parameters.Add(new SqlParameter("@password_ingresada", this.txtPass.Text));
-            cn.Open();
-            query.ExecuteNonQuery();
-            MessageBox.Show("Login exitoso");
+                FuncionalidadesRol.FuncionalidadesAdmin funadm = new FuncionalidadesRol.FuncionalidadesAdmin();
+                this.Hide();
+                funadm.Show();
 
-            FuncionalidadesRol.FuncionalidadesAdmin funadm = new FuncionalidadesRol.FuncionalidadesAdmin();
-            this.Hide();
-            funadm.Show();
+                nombre_usuario = this.txtUsuario.Text;
 
-            nombre_usuario = this.txtUsuario.Text;
-
-            cn.Close();
+                cn.Close();
 
             }
             catch (Exception Em)
             {
                 MessageBox.Show(Em.Message.ToString());
+                cn.Close();
             }
           }
         

@@ -24,21 +24,20 @@ namespace FrbaOfertas.ListadoEstadistico
         }
 
         public void cargarDatosListado()
-        {
-            cn.Open();
-            SqlCommand query = new SqlCommand("LIL_MIX.seleccionarListado", cn);
-            query.CommandType = CommandType.StoredProcedure;
-            SqlDataAdapter da = new SqlDataAdapter(query);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            cn.Close();
+        {           
+                cn.Open();
+                SqlCommand query = new SqlCommand("LIL_MIX.seleccionarListado", cn);
+                query.CommandType = CommandType.StoredProcedure;
+                SqlDataAdapter da = new SqlDataAdapter(query);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                cn.Close();
 
-            DataRow fila = dt.NewRow();
+                DataRow fila = dt.NewRow();
 
-            comboBox1.ValueMember = "listado_id";
-            comboBox1.DisplayMember = "listado_id";
-            comboBox1.DataSource = dt;
-
+                comboBox1.ValueMember = "listado_id";
+                comboBox1.DisplayMember = "listado_id";
+                comboBox1.DataSource = dt;
         }
 
         public void cargarDatosSemestre()
@@ -56,7 +55,6 @@ namespace FrbaOfertas.ListadoEstadistico
             comboBox2.ValueMember = "semestre_id";
             comboBox2.DisplayMember = "semestre_id";
             comboBox2.DataSource = dt;
-
         }
 
         private void confeccionarListado(string listado_id, string semestre_id)
@@ -95,6 +93,7 @@ namespace FrbaOfertas.ListadoEstadistico
             catch (Exception Em)
             {
                 MessageBox.Show(Em.Message.ToString());
+                cn.Close();
             }
         }
 

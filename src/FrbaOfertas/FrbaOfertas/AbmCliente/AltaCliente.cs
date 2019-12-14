@@ -60,6 +60,7 @@ namespace FrbaOfertas.AbmCliente
             catch (Exception Em)
             {
                 MessageBox.Show(Em.Message.ToString());
+                cn.Close();
             }
         }
 

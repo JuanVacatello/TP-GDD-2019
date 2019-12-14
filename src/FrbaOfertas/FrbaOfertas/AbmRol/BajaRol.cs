@@ -70,10 +70,18 @@ namespace FrbaOfertas.AbmRol
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedValue.ToString() != null)
+            try
             {
-                string rol_nombre = comboBox1.SelectedValue.ToString();
-                eliminarRol(rol_nombre);
+                if (comboBox1.SelectedValue.ToString() != null)
+                {
+                    string rol_nombre = comboBox1.SelectedValue.ToString();
+                    eliminarRol(rol_nombre);
+                }
+            }
+            catch (Exception Em)
+            {
+                MessageBox.Show(Em.Message.ToString());
+                cn.Close();
             }
         }
 
