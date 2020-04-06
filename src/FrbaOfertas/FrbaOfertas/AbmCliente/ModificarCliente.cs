@@ -20,67 +20,11 @@ namespace FrbaOfertas.AbmCliente
         {
             InitializeComponent();
         }
-
-        private void label14_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void ModificarCliente_Load(object sender, EventArgs e)
         {
 
         }
-
-        private void ModificarNombre_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void btnModificarApellido_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void btnModificarDNI_Click(object sender, EventArgs e)
-        {
-         
-        }
-
-        private void btnModificarTelefono_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void btnModificarMail_Click(object sender, EventArgs e)
-        {
-           
-        }
-
-        private void btnModificarCP_Click(object sender, EventArgs e)
-        {
-           
-        }
-
-        private void btnModificarDirec_Click(object sender, EventArgs e)
-        {
-           
-        }
-
-        private void btnModificarPiso_Click(object sender, EventArgs e)
-        {
-           
-        }
-
-        private void btnModificarCiudad_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void btnModificarDpto_Click(object sender, EventArgs e)
-        {
-            
-        }
-
+       
         private void btnModificarFecha_Click(object sender, EventArgs e)
         {
             SqlCommand query = new SqlCommand("LIL_MIX.modificarClienteFechaNacimiento", cn);
@@ -241,17 +185,8 @@ namespace FrbaOfertas.AbmCliente
         }
 
         private void btnListo_Click(object sender, EventArgs e)
-        {
-           // if (txtNuevoDni.TextLength != 8 & txtNuevoDni.TextLength != 0)
-           //     MessageBox.Show("Ingrese un DNI valido");
-           // if (txtNuevoTelefono.TextLength != 8 & txtNuevoTelefono.TextLength != 0)
-           //     MessageBox.Show("Ingrese un telefono valido");
-
-           //else
-           // {
+        {          
                 modificarCliente();
-
-            //}
         }
 
         private void button1_Click(object sender, EventArgs e)

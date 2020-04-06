@@ -20,22 +20,50 @@ DEALLOCATE cursor_tablas
 GO
 
 -----DROPS INDICES
-/*
-DROP INDEX LIL_MIX.usuario.IDX_USUARIO
-DROP INDEX LIL_MIX.direccion.IDX_DIRECCION
-DROP INDEX LIL_MIX.proveedor.IDX_PROVEEDOR
-DROP INDEX LIL_MIX.oferta.IDX_OFERTA
-DROP INDEX LIL_MIX.cliente.IDX_CLIENTE
-DROP INDEX LIL_MIX.compra.IDX_COMPRA
-DROP INDEX LIL_MIX.factura.IDX_FACTURA
-DROP INDEX LIL_MIX.cupon.IDX_CUPON
-DROP INDEX LIL_MIX.rol.IDX_ROL
-DROP INDEX LIL_MIX.funcionalidad.IDX_FUNCIONALIDAD
-DROP INDEX LIL_MIX.tarjeta.IDX_TARJETA
-DROP INDEX LIL_MIX.tipoDepago.IDX_TIPO_DE_PAGO
-DROP INDEX LIL_MIX.cargaDeCredito.IDX_CARGA_DE_CREDITO
-DROP INDEX LIL_MIX.semestre.IDX_SEMESTRE
-GO */
+
+IF OBJECT_ID('LIL_MIX.usuario.IDX_USUARIO') IS NOT NULL
+  DROP INDEX LIL_MIX.usuario.IDX_USUARIO
+ GO
+IF OBJECT_ID('LIL_MIX.usuario.IDX_DIRECCION') IS NOT NULL
+  DROP INDEX LIL_MIX.usuario.IDX_DIRECCION
+ GO
+IF OBJECT_ID('LIL_MIX.usuario.IDX_PROVEEDOR') IS NOT NULL
+  DROP INDEX LIL_MIX.usuario.IDX_PROVEEDOR
+ GO
+IF OBJECT_ID('LIL_MIX.usuario.IDX_OFERTA') IS NOT NULL
+  DROP INDEX LIL_MIX.usuario.IDX_OFERTA
+ GO
+IF OBJECT_ID('LIL_MIX.usuario.IDX_CLIENTE') IS NOT NULL
+  DROP INDEX LIL_MIX.usuario.IDX_CLIENTE
+ GO
+IF OBJECT_ID('LIL_MIX.usuario.IDX_COMPRA') IS NOT NULL
+  DROP INDEX LIL_MIX.usuario.IDX_COMPRA
+ GO
+IF OBJECT_ID('LIL_MIX.usuario.IDX_FACTURA') IS NOT NULL
+  DROP INDEX LIL_MIX.usuario.IDX_FACTURA
+ GO
+IF OBJECT_ID('LIL_MIX.usuario.IDX_CUPON') IS NOT NULL
+  DROP INDEX LIL_MIX.usuario.IDX_CUPON
+ GO
+IF OBJECT_ID('LIL_MIX.usuario.IDX_ROL') IS NOT NULL
+  DROP INDEX LIL_MIX.usuario.IDX_ROL
+ GO
+IF OBJECT_ID('LIL_MIX.usuario.IDX_FUNCIONALIDAD') IS NOT NULL
+  DROP INDEX LIL_MIX.usuario.IDX_FUNCIONALIDAD
+ GO
+ IF OBJECT_ID('LIL_MIX.usuario.IDX_TARJETA') IS NOT NULL
+  DROP INDEX LIL_MIX.usuario.IDX_TARJETA
+ GO
+IF OBJECT_ID('LIL_MIX.usuario.IDX_TIPO_DE_PAGO') IS NOT NULL
+  DROP INDEX LIL_MIX.usuario.IDX_TIPO_DE_PAGO
+ GO
+IF OBJECT_ID('LIL_MIX.usuario.IDX_CARGA_DE_CREDITO') IS NOT NULL
+  DROP INDEX LIL_MIX.usuario.IDX_CARGA_DE_CREDITO
+ GO
+IF OBJECT_ID('LIL_MIX.usuario.IDX_SEMESTRE') IS NOT NULL
+  DROP INDEX LIL_MIX.usuario.IDX_SEMESTRE
+ GO
+ 
 
 ------DROPS TABLAS
 
@@ -573,7 +601,7 @@ CREATE TABLE LIL_MIX.listadoEstadistico ( listado_id INT NOT NULL IDENTITY(1,1) 
 					 )
 
 --							 Indices
-/*
+
 CREATE INDEX IDX_USUARIO ON LIL_MIX.usuario (usuario_id)
 CREATE INDEX IDX_DIRECCION ON LIL_MIX.direccion (direccion_id)
 CREATE INDEX IDX_PROVEEDOR ON LIL_MIX.proveedor (proveedor_id,proveedor_direccion_id,proveedor_usuario_id,proveedor_cuit)
@@ -589,7 +617,6 @@ CREATE INDEX IDX_TIPO_DE_PAGO ON LIL_MIX.tipoDePago (tipo_de_pago_id)
 CREATE INDEX IDX_CARGA_DE_CREDITO ON LIL_MIX.cargaDeCredito (carga_id,carga_id_cliente,carga_tipo_de_pago,carga_tarjeta_numero)
 CREATE INDEX IDX_SEMESTRE ON LIL_MIX.semestre (semestre_id)
 GO
-*/
 
 						/*Creacion de datos*/
 
@@ -3133,24 +3160,3 @@ BEGIN
 
 END
 GO
-
------------------------------------------ CARGA DE CRÉDITO ----------------------------------------------
-
--- 3)
-/*
-CREATE TRIGGER LIL_MIX.cargarCreditoAlCliente ON LIL_MIX.cargaDeCredito
-AFTER INSERT AS
-BEGIN
-	DECLARE @monto_cargado INT,
-		@cliente_id INT
-
-	SELECT @monto_cargado = carga_monto, @cliente_id = carga_id_cliente FROM inserted
-
-	UPDATE LIL_MIX.cliente
-	SET cliente_credito = cliente_credito + @monto_cargado
-	WHERE cliente_id = @cliente_id
-
-END
-GO*/
-
---------------------------------------

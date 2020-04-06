@@ -81,7 +81,7 @@ namespace FrbaOfertas.Facturar
         private void button3_Click(object sender, EventArgs e)
         {
             if (dateTimePicker1.Value > dateTimePicker2.Value)
-                MessageBox.Show("Seleccione un período valido"); //NO ESTA FUNCIONANDO BIEN NO SE SI LO QUIEREN DEJAR O QUE
+                MessageBox.Show("Seleccione un período valido");
             else
                 verProveedoresAFacturar();
         }
@@ -89,7 +89,6 @@ namespace FrbaOfertas.Facturar
         void limpiarCampos()
         {
             textBox1.Clear();
-            //falta el clear del datetimepicker
             dataGridView1.DataSource = null;
             dataGridView1.Refresh();
 

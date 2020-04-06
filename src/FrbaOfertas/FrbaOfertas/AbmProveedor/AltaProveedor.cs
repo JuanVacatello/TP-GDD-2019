@@ -87,7 +87,6 @@ namespace FrbaOfertas.AbmProveedor
                 MessageBox.Show("Ingrese su ciudad");
             else if (txtDireccion.TextLength == 0)
                 MessageBox.Show("Ingrese su calle");
-
             else
             {
                 CrearProveedor();
